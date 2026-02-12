@@ -13,6 +13,7 @@ urlpatterns = [
     path("my-progress/", views.my_progress, name="student_my_progress"),
     path("payments/", views.payments, name="student_payments"),
     path("enquiry/", views.enquiry, name="student_enquiry"),
+    path("announcement/", views.announcement, name="student_announcement"),
     path("my-account/", views.my_account, name="student_my_account"),
 ]
 

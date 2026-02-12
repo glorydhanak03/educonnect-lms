@@ -1,0 +1,232 @@
+{% extends "student/base_student.html" %}
+{% block student_title %}Student | Announcements{% endblock %}
+
+{% block student_content %}
+
+<style>
+
+.page-wrapper{
+    display:flex;
+    gap:20px;
+}
+
+/* LEFT SIDE */
+.left-section{
+    width:100%;
+    background:#e9f0f8;
+    padding:25px;
+    border-radius:12px;
+}
+
+.announcement-card{
+    background:#ffffff;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:18px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
+}
+
+.badge{
+    float:right;
+    background:#28a745;
+    color:#fff;
+    padding:4px 12px;
+    font-size:12px;
+    border-radius:15px;
+}
+
+.meta{
+    font-size:12px;
+    color:#666;
+    margin:6px 0;
+}
+
+.view-link{
+    color:#007bff;
+    font-size:13px;
+    cursor:pointer;
+    font-weight:500;
+}
+
+/* CENTER POPUP */
+.modal-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal-box{
+    background:#ffffff;
+    width:500px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 25px rgba(0,0,0,0.2);
+    position:relative;
+}
+
+.close-btn{
+    position:absolute;
+    right:15px;
+    top:10px;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.new-badge{
+    background:#007bff;
+    color:#fff;
+    font-size:11px;
+    padding:4px 8px;
+    border-radius:8px;
+    margin-left:8px;
+}
+
+.active-badge{
+    background:#28a745;
+    color:#fff;
+    font-size:11px;
+    padding:4px 8px;
+    border-radius:8px;
+    margin-left:6px;
+}
+
+</style>
+
+
+<div class="page-wrapper">
+
+    <div class="left-section">
+        <h3>Announcements</h3>
+
+        <!-- 1 -->
+        <div class="announcement-card">
+            <span class="badge">Active</span>
+            <h4>Exam Schedule Update</h4>
+            <div class="meta">Posted on 10 Feb 2026 • By Admin</div>
+            <p>The exam timetable for the upcoming semester has been updated.</p>
+            <div class="view-link" onclick="openModal('modal1')">View Details</div>
+        </div>
+
+        <!-- 2 -->
+        <div class="announcement-card">
+            <span class="badge">Active</span>
+            <h4>Campus Event: Science Fair</h4>
+            <div class="meta">Posted on 5 Feb 2026 • By Faculty</div>
+            <p>Join us for the Annual Science Fair this Friday!</p>
+            <div class="view-link" onclick="openModal('modal2')">View Details</div>
+        </div>
+
+        <!-- 3 -->
+        <div class="announcement-card">
+            <span class="badge">Active</span>
+            <h4>Library Hours Extended</h4>
+            <div class="meta">Posted on 10 Feb 2026 • By Admin</div>
+            <p>The library will be open until 9 PM during exam period.</p>
+            <div class="view-link" onclick="openModal('modal3')">View Details</div>
+        </div>
+
+     </div>
+</div>
+
+
+<!-- CENTER POPUP -->
+     <div class="modal-overlay" id="modal1">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal('modal1')">✖</span>
+         <h3>
+            Exam Schedule Update
+            <span class="new-badge">New</span>
+            <span class="active-badge">Active</span>
+        </h3>
+
+        <div class="meta">
+            Posted on 10 Feb 2026 • By Admin
+        </div>
+
+        <hr>
+
+        <p>
+            The exam timetable for the upcoming semester has been updated.
+            Please check the new schedule in the ‘Exam’ Section.
+        </p>
+
+        <ul>
+            <li><strong>Exam Start Date:</strong> 15 March 2026</li>
+            <li><strong>Hall Tickets Available:</strong> 10 March 2026</li>
+        </ul>
+    </div>
+</div>
+<div class="modal-overlay" id="modal2">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal('modal2')">✖</span>
+        <h3>
+    Annual Science Fair 2026
+    <span class="active-badge">Active</span>
+</h3>
+
+<div class="meta">
+    Posted on 12 Feb 2026 • By Admin
+</div>
+
+<hr>
+
+<p>
+    Our school is organizing the Annual Science Fair 2026.
+    Students are encouraged to participate and showcase their innovative projects.
+</p>
+
+<ul>
+    <li><strong>Event Date:</strong> 25 March 2026</li>
+    <li><strong>Registration Deadline:</strong> 18 March 2026</li>
+</ul>
+
+    </div>
+</div>
+<div class="modal-overlay" id="modal3">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal('modal3')">✖</span>
+        <h3>
+    Library Hours Extended
+    <span class="active-badge">Active</span>
+</h3>
+
+<div class="meta">
+    Posted on 13 Feb 2026 • By Admin
+</div>
+
+<hr>
+
+<p>
+    To support students during the examination period,
+    library working hours have been extended for better study access.
+</p>
+
+<ul>
+    <li><strong>New Closing Time:</strong> 7:30 PM</li>
+    <li><strong>Effective From:</strong> 15 Feb 2026</li>
+</ul>
+
+    </div>
+</div>
+    
+
+
+<script>
+function openModal(id){
+    document.getElementById(id).style.display="flex";
+}
+
+function closeModal(id){
+    document.getElementById(id).style.display="none";
+}
+</script>
+
+{% endblock %}

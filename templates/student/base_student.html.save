@@ -144,7 +144,7 @@
       
       <a href="{% url 'student_announcement' %}"
          class="{% if request.resolver_match.url_name == 'student_announcement' %}active{% endif %}">
-        <div class="ico"> 📣</div> <span>Announcement</span>
+        <div clas="ico"></div> <span>Announcement</span>
       </a>    
 
       <a href="{% url 'student_my_account' %}"

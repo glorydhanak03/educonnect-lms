@@ -59,6 +59,10 @@ def payments(request):
 def enquiry(request):
     return render(request, "student/enquiry.html", {"display_name": _student_name(request)})
 
+@login_required
+def announcement(request):
+    return render(request, "student/announcement.html", {"display_name": _student_name(request)})
+
 
 @login_required
 def my_account(request):
