@@ -1,10 +1,186 @@
 {% extends "parent/base_parent.html" %}
 
-{% block parent_title %}Parent | announcement{% endblock %}
+{% block parent_title %}Parent | Announcement{% endblock %}
 
 {% block parent_content %}
-<div class="card pad">
-  <h2>announcement</h2>
-  <p>Parent announcement page</p>
+
+<style>
+.page-wrapper{
+    padding:30px;
+    min-height:100vh;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-header h2{
+    font-size:28px;
+    font-weight:600;
+}
+
+.search-box input{
+    padding:10px 40px 10px 15px;
+    border-radius:25px;
+    border:none;
+    width:250px;
+}
+
+.announcement-card{
+    background:#ffffff;
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:20px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    border:1px solid #00000020;
+}
+
+.announcement-card h3{
+    margin:0 0 8px;
+    font-size:20px;
+    font-weight:700;
+}
+
+.meta{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.view-btn{
+    color:#0066cc;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+    display:inline-block;
+}
+
+/* ===== POPUP ===== */
+
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(6px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.popup-box{
+    background:#ffffff;
+    width:500px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    animation:popupAnim 0.3s ease;
+}
+
+.popup-box h3{
+    margin-bottom:10px;
+}
+
+.close-btn{
+    float:right;
+    cursor:pointer;
+    font-size:20px;
+    font-weight:bold;
+}
+
+@keyframes popupAnim{
+    from{transform:scale(0.8); opacity:0;}
+    to{transform:scale(1); opacity:1;}
+}
+</style>
+
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h2>📢 Announcement</h2>
+        <div class="search-box">
+            <input type="text" placeholder="Search">
+        </div>
+    </div>
+
+    <!-- Announcement 1 -->
+    <div class="announcement-card">
+        <h3>Final Term Result Out</h3>
+        <div class="meta">By: Principal | 12 Dec 2025, 10:30 AM</div>
+        <p>We are pleased to inform you that the Final Term Results have been officially released.</p>
+        <span class="view-btn" onclick="openPopup('popup1')">View Details</span>
+    </div>
+
+    <!-- Announcement 2 -->
+    <div class="announcement-card">
+        <h3>PTM Scheduled</h3>
+        <div class="meta">By: Admin | 12 Dec 2025, 10:30 AM</div>
+        <p>A Parent-Teacher Meeting has been scheduled for 30 October at 10:00 AM.</p>
+        <span class="view-btn" onclick="openPopup('popup2')">View Details</span>
+    </div>
+
+    <!-- Announcement 3 -->
+    <div class="announcement-card">
+        <h3>Holiday Announcement</h3>
+        <div class="meta">By: Faculty | 12 Dec 2025, 10:30 AM</div>
+        <p>The school will remain closed on 15 October in celebration of Dussehra.</p>
+        <span class="view-btn" onclick="openPopup('popup3')">View Details</span>
+    </div>
+
 </div>
+
+<!-- ================= POPUPS ================= -->
+
+<div class="popup-overlay" id="popup1">
+    <div class="popup-box">
+        <span class="close-btn" onclick="closePopup('popup1')">✖</span>
+        <h3>Final Term Result Out</h3>
+        <p>
+            Subject-wise marks & grades<br>
+            Overall percentage & rank<br>
+            Attendance summary<br>
+            Teacher feedback & improvement areas
+        </p>
+    </div>
+</div>
+
+<div class="popup-overlay" id="popup2">
+    <div class="popup-box">
+        <span class="close-btn" onclick="closePopup('popup2')">✖</span>
+        <h3>PTM Scheduled</h3>
+        <p>
+            Parent-Teacher Meeting on 30 October at 10:00 AM.<br>
+            Please confirm your attendance via dashboard.
+        </p>
+    </div>
+</div>
+
+<div class="popup-overlay" id="popup3">
+    <div class="popup-box">
+        <span class="close-btn" onclick="closePopup('popup3')">✖</span>
+        <h3>Holiday Announcement</h3>
+        <p>
+            School closed on 15 October for Dussehra.<br>
+            Classes resume next working day.
+        </p>
+    </div>
+</div>
+
+<script>
+function openPopup(id){
+    document.getElementById(id).style.display="flex";
+}
+
+function closePopup(id){
+    document.getElementById(id).style.display="none";
+}
+</script>
+
 {% endblock %}
+
