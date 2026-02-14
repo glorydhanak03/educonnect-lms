@@ -294,8 +294,8 @@
 
   <div class="profile-menu">
     <a href="#" id="openProfileDetail">👤 View Profile</a>
-    <a class="{% if request.path == '/parent/settings/' %}active{% endif %}" href="{% url 'parent_app:settings' %}">⚙ Settings</a>
     <a class="{% if request.path == '/parent/announcement/' %}active{% endif %}" href="{% url 'parent_app:announcement' %}">📣 Announcement</a>
+    <a class="{% if request.path == '/parent/settings/' %}active{% endif %}" href="{% url 'parent_app:settings' %}">⚙ Settings</a>
     <a href="{% url 'logout' %}">🚪 Log out</a>
   </div>
 </div>
@@ -312,7 +312,7 @@
      <div class="profile-name">{{ request.user.username }}</div>
       <div class="profile-detail-role">Parent</div>
       <div style="font-size:13px;color:#666;">
-        nakul@educonnect.com<br>
+        parent@educonnect.com<br>
         +91 0000000000
       </div>
     </div>

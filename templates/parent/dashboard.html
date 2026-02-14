@@ -85,7 +85,7 @@
 
 {% block parent_content %}
   <section class="welcome">
-    <h2>Welcome back, {{ display_name }}!</h2>
+    <h2>Welcome back, {{ request.user.username }}!</h2>
     <div class="meta">Child: Priya Sharma | Grade 10-B</div>
     <div class="meta">Last Login : 12 Oct 2025</div>
   </section>
