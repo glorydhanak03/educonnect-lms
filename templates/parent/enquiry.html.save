@@ -218,13 +218,6 @@ th,td{
     background:#f3f4f6;
 }
 
-.page-number.active{
-    background:#2563eb;
-    color:#fff;
-    border:1px solid #2563eb;
-    box-shadow:0 4px 10px rgba(37,99,235,0.3);
-}
-
 
 </style>
 
@@ -345,18 +338,6 @@ th,td{
 </tr>
 
 </table>
-
-<div class="pagination-container">
-    <button class="page-btn">Previous</button>
-
-    <button class="page-number active">1</button>
-    <button class="page-number">2</button>
-    <button class="page-number">3</button>
-
-    <button class="page-btn">Next</button>
-</div>
-
-
 </div>
 
 </div>
@@ -391,7 +372,7 @@ th,td{
             <td style="font-weight:600; padding:10px; background:#f9fafb;">
                 Parent Name
             </td>
-            <td style="padding:10px;">Nakul Sharma</td>
+            <td style="padding:10px;">Ajinkya Pachade</td>
         </tr>
 
         <tr>

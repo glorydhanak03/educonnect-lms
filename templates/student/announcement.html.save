@@ -13,7 +13,7 @@
 /* LEFT SIDE */
 .left-section{
     width:100%;
-    background:#eaf0ff;
+    background:#ffffff;
     padding:25px;
     border-radius:12px;
 }
@@ -103,8 +103,8 @@
 
 <div class="page-wrapper">
 
-    <div class="left-section">       
-       <h1>📢 Announcements</h1>
+    <div class="left-section">
+        <h3>Announcements</h3>
 
         <!-- 1 -->
         <div class="announcement-card">
