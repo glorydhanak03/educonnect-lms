@@ -311,7 +311,7 @@ background:#ffffff;
 <!-- ================= TABLE ================= -->
 <div class="my-enquiry">
 <h3>My Enquiries</h3>
-<table>
+<table id="enquiryTable">
 <tr>
 <th>ID</th>
 <th>Send To</th>
@@ -348,16 +348,52 @@ background:#ffffff;
 <td><button class="feedback-btn" onclick="openFeedback()">Feedback</button></td>
 </tr>
 
+<tr>
+<td>ENQ-101</td>
+<td>Admin</td>
+<td>Mr. Ajinkya Pachade</td>
+<td>N/A</td>
+<td>1 to 1 Session</td>
+<td>10 Oct 2025</td>
+<td>11:25 AM</td>
+<td>Pending</td>
+<td><button class="view-btn" onclick="openDetails()">View Details</button></td>
+</tr>
+
+<tr>
+<td>ENQ-102</td>
+<td>Faculty</td>
+<td>Prof. Arjun Patel</td>
+<td>Physics</td>
+<td>Extra Class</td>
+<td>15 Aug 2025</td>
+<td>9:25 AM</td>
+<td>Approved</td>
+<td><button class="feedback-btn" onclick="openFeedback()">Feedback</button></td>
+</tr>
+
+<tr>
+<td>ENQ-101</td>
+<td>Admin</td>
+<td>Mr. Ajinkya Pachade</td>
+<td>N/A</td>
+<td>1 to 1 Session</td>
+<td>10 Oct 2025</td>
+<td>11:25 AM</td>
+<td>Pending</td>
+<td><button class="view-btn" onclick="openDetails()">View Details</button></td>
+</tr>
+
 </table>
 
 <div class="pagination-container">
-    <button class="page-btn">Previous</button>
+    <button class="page-btn" onclick="prevPage()">Previous</button>
 
-    <button class="page-number active">1</button>
-    <button class="page-number">2</button>
-    <button class="page-number">3</button>
+    <button class="page-number active" onclick="goToPage(1)">1</button>
+    <button class="page-number" onclick="goToPage(2)">2</button>
+    <button class="page-number" onclick="goToPage(3)">3</button>
 
-    <button class="page-btn">Next</button>
+    <button class="page-btn" onclick="nextPage()">Next</button>
 </div>
 
 
@@ -575,6 +611,67 @@ function rate(star){
         }
     });
 }
+
+let currentPage = 1;
+let rowsPerPage = 2;
+
+function showPage(page){
+
+    let table = document.getElementById("enquiryTable");
+    let rows = table.querySelectorAll("tr");
+
+    let start = (page - 1) * rowsPerPage + 1;
+    let end = start + rowsPerPage - 1;
+
+    rows.forEach((row, index) => {
+
+        if(index === 0){
+            row.style.display = ""; // header
+        }
+        else if(index >= start && index <= end){
+            row.style.display = "";
+        }
+        else{
+            row.style.display = "none";
+        }
+
+    });
+
+    updateActiveButton(page);
+}
+
+function updateActiveButton(page){
+    document.querySelectorAll(".page-number").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(".page-number")[page-1].classList.add("active");
+
+    currentPage = page;
+}
+
+function goToPage(page){
+    showPage(page);
+}
+
+function nextPage(){
+    let totalPages = document.querySelectorAll(".page-number").length;
+    if(currentPage < totalPages){
+        showPage(currentPage + 1);
+    }
+}
+
+function prevPage(){
+    if(currentPage > 1){
+        showPage(currentPage - 1);
+    }
+}
+
+/* Load first page on start */
+document.addEventListener("DOMContentLoaded", function(){
+    showPage(1);
+});
+
 
 </script>
 

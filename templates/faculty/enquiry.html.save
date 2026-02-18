@@ -9,10 +9,9 @@
 /* PAGE */
 .enquiry-container{ padding:30px; }
 .enquiry-card{
-    background:#ffffff;
+    background:#fff;
     padding:20px;
-    border-radius:8px;
-    border:1px solid #e5e7eb;
+    border-radius:16px;
     box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
@@ -328,98 +327,37 @@ th{ background:#f9fafb; font-weight:600; }
 }
 
 
-/* ================= TABS ================= */
-
-.enquiry-tabs{
-    display:flex;
-    margin-bottom:10px;   /* gap between tabs & card */
-}
-
-.tab-item{
-    padding:12px 22px;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    background:#ffffff;
-    color:#555;
-    border:1px solid #e5e7eb;
-    border-radius:8px 8px 0 0;
-    margin-right:6px;   /* spacing between tabs */
-    transition:0.3s ease;
-}
-
-/* ACTIVE TAB */
-.tab-item.active{
-    background:#ffffff;
-    color:#2563eb;
-    position:relative;
-}
-
-/* BLUE LINE KHAAALI */
-.tab-item.active::after{
-    content:"";
-    position:absolute;
-    bottom:-4px;   /* adjust if needed */
-    left:0;
-    width:100%;
-    height:3px;
-    background:#2563eb;
-    border-radius:4px;
-    margin-bottom:4px;
-}
-
-
 </style>
 
 
 <div class="enquiry-container">
-
-<h1>👥 Enquiries</h1>
-
-<!-- TABS -->
-<div class="enquiry-tabs">
-
-    <div class="tab-item active" onclick="switchTab('student')">
-        Academic / Students Enquiries
-    </div>
-
-    <div class="vertical-divider"></div>
-
-    <div class="tab-item" onclick="switchTab('parent')">
-        Parent Enquiries
-    </div>
-
-</div>
-
-<div style="text-align:right;margin-top:-50px;font-size:20px;color:#01579B">
+<div style="text-align:right;margin-top:15px;font-size:20px;color:#01579B">
         <a href="#" onclick="openPopup('guidelinesPopup')">View Admin Enquiry Guidelines</a>
  </div>
 
 <br>
 <div class="enquiry-card">
 
-<div id="studentTable">
-<table id="enquiryTable">
 
+<h1>👥 Enquiries</h1>
+
+<table id="enquiryTable">
 <tr>
 <th>ID</th>
-<th>Student Name</th>
+<th>Parent</th>
+<th>Student</th>
 <th>Class</th>
-<th>Enquiry Type</th>
+<th>Type</th>
 <th>Date</th>
-<th>Time</th>
 <th>Status</th>
 <th>Take Action</th>
 </tr>
 
-<!-- ROW 1 -->
+<!-- 8 Rows -->
+
 <tr>
-<td>SENQ-101</td>
-<td>Riya</td>
-<td>5th</td>
-<td>Fee</td>
-<td>10 Oct</td>
-<td>11:00 AM</td>
+<td>ENQ-101</td><td>Ajinkya</td><td>Riya</td><td>5th</td>
+<td>Fee</td><td>10 Oct</td>
 <td class="status-pending">Pending</td>
 <td>
 <select class="action-select" onchange="handleAction(this)">
@@ -432,14 +370,9 @@ th{ background:#f9fafb; font-weight:600; }
 </td>
 </tr>
 
-<!-- ROW 2 -->
 <tr>
-<td>SENQ-102</td>
-<td>Arjun</td>
-<td>6th</td>
-<td>Complaint</td>
-<td>12 Oct</td>
-<td>01:30 PM</td>
+<td>ENQ-102</td><td>Raj</td><td>Arjun</td><td>6th</td>
+<td>Complaint</td><td>12 Oct</td>
 <td class="status-approved">Approved</td>
 <td>
 <select class="action-select" onchange="handleAction(this)">
@@ -452,14 +385,9 @@ th{ background:#f9fafb; font-weight:600; }
 </td>
 </tr>
 
-<!-- ROW 3 -->
 <tr>
-<td>SENQ-103</td>
-<td>Simran</td>
-<td>7th</td>
-<td>Academic</td>
-<td>13 Oct</td>
-<td>10:15 AM</td>
+<td>ENQ-103</td><td>Meena</td><td>Simran</td><td>7th</td>
+<td>Academic</td><td>13 Oct</td>
 <td class="status-complete">Complete</td>
 <td>
 <select class="action-select" onchange="handleAction(this)">
@@ -471,8 +399,8 @@ th{ background:#f9fafb; font-weight:600; }
 </tr>
 
 <tr>
-<td>SENQ-104</td><td>Amit</td><td>8th</td><td>General</td>
-<td>15 Oct</td><td>11:00 AM</td>
+<td>ENQ-104</td><td>Amit</td><td>Karan</td><td>8th</td>
+<td>General</td><td>14 Oct</td>
 <td class="status-rejected">Rejected</td>
 <td>
 <select class="action-select" onchange="handleAction(this)">
@@ -482,98 +410,17 @@ th{ background:#f9fafb; font-weight:600; }
 </td>
 </tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>10th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>12th</td><td>Complaint</td><td>15 Feb</td><td>6:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-107</td><td>Kavita</td><td>9th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>12th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
+<tr><td>ENQ-105</td><td>Pooja</td><td>Neha</td><td>9th</td><td>Fee</td><td>15 Oct</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-106</td><td>Suresh</td><td>Aryan</td><td>10th</td><td>Complaint</td><td>16 Oct</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-107</td><td>Kavita</td><td>Isha</td><td>11th</td><td>General</td><td>17 Oct</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-108</td><td>Rohan</td><td>Tanvi</td><td>12th</td><td>Academic</td><td>18 Oct</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>7th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>10th</td><td>Complaint</td><td>15 Oct</td><td>6:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-107</td><td>Kavita</td><td>11th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>5th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
-
-</table>
-</div>
-
-<div id="parentTable" style="display:none;">
-
-<table id="parentEnquiryTable" class="enquiry-table">
-<tr>
-<th>ID</th>
-<th>Parent Name</th>
-<th>Student Name</th>
-<th>Class</th>
-<th>Enquiry Type</th>
-<th>Date</th>
-<th>Time</th>
-<th>Status</th>
-<th>Take Action</th>
-</tr>
-
-<tr>
-<td>PENQ-201</td>
-<td>Mahesh</td>
-<td>Riya</td>
-<td>5th</td>
-<td>Meeting</td>
-<td>20 Oct</td>
-<td>11:30 AM</td>
-<td class="status-pending">Pending</td>
-<td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✅ Approve</option>
-<option>❌ Reject</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
-</select>
-</td>
-</tr>
-
-<tr>
-<td>PENQ-202</td>
-<td>Sunita</td>
-<td>Arjun</td>
-<td>6th</td>
-<td>Fee</td>
-<td>21 Oct</td>
-<td>01:15 PM</td>
-<td class="status-approved">Approved</td>
-<td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✔ Mark as Complete</option>
-<option>❌ Cancel</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
-</select>
-</td>
-</tr>
-
-<tr><td>PENQ-203</td><td>Rajesh</td><td>Meera</td><td>7th</td><td>Admission</td><td>22 Oct</td><td>10:30 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-204</td><td>Anita</td><td>Rohan</td><td>8th</td><td>Exam</td><td>23 Oct</td><td>11:45 AM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-205</td><td>Mahesh</td><td>Sneha</td><td>5th</td><td>Transport</td><td>24 Oct</td><td>09:15 AM</td><td class="status-rejected">Rejected</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-206</td><td>Kavita</td><td>Aditya</td><td>9th</td><td>Fee</td><td>25 Oct</td><td>02:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-207</td><td>Vikram</td><td>Pooja</td><td>6th</td><td>Admission</td><td>26 Oct</td><td>12:20 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-208</td><td>Neha</td><td>Karan</td><td>10th</td><td>Exam</td><td>27 Oct</td><td>03:10 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-209</td><td>Suresh</td><td>Tanvi</td><td>4th</td><td>Transport</td><td>28 Oct</td><td>08:40 AM</td><td class="status-rejected">Rejected</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-210</td><td>Priya</td><td>Om</td><td>3rd</td><td>Fee</td><td>29 Oct</td><td>01:50 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-211</td><td>Deepak</td><td>Ishita</td><td>8th</td><td>Admission</td><td>30 Oct</td><td>10:10 AM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-
-<tr><td>PENQ-212</td><td>Shalini</td><td>Vivaan</td><td>5th</td><td>Exam</td><td>31 Oct</td><td>02:35 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-105</td><td>Pooja</td><td>Neha</td><td>9th</td><td>Fee</td><td>15 Oct</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-106</td><td>Suresh</td><td>Aryan</td><td>10th</td><td>Complaint</td><td>16 Oct</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-107</td><td>Kavita</td><td>Isha</td><td>11th</td><td>General</td><td>17 Oct</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-108</td><td>Rohan</td><td>Tanvi</td><td>12th</td><td>Academic</td><td>18 Oct</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
 
 </table>
-
-</div>
-
 </div>
 </div>
 
@@ -586,16 +433,6 @@ th{ background:#f9fafb; font-weight:600; }
     <button class="page-number" onclick="goToPage(3)">3</button>
 
     <button class="page-btn" onclick="nextPage()">Next</button>
-</div>
-
-<!-- PARENT PAGINATION -->
-<div class="pagination-container" id="parentPagination" style="display:none;">
-    <button class="page-btn" onclick="prevParentPage()">Previous</button>
-
-    <button class="page-number parent-page active" onclick="showParentPage(1)">1</button>
-    <button class="page-number parent-page" onclick="showParentPage(2)">2</button>
-
-    <button class="page-btn" onclick="nextParentPage()">Next</button>
 </div>
 
 
@@ -978,22 +815,18 @@ function handleAction(select){
 
     currentRow = row; // store row globally
 
-    let cells = row.querySelectorAll("td");
-
-    let studentName = cells[1].innerText;
-    let className = cells[2].innerText;
-    let type = cells[3].innerText;
-    let date = cells[4].innerText;
-    let time = cells[5].innerText;
-    let status = cells[6].innerText;
-    
+    let studentName = row.children[2].innerText;
+    let className = row.children[3].innerText;
+    let type = row.children[4].innerText;
+    let date = row.children[5].innerText;
+    let status = row.children[6].innerText;
 
     if(value.includes("Reschedule")){
 
         document.getElementById("resStudentName").innerText = studentName;
         document.getElementById("resCurrentDate").innerText = date;
         document.getElementById("resClass").innerText = className;
-        document.getElementById("resTime").innerText =  time;
+        document.getElementById("resTime").innerText = "01:15 PM"; // demo time
         document.getElementById("resType").innerText = type;
         document.getElementById("resStatus").innerText = status;
 
@@ -1073,8 +906,6 @@ function showPage(page){
     updateActiveButton(page);
 }
 
-
-
 function updateActiveButton(page){
     document.querySelectorAll(".page-number").forEach(btn=>{
         btn.classList.remove("active");
@@ -1102,62 +933,6 @@ function prevPage(){
     }
 }
 
-
-let parentCurrentPage = 1;
-let parentRowsPerPage = 8;
-
-function showParentPage(page){
-
-    let table = document.getElementById("parentEnquiryTable");
-    let rows = table.querySelectorAll("tr");
-
-    let start = (page - 1) * parentRowsPerPage + 1;
-    let end = start + parentRowsPerPage - 1;
-
-    rows.forEach((row, index) => {
-
-        if(index === 0){
-            row.style.display = "";
-        }
-        else if(index >= start && index <= end){
-            row.style.display = "";
-        }
-        else{
-            row.style.display = "none";
-        }
-
-    });
-
-    updateParentActiveButton(page);   // 👈 he call already aahe
-}
-
-
-function updateParentActiveButton(page){
-
-    document.querySelectorAll(".parent-page").forEach(btn=>{
-        btn.classList.remove("active");
-    });
-
-    document.querySelectorAll(".parent-page")[page-1].classList.add("active");
-
-    parentCurrentPage = page;
-}
-
-function nextParentPage(){
-    let totalPages = document.querySelectorAll(".parent-page").length;
-    if(parentCurrentPage < totalPages){
-        showParentPage(parentCurrentPage + 1);
-    }
-}
-
-function prevParentPage(){
-    if(parentCurrentPage > 1){
-        showParentPage(parentCurrentPage - 1);
-    }
-}
-
-
-
 /* Load first page on start */
 document.addEventListener("DOMContentLoaded", function(){
     showPage(1);
@@ -1165,33 +940,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function switchTab(type){
 
-    const tabs = document.querySelectorAll(".tab-item");
-    tabs.forEach(tab => tab.classList.remove("active"));
+    let tabs = document.querySelectorAll(".tab-item");
+    tabs.forEach(t => t.classList.remove("active"));
 
     if(type === "student"){
         tabs[0].classList.add("active");
-
         document.getElementById("studentTable").style.display = "block";
         document.getElementById("parentTable").style.display = "none";
-
-        document.querySelector(".pagination-container").style.display = "flex";
-        document.getElementById("parentPagination").style.display = "none";
-
-        showPage(1);
     }
     else{
         tabs[1].classList.add("active");
-
         document.getElementById("studentTable").style.display = "none";
         document.getElementById("parentTable").style.display = "block";
-
-        document.querySelector(".pagination-container").style.display = "none";
-        document.getElementById("parentPagination").style.display = "flex";
-
-        showParentPage(1);
     }
-}
 
+}
 
 </script>
 
