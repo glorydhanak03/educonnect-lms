@@ -747,8 +747,11 @@ placeholder="Write feedback..."></textarea>
 </div>
 
 <div class="popup-body">
+<strong>Are you sure want to approve this enquiry?</strong>
 <p><strong>Student:</strong> <span id="approveStudent"></span></p>
 <p><strong>Date:</strong> <span id="approveDate"></span></p>
+<p><strong>Enquiry Type:</strong> <span>Assignment Help</span></p>
+<p><strong>Time:</strong> <span>11:00 AM</span></p>
 
 <br>
 
@@ -764,9 +767,9 @@ placeholder="Write feedback..."></textarea>
 
 <div class="popup-header">
 <div class="popup-title">
-<svg width="26" height="26" fill="#dc2626" viewBox="0 0 24 24">
-<path d="M18 6 6 18M6 6l12 12"/>
-</svg>
+ <svg width="26" height="26" fill="#ef4444" viewBox="0 0 24 24">
+    <path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L12 13.4l-6.3 6.3-1.4-1.4L10.6 12 4.3 5.7l1.4-1.4L12 10.6l6.3-6.3z"/>
+  </svg>
 <span>Reject Enquiry</span>
 </div>
 <span class="close-btn" onclick="closePopup('rejectPopup')">✖</span>
@@ -774,10 +777,11 @@ placeholder="Write feedback..."></textarea>
 
 <div class="popup-body">
 
+<strong>Reason for Rejection</strong>
 <p><strong>Student:</strong> <span id="rejectStudent"></span></p>
 
 <textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
-placeholder="Reason for rejection"></textarea>
+placeholder="Type reason here..."></textarea>
 
 <br><br>
 
@@ -903,10 +907,13 @@ Once rescheduled, your faculty and student will receive a notification.
 </div>
 
 <div class="popup-body">
+<strong>Are you sure you want to mark this enquiry as completed?</strong> 
 <p><strong>Student:</strong> <span id="completeStudent"></span></p>
-
+<span>Add completion notes<span>
 <br>
-
+<textarea class="textarea-style"
+placeholder="Type something here ..."></textarea>
+<br><br>
 <button class="send-btn">Confirm Complete</button>
 <button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
 
@@ -920,9 +927,9 @@ Once rescheduled, your faculty and student will receive a notification.
 
 <div class="popup-header">
 <div class="popup-title">
-<svg width="26" height="26" fill="#6b7280" viewBox="0 0 24 24">
-<path d="M18 6 6 18M6 6l12 12"/>
-</svg>
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13l-2 2-3-3-3 3-2-2 3-3-3-3 2-2 3 3 3-3 2 2-3 3 3 3z"/>
+  </svg>
 <span>Cancel Enquiry</span>
 </div>
 <span class="close-btn" onclick="closePopup('cancelPopup')">✖</span>
@@ -930,10 +937,11 @@ Once rescheduled, your faculty and student will receive a notification.
 
 <div class="popup-body">
 
+<strong>Reason for Cancellation</strong>
 <p><strong>Student:</strong> <span id="cancelStudent"></span></p>
 
 <textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
-placeholder="Reason for cancellation"></textarea>
+placeholder="Type reason here..."></textarea>
 
 <br><br>
 
