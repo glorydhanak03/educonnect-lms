@@ -1,10 +1,679 @@
 {% extends "admin_panel/base_admin.html" %}
 
-{% block admin_title %}Admin | enquiry{% endblock %}
+{% block admin_title %}Admin | Enquiry{% endblock %}
 
 {% block admin_content %}
-<div class="card pad">
-  <h2 style="margin:0 0 6px">enquiry</h2>
-  <p style="margin:0;color:#64748b">Admin enquiry page</p>
+
+<style>
+/* ================= WRAPPER ================= */
+
+.enquiry-wrapper{
+    padding:20px;
+}
+
+/* ================= PAGE HEADING ================= */
+
+.page-heading{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+/* ================= TABS ================= */
+
+.enquiry-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.tab-item{
+    padding:10px 18px;
+    background:#f3f4f6;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.tab-item.active{
+    background:#2563eb;
+    color:white;
+}
+
+.tab-item:hover{
+    background:#e5e7eb;
+}
+
+/* ================= TOP SECTION ================= */
+
+.top-section{
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+/* ================= DETAILS CARD ================= */
+
+.details-card{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.details-card h3{
+    margin-bottom:15px;
+}
+
+.detail-row{
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.message-box{
+    background:#f9fafb;
+    padding:10px;
+    border-radius:6px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+/* ================= ACTION BUTTONS ================= */
+
+.action-buttons{
+    margin-top:15px;
+}
+
+.approve-btn{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:8px;
+}
+
+.reject-btn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.approve-btn:hover{
+    background:#1e40af;
+}
+
+.reject-btn:hover{
+    background:#b91c1c;
+}
+
+/* ================= GUIDELINE CARD ================= */
+
+.guideline-card{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.guideline-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.edit-icon{
+    cursor:pointer;
+    font-size:16px;
+}
+
+#guidelineTextarea{
+    width:100%;
+    height:120px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #e5e7eb;
+}
+
+.change-btn{
+    margin-top:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.change-btn:hover{
+    background:#1e40af;
+}
+
+.guideline-controls{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+
+.guideline-controls select{
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid #d1d5db;
+}
+
+.guideline-controls button{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.guideline-controls button:hover{
+    background:#15803d;
+}
+
+
+/* ================= TABLE CARD ================= */
+
+.table-card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ================= TABLE ================= */
+
+.enquiry-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.enquiry-table th{
+    background:#f3f4f6;
+    padding:10px;
+    font-size:14px;
+    text-align:left;
+}
+
+.enquiry-table td{
+    padding:10px;
+    font-size:14px;
+    border-top:1px solid #e5e7eb;
+}
+
+.enquiry-table tr:hover{
+    background:#f9fafb;
+}
+
+/* ================= STATUS COLORS ================= */
+
+.status-approved{
+    color:#16a34a;
+    font-weight:600;
+}
+
+.status-rejected{
+    color:#dc2626;
+    font-weight:600;
+}
+
+.status-pending{
+    color:#f59e0b;
+    font-weight:600;
+}
+
+.status-completed{
+    color:#2563eb;
+    font-weight:600;
+}
+
+.status-cancelled{
+    color:#6b7280;
+    font-weight:600;
+}
+
+/* ================= ACTION SELECT ================= */
+
+.action-select{
+    padding:6px;
+    border-radius:6px;
+    border:1px solid #d1d5db;
+    cursor:pointer;
+}
+
+/* ================= PAGINATION ================= */
+
+.pagination{
+    margin-top:15px;
+    display:flex;
+    gap:6px;
+    align-items:center;
+}
+
+.pagination button{
+    padding:6px 12px;
+    border:none;
+    background:#e5e7eb;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.pagination button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.pagination button:hover{
+    background:#d1d5db;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+    .top-section{
+        flex-direction:column;
+    }
+}
+
+
+</style>
+
+<div class="enquiry-wrapper">
+
+    <!-- PAGE TITLE -->
+    <h2 class="page-heading">❓ Enquiry for 1-to-1 Session</h2>
+
+    <!-- TABS -->
+    <div class="enquiry-tabs">
+        <div class="tab-item active" onclick="switchTab('parent')">Parent Enquiries</div>
+        <div class="tab-item" onclick="switchTab('student')">Academic / Students Enquiries</div>
+    </div>
+
+    <!-- =================== DETAILS + GUIDELINES SECTION =================== -->
+
+    <div class="top-section">
+
+        <!-- ENQUIRY DETAILS (VIEW ONLY) -->
+        <div class="details-card">
+
+            <h3>Enquiry Details</h3>
+
+            <div class="detail-row"><b>Name :</b> <span id="dName">Rajesh Sharma</span></div>
+            <div class="detail-row"><b>Class :</b> <span id="dClass">8th Std</span></div>
+            <div class="detail-row"><b>Enquiry Type :</b> <span id="dType">Fee Issue</span></div>
+            <div class="detail-row"><b>Date & Time :</b> <span id="dDate">10 Oct 2025, 11:25 AM</span></div>
+
+            <div class="message-box">
+                I faced fees issue while submitting payment.
+            </div>
+
+            <div class="action-buttons">
+                <button class="approve-btn">Approve</button>
+                <button class="reject-btn">Reject</button>
+            </div>
+
+        </div>
+
+        <!-- GUIDELINES -->
+        <div class="guideline-card">
+
+            <div class="guideline-header">
+                <h3>Admin Enquiry Guidelines</h3>
+                <span class="edit-icon" onclick="enableEdit()">✏️</span>
+            </div>
+
+            <div id="guidelineContent">
+                <ul>
+                    <li>All enquiries must be submitted with accurate information.</li>
+                    <li>Enquiries reviewed within 24–48 hours.</li>
+                    <li>Duplicate enquiries should be avoided.</li>
+                </ul>
+            </div>
+
+            <textarea id="guidelineTextarea" style="display:none;"></textarea>
+
+            <button class="change-btn" onclick="saveGuidelines()">Change Guidelines</button>
+        <div class="guideline-controls">
+
+    <select id="sendToRole">
+        <option value="">Select Role</option>
+        <option value="student">Student</option>
+        <option value="parent">Parent</option>
+        <option value="faculty">Faculty</option>
+    </select>
+
+    <button onclick="sendGuidelines()">Send Guidelines</button>
+
 </div>
+
+        </div>
+
+    </div>
+
+    <!-- =================== TABLE SECTION =================== -->
+
+    <!-- PARENT TABLE -->
+    <div id="parentTable">
+
+        <div class="table-card">
+            <h3>Parent Previous Enquiries</h3>
+
+            <table id="parentEnquiryTable" class="enquiry-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Parent</th>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                <!-- 12 rows demo -->
+                {% for i in "123456789012" %}
+                <tr>
+                    <td>ENQ-10{{forloop.counter}}</td>
+                    <td>Rajesh Sharma</td>
+                    <td>Aarav</td>
+                    <td>8th Std</td>
+                    <td>Fee Issue</td>
+                    <td>10 Oct 2025 11:25 AM</td>
+                    <td class="status-pending">Pending</td>
+                    <td>
+                        <select class="action-select" onchange="handleAction(this)">
+                            <option>Select</option>
+                            <option>✔ Mark as Complete</option>
+                            <option>❌ Cancel</option>
+                            <option>👁 View</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <!-- PARENT PAGINATION -->
+            <div class="pagination">
+                <button onclick="prevParentPage()">Previous</button>
+                <button class="parent-page active" onclick="showParentPage(1)">1</button>
+                <button class="parent-page" onclick="showParentPage(2)">2</button>
+                <button onclick="nextParentPage()">Next</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- STUDENT TABLE -->
+    <div id="studentTable" style="display:none;">
+
+        <div class="table-card">
+            <h3>Student Previous Enquiries</h3>
+
+            <table id="studentEnquiryTable" class="enquiry-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for i in "123456789012" %}
+                <tr>
+                    <td>ENQ-20{{forloop.counter}}</td>
+                    <td>Amit</td>
+                    <td>10th</td>
+                    <td>Revision Session</td>
+                    <td>11 Oct 2025 12:30 PM</td>
+                    <td class="status-approved">Approved</td>
+                    <td>
+                        <select class="action-select" onchange="handleAction(this)">
+                            <option>Select</option>
+                            <option>✔ Mark as Complete</option>
+                            <option>❌ Cancel</option>
+                            <option>👁 View</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <!-- STUDENT PAGINATION -->
+            <div class="pagination">
+                <button onclick="prevStudentPage()">Previous</button>
+                <button class="student-page active" onclick="showStudentPage(1)">1</button>
+                <button class="student-page" onclick="showStudentPage(2)">2</button>
+                <button onclick="nextStudentPage()">Next</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= JS ================= -->
+
+<script>
+
+/* TAB SWITCH */
+function switchTab(type){
+
+    document.querySelectorAll(".tab-item").forEach(tab=>tab.classList.remove("active"));
+
+    if(type==="parent"){
+        document.querySelectorAll(".tab-item")[0].classList.add("active");
+        document.getElementById("parentTable").style.display="block";
+        document.getElementById("studentTable").style.display="none";
+    }else{
+        document.querySelectorAll(".tab-item")[1].classList.add("active");
+        document.getElementById("parentTable").style.display="none";
+        document.getElementById("studentTable").style.display="block";
+    }
+}
+
+/* TAKE ACTION LOGIC */
+function handleAction(select){
+
+    let value = select.value;
+    let row = select.closest("tr");
+    let enquiryId = row.dataset.id;
+    let statusCell = row.querySelector(".status-cell");
+
+    if(value === "View Details"){
+        openViewPopup(row);
+        select.selectedIndex = 0;
+        return;
+    }
+
+    if(value === "Reschedule"){
+        openReschedulePopup(row);
+        select.selectedIndex = 0;
+        return;
+    }
+
+    let newStatus = "";
+
+    if(value === "Approve") newStatus = "Approved";
+    if(value === "Reject") newStatus = "Rejected";
+    if(value === "Mark as Complete") newStatus = "Completed";
+    if(value === "Cancel") newStatus = "Cancelled";
+
+    if(newStatus !== ""){
+        updateStatusInDB(enquiryId, newStatus, statusCell, row);
+    }
+
+    select.selectedIndex = 0;
+}
+
+document.querySelectorAll("tbody tr").forEach(row=>{
+    setActionsForRow(row);
+});
+
+
+function updateStatusInDB(id, status, statusCell, row){
+
+    fetch("/update-enquiry-status/", {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "X-CSRFToken":getCSRFToken()
+        },
+        body:JSON.stringify({
+            id:id,
+            status:status
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.success){
+
+            statusCell.innerText = status;
+            statusCell.className = "status-cell status-" + status.toLowerCase();
+
+            setActionsForRow(row);   // 🔥 IMPORTANT
+        }
+    });
+}
+
+function openViewPopup(row){
+
+    let id = row.children[0].innerText;
+    let name = row.children[1].innerText;
+    let className = row.children[3].innerText;
+
+    document.getElementById("viewId").innerText = id;
+    document.getElementById("viewName").innerText = name;
+    document.getElementById("viewClass").innerText = className;
+
+    document.getElementById("viewPopup").style.display = "flex";
+}
+
+
+
+/* GUIDELINE EDIT */
+function enableEdit(){
+    let content = document.getElementById("guidelineContent");
+    let textarea = document.getElementById("guidelineTextarea");
+
+    textarea.value = content.innerText;
+    content.style.display="none";
+    textarea.style.display="block";
+}
+
+function saveGuidelines(){
+    let content = document.getElementById("guidelineContent");
+    let textarea = document.getElementById("guidelineTextarea");
+
+    if(textarea.style.display==="block"){
+        content.innerHTML = "<ul><li>" + textarea.value.replace(/\n/g,"</li><li>") + "</li></ul>";
+        textarea.style.display="none";
+        content.style.display="block";
+    }
+}
+
+/* ================= PAGINATION ================= */
+
+let parentCurrentPage=1;
+let parentRowsPerPage=8;
+
+function showParentPage(page){
+    let rows=document.querySelectorAll("#parentEnquiryTable tr");
+    let start=(page-1)*parentRowsPerPage+1;
+    let end=start+parentRowsPerPage-1;
+
+    rows.forEach((row,index)=>{
+        if(index===0){row.style.display="";}
+        else if(index>=start && index<=end){row.style.display="";}
+        else{row.style.display="none";}
+    });
+
+    document.querySelectorAll(".parent-page").forEach(btn=>btn.classList.remove("active"));
+    document.querySelectorAll(".parent-page")[page-1].classList.add("active");
+    parentCurrentPage=page;
+}
+
+function nextParentPage(){
+    if(parentCurrentPage<2) showParentPage(parentCurrentPage+1);
+}
+
+function prevParentPage(){
+    if(parentCurrentPage>1) showParentPage(parentCurrentPage-1);
+}
+
+/* STUDENT PAGINATION */
+
+let studentCurrentPage=1;
+let studentRowsPerPage=8;
+
+function showStudentPage(page){
+    let rows=document.querySelectorAll("#studentEnquiryTable tr");
+    let start=(page-1)*studentRowsPerPage+1;
+    let end=start+studentRowsPerPage-1;
+
+    rows.forEach((row,index)=>{
+        if(index===0){row.style.display="";}
+        else if(index>=start && index<=end){row.style.display="";}
+        else{row.style.display="none";}
+    });
+
+    document.querySelectorAll(".student-page").forEach(btn=>btn.classList.remove("active"));
+    document.querySelectorAll(".student-page")[page-1].classList.add("active");
+    studentCurrentPage=page;
+}
+
+function nextStudentPage(){
+    if(studentCurrentPage<2) showStudentPage(studentCurrentPage+1);
+}
+
+function prevStudentPage(){
+    if(studentCurrentPage>1) showStudentPage(studentCurrentPage-1);
+}
+
+/* INIT */
+showParentPage(1);
+
+
+function setActionsForRow(row){
+
+    let status = row.querySelector(".status-cell").innerText;
+    let select = row.querySelector(".action-select");
+
+    select.innerHTML = '<option>Select</option>';
+
+    if(status === "Pending"){
+        select.innerHTML += `
+            <option>Approve</option>
+            <option>Reject</option>
+            <option>Reschedule</option>
+            <option>View Details</option>
+        `;
+    }
+    else if(status === "Approved"){
+        select.innerHTML += `
+            <option>Mark as Complete</option>
+            <option>Cancel</option>
+            <option>View Details</option>
+        `;
+    }
+    else{
+        select.innerHTML += `<option>View Details</option>`;
+    }
+}
+
+</script>
+
 {% endblock %}
