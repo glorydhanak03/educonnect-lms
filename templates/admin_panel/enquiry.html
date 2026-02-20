@@ -182,6 +182,32 @@
     background:#15803d;
 }
 
+.guideline-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.edit-icon{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+    transition:all 0.3s ease;
+    user-select:none;
+}
+
+/* Hover Effect */
+.edit-icon:hover{
+    background:#2563eb;
+    transform:scale(1.05);
+}
 
 /* ================= TABLE CARD ================= */
 
@@ -217,6 +243,127 @@
     background:#f9fafb;
 }
 
+
+/* ================= POPUP OVERLAY ================= */
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(6px);
+
+    display:flex;                /* Always flex */
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+/* When active */
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ================= POPUP BOX ================= */
+.popup-box{
+    width:750px;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+/* ================= HEADER ================= */
+.popup-header{
+    background:#FBF9F9;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+}
+
+.popup-title{
+    font-size:22px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.close-btn{
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* ================= BODY ================= */
+.popup-body{
+    padding:25px;
+}
+
+.popup-body table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.popup-body table tr{
+    border-bottom:1px solid #eee;
+}
+
+.popup-body table td{
+    padding:10px;
+}
+
+.popup-body table td:first-child{
+    font-weight:600;
+    width:35%;
+    background:#f9fafb;
+}
+
+/* ================= BUTTONS ================= */
+.send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.feedback-btn{
+    background:#e5e7eb;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+/* ================= STAR RATING ================= */
+.star-rating{
+    font-size:28px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.star-rating .active{
+    color:gold;
+}
+
+
 /* ================= STATUS COLORS ================= */
 
 .status-approved{
@@ -243,6 +390,119 @@
     color:#6b7280;
     font-weight:600;
 }
+
+/* ================= RESCHEDULE SPECIAL ================= */
+
+.reschedule-box{
+    width:900px;
+}
+
+.reschedule-header{
+    background:#f3f4f6;
+}
+
+.reschedule-body{
+    background:#ffffff;
+    padding:30px;
+}
+
+.reschedule-card{
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:25px;
+}
+
+.section-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px 60px;
+    margin-bottom:20px;
+}
+
+.details-grid label{
+    font-weight:600;
+    font-size:14px;
+    color:#444;
+}
+
+.detail-value{
+    border-bottom:1px solid #ddd;
+    padding:6px 0;
+    margin-top:4px;
+}
+
+.new-session-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px 60px;
+    margin-bottom:20px;
+}
+
+.input-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.textarea-style{
+    width:100%;
+    height:100px;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.confirm-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.note-text{
+    font-size:14px;
+    color:#555;
+    margin-top:8px;
+}
+
+.reschedule-footer{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-top:30px;
+}
+
+.confirm-btn{
+    background:#f59e0b;
+    color:#fff;
+    padding:12px 40px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    padding:12px 60px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+
 
 /* ================= ACTION SELECT ================= */
 
@@ -278,6 +538,8 @@
 .pagination button:hover{
     background:#d1d5db;
 }
+
+
 
 /* ================= RESPONSIVE ================= */
 
@@ -361,6 +623,320 @@
         </div>
 
     </div>
+    <!--Enqury Details Popup-->
+<div class="popup-overlay" id="detailsPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+</svg>
+<span>Enquiry Details</span>
+</div>
+<span class="close-btn" onclick="closePopup('detailsPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<table>
+<tr><td>Enquiry ID</td><td>ENQ-101</td></tr>
+<tr><td>Student Name</td><td>Ram Jadhav</td></tr>
+<tr><td>Class</td><td>5th Std</td></tr>
+<tr><td>Send To</td><td>Admin</td></tr>
+<tr><td>Admin Name</td><td>Mr. Ajinkya Pachade</td></tr>
+<tr><td>Type</td><td>1 to 1 Session</td></tr>
+<tr><td>Date</td><td>10 Oct 2025</td></tr>
+<tr><td>Time Slot</td><td>11:25 AM</td></tr>
+<tr><td>Message</td><td>I need help in physics.</td></tr>
+</table>
+
+<br>
+
+<button class="send-btn" onclick="openPopup('feedbackPopup')">Provide Feedback</button>
+<button class="feedback-btn" onclick="closePopup('detailsPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="feedbackPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"/>
+</svg>
+<span>Provide Feedback</span>
+</div>
+<span class="close-btn" onclick="closePopup('feedbackPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<textarea style="width:100%;height:100px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Write feedback..."></textarea>
+
+<br><br>
+
+<p>Rate your experience</p>
+<div class="star-rating" id="stars">
+<span onclick="rate(1)">★</span>
+<span onclick="rate(2)">★</span>
+<span onclick="rate(3)">★</span>
+<span onclick="rate(4)">★</span>
+<span onclick="rate(5)">★</span>
+</div>
+
+<br>
+
+<input type="file">
+
+<br><br>
+
+<button class="send-btn">Submit</button>
+<button class="feedback-btn" onclick="closePopup('feedbackPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="approvePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Approve Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<strong>Are you sure want to approve this enquiry?</strong>
+<p><strong>Student:</strong> <span id="approveStudent"></span></p>
+<p><strong>Date:</strong> <span id="approveDate"></span></p>
+<p><strong>Enquiry Type:</strong> <span>Assignment Help</span></p>
+<p><strong>Time:</strong> <span>11:00 AM</span></p>
+
+<br>
+
+<button class="send-btn"
+onclick="updateStatus('Approved')">
+Confirm Approve
+</button>
+<button class="feedback-btn" onclick="closePopup('approvePopup')">Cancel</button>
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="rejectPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+ <svg width="26" height="26" fill="#ef4444" viewBox="0 0 24 24">
+    <path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L12 13.4l-6.3 6.3-1.4-1.4L10.6 12 4.3 5.7l1.4-1.4L12 10.6l6.3-6.3z"/>
+  </svg>
+<span>Reject Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('rejectPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Rejection</strong>
+<p><strong>Student:</strong> <span id="rejectStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn"
+onclick="updateStatus('Rejected')">
+Confirm Reject
+</button>
+<button class="feedback-btn" onclick="closePopup('rejectPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- RESCHEDULE POPUP -->
+<div class="popup-overlay" id="reschedulePopup">
+<div class="popup-box reschedule-box">
+
+<div class="popup-header reschedule-header">
+<div class="popup-title">
+<span style="font-size:26px;">📅</span>
+<span>Reschedule Session</span>
+</div>
+<span class="close-btn" onclick="closePopup('reschedulePopup')">✖</span>
+</div>
+
+<div class="popup-body reschedule-body">
+
+<div class="reschedule-card">
+
+<!-- CURRENT SESSION DETAILS -->
+<h3 class="section-title">Current Session Details</h3>
+
+<div class="details-grid">
+
+<div>
+<label>Student Name</label>
+<div class="detail-value" id="resStudentName">-</div>
+</div>
+
+<div>
+<label>Current Date</label>
+<div class="detail-value" id="resCurrentDate">-</div>
+</div>
+
+<div>
+<label>Class</label>
+<div class="detail-value" id="resClass">-</div>
+</div>
+
+<div>
+<label>Current Time Slot</label>
+<div class="detail-value" id="resTime">-</div>
+</div>
+
+<div>
+<label>Enquiry Type</label>
+<div class="detail-value" id="resType">-</div>
+</div>
+
+<div>
+<label>Status</label>
+<div class="detail-value" id="resStatus">-</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- NEW SESSION SELECTION -->
+<h3 class="section-title">New Session Selection</h3>
+
+<div class="new-session-grid">
+
+<div>
+<label>Select New Date</label>
+<input type="date" class="input-style">
+</div>
+
+<div>
+<label>Reason for Reschedule</label>
+<textarea class="textarea-style"
+placeholder="Type something reason ...."></textarea>
+</div>
+
+<div>
+<label>Select New Time Slot</label>
+<input type="time" class="input-style">
+</div>
+
+</div>
+
+<div class="confirm-line">
+<input type="checkbox" checked>
+<span><strong>I confirm to reschedule this session</strong></span>
+</div>
+
+<p class="note-text">
+Once rescheduled, your faculty and student will receive a notification.
+</p>
+
+</div>
+
+<!-- BUTTONS -->
+<div class="reschedule-footer">
+<button class="confirm-btn"
+onclick="updateStatus('Rescheduled')">
+Confirm Reschedule
+</button>
+<button class="cancel-btn" onclick="closePopup('reschedulePopup')">Cancel</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="completePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Mark as Complete</span>
+</div>
+<span class="close-btn" onclick="closePopup('completePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<strong>Are you sure you want to mark this enquiry as completed?</strong> 
+<p><strong>Student:</strong> <span id="completeStudent"></span></p>
+<span>Add completion notes</span>
+<br>
+<textarea class="textarea-style"
+placeholder="Type something here ..."></textarea>
+<br><br>
+<button class="send-btn"
+onclick="updateStatus('Completed')">
+Confirm Complete
+</button>
+<button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="cancelPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13l-2 2-3-3-3 3-2-2 3-3-3-3 2-2 3 3 3-3 2 2-3 3 3 3z"/>
+  </svg>
+<span>Cancel Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('cancelPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Cancellation</strong>
+<p><strong>Student:</strong> <span id="cancelStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn"
+onclick="updateStatus('Cancelled')">
+Confirm Cancel
+</button>
+
+<button class="feedback-btn" onclick="closePopup('cancelPopup')">Close</button>
+
+</div>
+</div>
+</div>
+
 
     <!-- =================== TABLE SECTION =================== -->
 
@@ -391,7 +967,7 @@
                     <td>8th Std</td>
                     <td>Fee Issue</td>
                     <td>10 Oct 2025 11:25 AM</td>
-                    <td class="status-pending">Pending</td>
+                    <td class="status-cell status-pending">Pending</td>
                     <td>
                         <select class="action-select" onchange="handleAction(this)">
                             <option>Select</option>
@@ -405,13 +981,11 @@
             </table>
 
             <!-- PARENT PAGINATION -->
-            <div class="pagination">
-                <button onclick="prevParentPage()">Previous</button>
-                <button class="parent-page active" onclick="showParentPage(1)">1</button>
-                <button class="parent-page" onclick="showParentPage(2)">2</button>
-                <button onclick="nextParentPage()">Next</button>
-            </div>
-
+            <div class="pagination" id="parentPagination">
+    <button onclick="prevParentPage()">Previous</button>
+    <!-- dynamic page numbers here -->
+    <button onclick="nextParentPage()">Next</button>
+</div>
         </div>
     </div>
 
@@ -439,7 +1013,7 @@
                     <td>10th</td>
                     <td>Revision Session</td>
                     <td>11 Oct 2025 12:30 PM</td>
-                    <td class="status-approved">Approved</td>
+                    <td class="status-cell status-approved">Approved</td>
                     <td>
                         <select class="action-select" onchange="handleAction(this)">
                             <option>Select</option>
@@ -453,13 +1027,11 @@
             </table>
 
             <!-- STUDENT PAGINATION -->
-            <div class="pagination">
-                <button onclick="prevStudentPage()">Previous</button>
-                <button class="student-page active" onclick="showStudentPage(1)">1</button>
-                <button class="student-page" onclick="showStudentPage(2)">2</button>
-                <button onclick="nextStudentPage()">Next</button>
-            </div>
-
+ <div class="pagination" id="studentPagination">
+    <button onclick="prevStudentPage()">Previous</button>
+    <!-- dynamic page numbers here -->
+    <button onclick="nextStudentPage()">Next</button>
+</div>
         </div>
     </div>
 
@@ -469,7 +1041,8 @@
 
 <script>
 
-/* TAB SWITCH */
+/* ================= TAB SWITCH ================= */
+
 function switchTab(type){
 
     document.querySelectorAll(".tab-item").forEach(tab=>tab.classList.remove("active"));
@@ -485,195 +1058,252 @@ function switchTab(type){
     }
 }
 
-/* TAKE ACTION LOGIC */
+
+/* ================= POPUP CONTROL ================= */
+
+function openPopup(id){
+    document.getElementById(id).classList.add("active");
+}
+
+function closePopup(id){
+    document.getElementById(id).classList.remove("active");
+}
+
+
+/* ================= GLOBAL ROW ================= */
+
+let currentRow = null;
+
+
+/* ================= HANDLE ACTION ================= */
+
 function handleAction(select){
 
     let value = select.value;
     let row = select.closest("tr");
-    let enquiryId = row.dataset.id;
-    let statusCell = row.querySelector(".status-cell");
+    currentRow = row;
 
-    if(value === "View Details"){
-        openViewPopup(row);
-        select.selectedIndex = 0;
-        return;
+    let studentName = row.children[1].innerText;
+
+    if(value==="Approve"){
+        document.getElementById("approveStudent").innerText = studentName;
+        openPopup("approvePopup");
     }
 
-    if(value === "Reschedule"){
-        openReschedulePopup(row);
-        select.selectedIndex = 0;
-        return;
+    else if(value==="Reject"){
+        document.getElementById("rejectStudent").innerText = studentName;
+        openPopup("rejectPopup");
     }
 
-    let newStatus = "";
+    else if(value==="Reschedule"){
+        document.getElementById("resStudentName").innerText = studentName;
+        openPopup("reschedulePopup");
+    }
 
-    if(value === "Approve") newStatus = "Approved";
-    if(value === "Reject") newStatus = "Rejected";
-    if(value === "Mark as Complete") newStatus = "Completed";
-    if(value === "Cancel") newStatus = "Cancelled";
+    else if(value==="Mark as Complete"){
+        document.getElementById("completeStudent").innerText = studentName;
+        openPopup("completePopup");
+    }
 
-    if(newStatus !== ""){
-        updateStatusInDB(enquiryId, newStatus, statusCell, row);
+    else if(value==="Cancel"){
+        document.getElementById("cancelStudent").innerText = studentName;
+        openPopup("cancelPopup");
+    }
+
+    else if(value==="View"){
+        openPopup("detailsPopup");
     }
 
     select.selectedIndex = 0;
 }
 
-document.querySelectorAll("tbody tr").forEach(row=>{
-    setActionsForRow(row);
-});
+/* ================= GUIDELINES EDIT ================= */
 
-
-function updateStatusInDB(id, status, statusCell, row){
-
-    fetch("/update-enquiry-status/", {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "X-CSRFToken":getCSRFToken()
-        },
-        body:JSON.stringify({
-            id:id,
-            status:status
-        })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        if(data.success){
-
-            statusCell.innerText = status;
-            statusCell.className = "status-cell status-" + status.toLowerCase();
-
-            setActionsForRow(row);   // 🔥 IMPORTANT
-        }
-    });
-}
-
-function openViewPopup(row){
-
-    let id = row.children[0].innerText;
-    let name = row.children[1].innerText;
-    let className = row.children[3].innerText;
-
-    document.getElementById("viewId").innerText = id;
-    document.getElementById("viewName").innerText = name;
-    document.getElementById("viewClass").innerText = className;
-
-    document.getElementById("viewPopup").style.display = "flex";
-}
-
-
-
-/* GUIDELINE EDIT */
 function enableEdit(){
     let content = document.getElementById("guidelineContent");
     let textarea = document.getElementById("guidelineTextarea");
 
-    textarea.value = content.innerText;
-    content.style.display="none";
-    textarea.style.display="block";
+    textarea.value = content.innerText.trim();
+    content.style.display = "none";
+    textarea.style.display = "block";
+    textarea.focus();
 }
 
 function saveGuidelines(){
     let content = document.getElementById("guidelineContent");
     let textarea = document.getElementById("guidelineTextarea");
 
-    if(textarea.style.display==="block"){
-        content.innerHTML = "<ul><li>" + textarea.value.replace(/\n/g,"</li><li>") + "</li></ul>";
-        textarea.style.display="none";
-        content.style.display="block";
+    if(textarea.style.display === "block"){
+
+        let lines = textarea.value.split("\n");
+        let html = "<ul>";
+
+        lines.forEach(line=>{
+            if(line.trim() !== ""){
+                html += `<li>${line}</li>`;
+            }
+        });
+
+        html += "</ul>";
+
+        content.innerHTML = html;
+
+        textarea.style.display = "none";
+        content.style.display = "block";
     }
 }
 
-/* ================= PAGINATION ================= */
+/* ================= UPDATE STATUS ================= */
 
-let parentCurrentPage=1;
-let parentRowsPerPage=8;
+function updateStatus(newStatus){
 
-function showParentPage(page){
-    let rows=document.querySelectorAll("#parentEnquiryTable tr");
-    let start=(page-1)*parentRowsPerPage+1;
-    let end=start+parentRowsPerPage-1;
+    if(!currentRow) return;
 
-    rows.forEach((row,index)=>{
-        if(index===0){row.style.display="";}
-        else if(index>=start && index<=end){row.style.display="";}
-        else{row.style.display="none";}
-    });
+    let statusCell = currentRow.querySelector(".status-cell");
 
-    document.querySelectorAll(".parent-page").forEach(btn=>btn.classList.remove("active"));
-    document.querySelectorAll(".parent-page")[page-1].classList.add("active");
-    parentCurrentPage=page;
+    statusCell.innerText = newStatus;
+    statusCell.className = "status-cell status-" + newStatus.toLowerCase();
+
+    updateDropdownForRow(currentRow, newStatus);
+
+    closeAllPopups();
 }
 
-function nextParentPage(){
-    if(parentCurrentPage<2) showParentPage(parentCurrentPage+1);
-}
 
-function prevParentPage(){
-    if(parentCurrentPage>1) showParentPage(parentCurrentPage-1);
-}
+/* ================= UPDATE DROPDOWN BASED ON STATUS ================= */
 
-/* STUDENT PAGINATION */
+function updateDropdownForRow(row, status){
 
-let studentCurrentPage=1;
-let studentRowsPerPage=8;
-
-function showStudentPage(page){
-    let rows=document.querySelectorAll("#studentEnquiryTable tr");
-    let start=(page-1)*studentRowsPerPage+1;
-    let end=start+studentRowsPerPage-1;
-
-    rows.forEach((row,index)=>{
-        if(index===0){row.style.display="";}
-        else if(index>=start && index<=end){row.style.display="";}
-        else{row.style.display="none";}
-    });
-
-    document.querySelectorAll(".student-page").forEach(btn=>btn.classList.remove("active"));
-    document.querySelectorAll(".student-page")[page-1].classList.add("active");
-    studentCurrentPage=page;
-}
-
-function nextStudentPage(){
-    if(studentCurrentPage<2) showStudentPage(studentCurrentPage+1);
-}
-
-function prevStudentPage(){
-    if(studentCurrentPage>1) showStudentPage(studentCurrentPage-1);
-}
-
-/* INIT */
-showParentPage(1);
-
-
-function setActionsForRow(row){
-
-    let status = row.querySelector(".status-cell").innerText;
     let select = row.querySelector(".action-select");
 
     select.innerHTML = '<option>Select</option>';
 
-    if(status === "Pending"){
+    if(status==="Pending"){
         select.innerHTML += `
             <option>Approve</option>
             <option>Reject</option>
             <option>Reschedule</option>
-            <option>View Details</option>
+            <option>View</option>
         `;
     }
-    else if(status === "Approved"){
+
+    else if(status==="Approved" || status==="Rescheduled"){
         select.innerHTML += `
             <option>Mark as Complete</option>
             <option>Cancel</option>
-            <option>View Details</option>
+            <option>View</option>
         `;
     }
+
     else{
-        select.innerHTML += `<option>View Details</option>`;
+        select.innerHTML += `<option>View</option>`;
     }
 }
 
-</script>
 
+/* ================= CLOSE ALL POPUPS ================= */
+
+function closeAllPopups(){
+    document.querySelectorAll(".popup-overlay").forEach(p=>{
+        p.classList.remove("active");
+    });
+}
+
+
+/* ================= INITIALIZE DROPDOWNS ================= */
+
+function initializeAllDropdowns(){
+
+    document.querySelectorAll(".enquiry-table tr:not(:first-child)").forEach(row=>{
+        let status = row.querySelector(".status-cell").innerText.trim();
+        updateDropdownForRow(row, status);
+    });
+}
+
+
+/* ================= PAGINATION ================= */
+
+let currentPages = {};
+
+function setupPagination(tableId, paginationId, rowsPerPage){
+
+    let rows = document.querySelectorAll(`#${tableId} tr:not(:first-child)`);
+    let totalPages = Math.ceil(rows.length / rowsPerPage);
+    let container = document.getElementById(paginationId);
+
+    currentPages[tableId] = 1;
+
+    container.querySelectorAll(".page-btn").forEach(btn=>btn.remove());
+
+    for(let i=1; i<=totalPages; i++){
+        let btn = document.createElement("button");
+        btn.innerText = i;
+        btn.classList.add("page-btn");
+
+        btn.onclick = function(){
+            currentPages[tableId] = i;
+            showPage(tableId, paginationId, i, rowsPerPage);
+        };
+
+        container.insertBefore(btn, container.lastElementChild);
+    }
+
+    showPage(tableId, paginationId, 1, rowsPerPage);
+}
+
+function showPage(tableId, paginationId, page, rowsPerPage){
+
+    let rows = document.querySelectorAll(`#${tableId} tr:not(:first-child)`);
+    let totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    if(page < 1) page = 1;
+    if(page > totalPages) page = totalPages;
+
+    rows.forEach((row,index)=>{
+        let start = (page-1)*rowsPerPage;
+        let end = start + rowsPerPage;
+        row.style.display = (index >= start && index < end) ? "" : "none";
+    });
+
+    document.querySelectorAll(`#${paginationId} .page-btn`)
+        .forEach(btn=>btn.classList.remove("active"));
+
+    document.querySelectorAll(`#${paginationId} .page-btn`)[page-1]
+        ?.classList.add("active");
+
+    currentPages[tableId] = page;
+}
+
+
+function nextParentPage(){
+    let page = currentPages["parentEnquiryTable"] + 1;
+    showPage("parentEnquiryTable","parentPagination",page,8);
+}
+
+function prevParentPage(){
+    let page = currentPages["parentEnquiryTable"] - 1;
+    showPage("parentEnquiryTable","parentPagination",page,8);
+}
+
+function nextStudentPage(){
+    let page = currentPages["studentEnquiryTable"] + 1;
+    showPage("studentEnquiryTable","studentPagination",page,8);
+}
+
+function prevStudentPage(){
+    let page = currentPages["studentEnquiryTable"] - 1;
+    showPage("studentEnquiryTable","studentPagination",page,8);
+}
+
+/* ================= INIT ================= */
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    initializeAllDropdowns();
+
+    setupPagination("parentEnquiryTable","parentPagination",8);
+    setupPagination("studentEnquiryTable","studentPagination",8);
+
+});
+</script>
 {% endblock %}
