@@ -368,7 +368,47 @@ th{ background:#f9fafb; font-weight:600; }
     margin-bottom:4px;
 }
 
+.filter-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    background: #f9fafc;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
 
+.filter-input {
+    padding: 9px 14px;
+    width: 240px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s ease;
+    outline: none;
+}
+
+.filter-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+}
+
+.filter-clear-btn {
+    padding: 9px 16px;
+    border: none;
+    background: #f44336;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.filter-clear-btn:hover {
+    background: #d32f2f;
+}
 </style>
 
 
@@ -379,13 +419,13 @@ th{ background:#f9fafb; font-weight:600; }
 <!-- TABS -->
 <div class="enquiry-tabs">
 
-    <div class="tab-item active" onclick="switchTab('student')">
+    <div id="studentTab" class="tab-item active" onclick="switchTab('student')">
         Academic / Students Enquiries
     </div>
 
     <div class="vertical-divider"></div>
 
-    <div class="tab-item" onclick="switchTab('parent')">
+    <div id="parentTab" class="tab-item" onclick="switchTab('parent')">
         Parent Enquiries
     </div>
 
@@ -396,6 +436,26 @@ th{ background:#f9fafb; font-weight:600; }
  </div>
 
 <br>
+<div class="filter-bar">
+
+    <input type="text"
+           id="commonSearch"
+           placeholder="🔍 Search by ID or Name"
+           class="filter-input"
+           onkeyup="smartFilter()">
+
+    <input type="date"
+           id="commonDate"
+           class="filter-input"
+           onchange="smartFilter()">
+
+    <button onclick="clearSmartFilter()"
+            class="filter-clear-btn">
+        Clear
+    </button>
+
+</div>
+
 <div class="enquiry-card">
 
 <div id="studentTable">
@@ -420,14 +480,10 @@ th{ background:#f9fafb; font-weight:600; }
 <td>Fee</td>
 <td>10 Oct</td>
 <td>11:00 AM</td>
-<td class="status-pending">Pending</td>
+<td class="status-cell status-pending">Pending</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✅ Approve</option>
-<option>❌ Reject</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
@@ -440,14 +496,10 @@ th{ background:#f9fafb; font-weight:600; }
 <td>Complaint</td>
 <td>12 Oct</td>
 <td>01:30 PM</td>
-<td class="status-approved">Approved</td>
+<td class="status-cell status-approved">Approved</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✔ Mark as Complete</option>
-<option>❌ Cancel</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
@@ -460,12 +512,10 @@ th{ background:#f9fafb; font-weight:600; }
 <td>Academic</td>
 <td>13 Oct</td>
 <td>10:15 AM</td>
-<td class="status-complete">Complete</td>
+<td class="status-cell status-complete">Complete</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>👁 View Details</option>
-<option>💬 Feedback</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
@@ -473,24 +523,25 @@ th{ background:#f9fafb; font-weight:600; }
 <tr>
 <td>SENQ-104</td><td>Amit</td><td>8th</td><td>General</td>
 <td>15 Oct</td><td>11:00 AM</td>
-<td class="status-rejected">Rejected</td>
+<td class="status-cell status-rejected">Rejected</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>👁 View Details</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>10th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>12th</td><td>Complaint</td><td>15 Feb</td><td>6:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-107</td><td>Kavita</td><td>9th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>12th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
+<tr><td>SENQ-105</td><td>Pooja</td><td>10th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr><td>SENQ-106</td><td>Suresh</td><td>12th</td><td>Complaint</td><td>15 Feb</td><td>6:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr><td>SENQ-107</td><td>Kavita</td><td>9th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cell status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr><td>SENQ-108</td><td>Rohan</td><td>12th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-cell status-complete">Complete</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>7th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>10th</td><td>Complaint</td><td>15 Oct</td><td>6:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-107</td><td>Kavita</td><td>11th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>5th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
+<tr><td>SENQ-105</td><td>Pooja</td><td>7th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr><td>SENQ-106</td><td>Suresh</td><td>10th</td><td>Complaint</td><td>15 Oct</td><td>6:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
+<tr><td>SENQ-107</td><td>Kavita</td><td>11th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cell status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr><td>SENQ-108</td><td>Rohan</td><td>5th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-cell status-complete">Complete</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
 
 </table>
 </div>
@@ -518,14 +569,10 @@ th{ background:#f9fafb; font-weight:600; }
 <td>Meeting</td>
 <td>20 Oct</td>
 <td>11:30 AM</td>
-<td class="status-pending">Pending</td>
+<td class="status-cell status-pending">Pending</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✅ Approve</option>
-<option>❌ Reject</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
@@ -538,37 +585,42 @@ th{ background:#f9fafb; font-weight:600; }
 <td>Fee</td>
 <td>21 Oct</td>
 <td>01:15 PM</td>
-<td class="status-approved">Approved</td>
+<td class="status-cell status-approved">Approved</td>
 <td>
-<select class="action-select" onchange="handleAction(this)">
-<option>Select</option>
-<option>✔ Mark as Complete</option>
-<option>❌ Cancel</option>
-<option>📅 Reschedule</option>
-<option>👁 View Details</option>
+<select class="action-select" onchange="handleFacultyAction(this)">
+<option value="">Select Action</option>
 </select>
 </td>
 </tr>
 
-<tr><td>PENQ-203</td><td>Rajesh</td><td>Meera</td><td>7th</td><td>Admission</td><td>22 Oct</td><td>10:30 AM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-203</td><td>Rajesh</td><td>Meera</td><td>7th</td><td>Admission</td><td>22 Oct</td><td>10:30 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>PENQ-204</td><td>Anita</td><td>Rohan</td><td>8th</td><td>Exam</td><td>23 Oct</td><td>11:45 AM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-204</td><td>Anita</td><td>Rohan</td><td>8th</td><td>Exam</td><td>23 Oct</td><td>11:45 AM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+</td></tr>
 
-<tr><td>PENQ-205</td><td>Mahesh</td><td>Sneha</td><td>5th</td><td>Transport</td><td>24 Oct</td><td>09:15 AM</td><td class="status-rejected">Rejected</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-205</td><td>Mahesh</td><td>Sneha</td><td>5th</td><td>Transport</td><td>24 Oct</td><td>09:15 AM</td><td class="status-cell status-rejected">Rejected</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>PENQ-206</td><td>Kavita</td><td>Aditya</td><td>9th</td><td>Fee</td><td>25 Oct</td><td>02:00 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
 
-<tr><td>PENQ-207</td><td>Vikram</td><td>Pooja</td><td>6th</td><td>Admission</td><td>26 Oct</td><td>12:20 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-206</td><td>Kavita</td><td>Aditya</td><td>9th</td><td>Fee</td><td>25 Oct</td><td>02:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>PENQ-208</td><td>Neha</td><td>Karan</td><td>10th</td><td>Exam</td><td>27 Oct</td><td>03:10 PM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
 
-<tr><td>PENQ-209</td><td>Suresh</td><td>Tanvi</td><td>4th</td><td>Transport</td><td>28 Oct</td><td>08:40 AM</td><td class="status-rejected">Rejected</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-207</td><td>Vikram</td><td>Pooja</td><td>6th</td><td>Admission</td><td>26 Oct</td><td>12:20 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>PENQ-210</td><td>Priya</td><td>Om</td><td>3rd</td><td>Fee</td><td>29 Oct</td><td>01:50 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
 
-<tr><td>PENQ-211</td><td>Deepak</td><td>Ishita</td><td>8th</td><td>Admission</td><td>30 Oct</td><td>10:10 AM</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>PENQ-208</td><td>Neha</td><td>Karan</td><td>10th</td><td>Exam</td><td>27 Oct</td><td>03:10 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
 
-<tr><td>PENQ-212</td><td>Shalini</td><td>Vivaan</td><td>5th</td><td>Exam</td><td>31 Oct</td><td>02:35 PM</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+
+<tr><td>PENQ-209</td><td>Suresh</td><td>Tanvi</td><td>4th</td><td>Transport</td><td>28 Oct</td><td>08:40 AM</td><td class="status-cell status-rejected">Rejected</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
+
+<tr><td>PENQ-210</td><td>Priya</td><td>Om</td><td>3rd</td><td>Fee</td><td>29 Oct</td><td>01:50 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
+
+<tr><td>PENQ-211</td><td>Deepak</td><td>Ishita</td><td>8th</td><td>Admission</td><td>30 Oct</td><td>10:10 AM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
+
+<tr><td>PENQ-212</td><td>Shalini</td><td>Vivaan</td><td>5th</td><td>Exam</td><td>31 Oct</td><td>02:35 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+
 
 </table>
 
@@ -582,8 +634,7 @@ th{ background:#f9fafb; font-weight:600; }
     <button class="page-btn" onclick="prevPage()">Previous</button>
 
     <button class="page-number active" onclick="goToPage(1)">1</button>
-    <button class="page-number" onclick="goToPage(2)">2</button>
-    <button class="page-number" onclick="goToPage(3)">3</button>
+      <button class="page-number" onclick="goToPage(2)">2</button>
 
     <button class="page-btn" onclick="nextPage()">Next</button>
 </div>
@@ -671,7 +722,7 @@ placeholder="Write feedback..."></textarea>
 
 <br><br>
 
-<button class="send-btn">Submit</button>
+<button class="send-btn" onclick="submitFeedback()">Submit</button>
 <button class="feedback-btn" onclick="closePopup('feedbackPopup')">Cancel</button>
 
 </div>
@@ -755,7 +806,7 @@ placeholder="Write feedback..."></textarea>
 
 <br>
 
-<button class="send-btn">Confirm Approve</button>
+<button class="send-btn" onclick="confirmApprove()">Confirm Approve</button>
 <button class="feedback-btn" onclick="closePopup('approvePopup')">Cancel</button>
 </div>
 </div>
@@ -785,7 +836,7 @@ placeholder="Type reason here..."></textarea>
 
 <br><br>
 
-<button class="send-btn" style="background:#dc2626;">Confirm Reject</button>
+<button class="send-btn" onclick="confirmReject()" style="background:#dc2626;">Confirm Reject</button>
 <button class="feedback-btn" onclick="closePopup('rejectPopup')">Cancel</button>
 
 </div>
@@ -914,7 +965,7 @@ Once rescheduled, your faculty and student will receive a notification.
 <textarea class="textarea-style"
 placeholder="Type something here ..."></textarea>
 <br><br>
-<button class="send-btn">Confirm Complete</button>
+<button class="send-btn" onclick="confirmComplete()">Confirm Complete</button>
 <button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
 
 </div>
@@ -945,7 +996,7 @@ placeholder="Type reason here..."></textarea>
 
 <br><br>
 
-<button class="send-btn" style="background:#6b7280;">Confirm Cancel</button>
+<button class="send-btn" style="background:#6b7280;" onclick="confirmCancel()">Confirm Cancel</button>
 <button class="feedback-btn" onclick="closePopup('cancelPopup')">Close</button>
 
 </div>
@@ -975,69 +1026,192 @@ function rate(star){
     });
 }
 
+/* ================= Student and Parent enquiry filter ================= */
+function smartFilter() {
+
+    let searchValue = document.getElementById("commonSearch").value.toLowerCase();
+    let dateValue = document.getElementById("commonDate").value;
+
+    // Detect active table (jo visible aahe)
+    let activeTable = null;
+
+    if (document.getElementById("studentTab").classList.contains("active")) {
+        activeTable = document.querySelector("#enquiryTable");
+    } 
+    else if (document.getElementById("parentTab").classList.contains("active")) {
+        activeTable = document.querySelector("#parentEnquiryTable");
+    }
+
+    if (!activeTable) return;
+
+    let rows = activeTable.querySelectorAll("tr:not(:first-child)");
+
+    rows.forEach(row => {
+
+        let rowText = row.innerText.toLowerCase();
+        let rowDateCell = row.querySelector("td:nth-child(5)"); // date column adjust if needed
+        let rowDate = rowDateCell ? rowDateCell.innerText.trim() : "";
+
+        let matchesSearch = rowText.includes(searchValue);
+        let matchesDate = dateValue === "" || rowDate.includes(dateValue);
+
+        row.style.display = (matchesSearch && matchesDate) ? "" : "none";
+
+    });
+}
+
+
+function clearSmartFilter() {
+    document.getElementById("commonSearch").value = "";
+    document.getElementById("commonDate").value = "";
+    smartFilter();
+}
+
+
 /* ================= HANDLE DROPDOWN ACTION ================= */
 
 let currentRow = null; // store active row
 
-function handleAction(select){
+function handleFacultyAction(select) {
 
-    let value = select.value;
-    let row = select.closest("tr");
+    const row = select.closest("tr");
+    currentRow = row;   // store active row
 
-    currentRow = row; // store row globally
+    const action = select.value;
 
-    let cells = row.querySelectorAll("td");
+    if (!action) return;
 
-    let studentName = cells[1].innerText;
-    let className = cells[2].innerText;
-    let type = cells[3].innerText;
-    let date = cells[4].innerText;
-    let time = cells[5].innerText;
-    let status = cells[6].innerText;
-    
-
-    if(value.includes("Reschedule")){
-
-        document.getElementById("resStudentName").innerText = studentName;
-        document.getElementById("resCurrentDate").innerText = date;
-        document.getElementById("resClass").innerText = className;
-        document.getElementById("resTime").innerText =  time;
-        document.getElementById("resType").innerText = type;
-        document.getElementById("resStatus").innerText = status;
-
-        openPopup("reschedulePopup");
-    }
-
-    else if(value.includes("Approve")){
-        document.getElementById("approveStudent").innerText = studentName;
-        document.getElementById("approveDate").innerText = date;
+    if (action === "approve") {
         openPopup("approvePopup");
     }
-
-    else if(value.includes("Reject")){
-        document.getElementById("rejectStudent").innerText = studentName;
+    else if (action === "reject") {
         openPopup("rejectPopup");
     }
-
-    else if(value.includes("Mark as Complete")){
-        document.getElementById("completeStudent").innerText = studentName;
+    else if (action === "complete") {
         openPopup("completePopup");
     }
-
-    else if(value.includes("Cancel")){
-        document.getElementById("cancelStudent").innerText = studentName;
+    else if (action === "cancel") {
         openPopup("cancelPopup");
     }
-
-    else if(value.includes("View")){
+    else if (action === "view") {
         openPopup("detailsPopup");
     }
-
-    else if(value.includes("Feedback")){
-        openPopup("feedbackPopup");
+    else if (action === "feedback") {
+    openPopup("feedbackPopup");
     }
 
-    select.selectedIndex = 0;
+    // Reset dropdown back to default
+    select.value = "";
+}
+
+function updateDropdown(select, status) {
+
+    let options = '<option value="">Select Action</option>';
+
+    if (status === "Pending") {
+        options += `
+            <option value="approve">Approve</option>
+            <option value="reject">Reject</option>
+            <option value="view">View</option>
+        `;
+    }
+
+    else if (status === "Approved") {
+        options += `
+            <option value="complete">Mark as Complete</option>
+            <option value="cancel">Cancel</option>
+            <option value="view">View</option>
+        `;
+    }
+
+    else if (status === "Completed") {
+        options += `
+            <option value="view">View</option>
+            <option value="feedback">Feedback</option>
+        `;
+    }
+
+    else {
+        options += `
+            <option value="view">View</option>
+        `;
+    }
+
+    select.innerHTML = options;
+}
+
+function confirmComplete(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        statusCell.innerText = "Completed";
+        statusCell.className = "status-cell status-completed";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Completed");
+
+        closePopup("completePopup");
+    }
+}
+
+function confirmApprove(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        statusCell.innerText = "Approved";
+        statusCell.className = "status-cell status-approved";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Approved");
+
+        closePopup("approvePopup");
+    }
+}
+
+function confirmReject(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        statusCell.innerText = "Rejected";
+        statusCell.className = "status-cell status-rejected";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Rejected");
+
+        closePopup("rejectPopup");
+    }
+}
+
+function confirmCancel(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        statusCell.innerText = "Cancelled";
+        statusCell.className = "status-cell status-cancelled";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Cancelled");
+
+        closePopup("cancelPopup");
+    }
+}
+
+function submitFeedback(){
+
+    if(currentRow){
+
+        alert("Feedback Submitted Successfully!");
+
+        closePopup("feedbackPopup");
+    }
 }
 
 function confirmReschedule(){
@@ -1136,7 +1310,7 @@ function showParentPage(page){
 
     });
 
-    updateParentActiveButton(page);   // 👈 he call already aahe
+    updateParentActiveButton(page);  
 }
 
 
@@ -1200,9 +1374,14 @@ function switchTab(type){
     }
 }
 
-
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("select").forEach(select => {
+        const row = select.closest("tr");
+        const status = row.querySelector(".status-cell").innerText.trim();
+        updateDropdown(select, status);
+    });
+});
 </script>
-
 
 {% endblock %}
 
