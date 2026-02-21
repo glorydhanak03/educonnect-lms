@@ -209,6 +209,33 @@
     transform:scale(1.05);
 }
 
+/* ================= FILTER ================= */
+
+.filter-section{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.filter-section input{
+    padding:8px 12px;
+    border:1px solid #d1d5db;
+    border-radius:6px;
+}
+
+.filter-section button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.filter-section button:hover{
+    background:#1e40af;
+}
+
 /* ================= TABLE CARD ================= */
 
 .table-card{
@@ -557,11 +584,7 @@
     <!-- PAGE TITLE -->
     <h2 class="page-heading">❓ Enquiry for 1-to-1 Session</h2>
 
-    <!-- TABS -->
-    <div class="enquiry-tabs">
-        <div class="tab-item active" onclick="switchTab('parent')">Parent Enquiries</div>
-        <div class="tab-item" onclick="switchTab('student')">Academic / Students Enquiries</div>
-    </div>
+ 
 
     <!-- =================== DETAILS + GUIDELINES SECTION =================== -->
 
@@ -938,6 +961,21 @@ Confirm Cancel
 </div>
 </div>
 
+    <!-- TABS -->
+    <div class="enquiry-tabs">
+        <div class="tab-item active" onclick="switchTab('parent')">Parent Enquiries</div>
+        <div class="tab-item" onclick="switchTab('student')">Academic / Students Enquiries</div>
+    </div>
+
+   <div class="filter-section">
+    <input type="text" id="commonSearch" placeholder="Search by ID, Name, Type..."
+        onkeyup="smartFilter()">
+
+    <input type="date" id="commonDate"
+        onchange="smartFilter()">
+
+    <button onclick="clearSmartFilter()">Clear</button>
+    </div>
 
     <!-- =================== TABLE SECTION =================== -->
 
@@ -1041,6 +1079,48 @@ Confirm Cancel
 <!-- ================= JS ================= -->
 
 <script>
+
+/* ================= SMART FILTER ================= */
+
+function smartFilter(){
+
+    let searchValue = document.getElementById("commonSearch").value.toLowerCase();
+    let dateValue = document.getElementById("commonDate").value;
+
+    let activeTable = null;
+
+    // Visible table detect
+    if(document.getElementById("parentTable").style.display !== "none"){
+        activeTable = document.getElementById("parentEnquiryTable");
+    } else {
+        activeTable = document.getElementById("studentEnquiryTable");
+    }
+
+    let rows = activeTable.querySelectorAll("tr:not(:first-child)");
+
+    rows.forEach(row => {
+
+        let rowText = row.innerText.toLowerCase();
+        let dateCell = row.querySelector("td[data-date]");
+        let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
+
+        let matchesSearch = rowText.includes(searchValue);
+        let matchesDate = dateValue === "" || rowDate === dateValue;
+
+        row.style.display = (matchesSearch && matchesDate) ? "" : "none";
+
+    });
+
+}
+
+
+/* ================= CLEAR FILTER ================= */
+
+function clearSmartFilter(){
+    document.getElementById("commonSearch").value = "";
+    document.getElementById("commonDate").value = "";
+    smartFilter();
+}
 
 /* ================= TAB SWITCH ================= */
 
