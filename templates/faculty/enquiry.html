@@ -27,6 +27,7 @@ th{ background:#f9fafb; font-weight:600; }
 .status-complete{color:#2563eb;font-weight:600;}
 .status-rejected{color:#dc2626;font-weight:600;}
 .status-cancelled{color:#6b7280;font-weight:600;}
+.status-rescheduled { color:#f59e0b; font-weight:600;}
 
 /* DROPDOWN */
 .action-select{ padding:6px 10px; border-radius:6px; }
@@ -480,7 +481,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-01">01 Feb 2025</td>
 <td>10:15 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -491,7 +492,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-03">03 Feb 2025</td>
 <td>11:30 AM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -502,7 +503,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-05">05 Feb 2025</td>
 <td>09:45 AM</td>
 <td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -513,7 +514,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-07">07 Feb 2025</td>
 <td>01:20 PM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -524,7 +525,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-09">09 Feb 2025</td>
 <td>12:00 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -535,7 +536,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-11">11 Feb 2025</td>
 <td>02:10 PM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -546,7 +547,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-13">13 Feb 2025</td>
 <td>08:40 AM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -557,7 +558,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-15">15 Feb 2025</td>
 <td>03:00 PM</td>
 <td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -568,7 +569,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-17">17 Feb 2025</td>
 <td>11:10 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -579,7 +580,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-19">19 Feb 2025</td>
 <td>09:00 AM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -590,7 +591,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-21">21 Feb 2025</td>
 <td>12:30 PM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select"onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -601,7 +602,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-23">23 Feb 2025</td>
 <td>04:15 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 </table>
@@ -631,7 +632,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-02">02 Feb 2025</td>
 <td>10:45 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -643,7 +644,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-04">04 Feb 2025</td>
 <td>01:10 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -655,7 +656,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-06">06 Feb 2025</td>
 <td>09:20 AM</td>
 <td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -667,7 +668,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-08">08 Feb 2025</td>
 <td>11:50 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -679,7 +680,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-10">10 Feb 2025</td>
 <td>02:40 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -691,7 +692,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-12">12 Feb 2025</td>
 <td>12:05 PM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -703,7 +704,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-14">14 Feb 2025</td>
 <td>03:25 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -715,7 +716,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-16">16 Feb 2025</td>
 <td>10:00 AM</td>
 <td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -727,7 +728,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-18">18 Feb 2025</td>
 <td>09:35 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -739,7 +740,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-20">20 Feb 2025</td>
 <td>01:00 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -751,7 +752,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-22">22 Feb 2025</td>
 <td>11:15 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 <tr>
@@ -763,7 +764,7 @@ th{ background:#f9fafb; font-weight:600; }
 <td data-date="2025-02-24">24 Feb 2025</td>
 <td>04:00 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td><select class="action-select"><option>Select</option></select></td>
+<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
 </tr>
 
 </table>
@@ -1226,6 +1227,10 @@ function handleFacultyAction(select) {
     if (action === "approve") {
         openPopup("approvePopup");
     }
+
+    else if(action === "reschedule"){
+        openPopup("reschedulePopup");
+    }
     else if (action === "reject") {
         openPopup("rejectPopup");
     }
@@ -1261,10 +1266,19 @@ function updateDropdown(select, status) {
     else if (status === "Approved") {
         options += `
             <option value="complete">Mark as Complete</option>
+            <option value="reschedule">Reschedule</option>
             <option value="cancel">Cancel</option>
             <option value="view">View</option>
         `;
     }
+
+     else if(status === "Rescheduled"){
+        select.innerHTML += `
+            <option value="complete">Mark as Complete</option>
+            <option value="cancel">Cancel</option>
+        `;
+    }
+
 
     else if (status === "Completed") {
         options += `
@@ -1289,7 +1303,7 @@ function confirmComplete(){
         let statusCell = currentRow.querySelector(".status-cell");
 
         statusCell.innerText = "Completed";
-        statusCell.className = "status-cell status-completed";
+        statusCell.className = "status-cell status-complete";
 
         let select = currentRow.querySelector("select");
         updateDropdown(select, "Completed");
@@ -1360,10 +1374,13 @@ function confirmReschedule(){
 
     if(currentRow){
 
-        let statusCell = currentRow.children[6];
+        let statusCell = currentRow.querySelector(".status-cell");
 
         statusCell.innerText = "Rescheduled";
-        statusCell.className = "status-pending";
+        statusCell.className = "status-cell status-rescheduled"; 
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Rescheduled");
 
         closePopup("reschedulePopup");
     }
