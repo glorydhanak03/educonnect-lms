@@ -1,12 +1,71 @@
-{% extends "faculty/base_faculty.html" %}
+<div style="background:#f8fafc;border-radius:12px;padding:20px;">
 
-{% block faculty_title %}Faculty | Live Class{% endblock %}
+  <h4 style="font-weight:800;margin-bottom:15px;">
+    Today's Classes
+  </h4>
 
-{% block faculty_content %}
-<div class="card pad">
-  <h2 style="margin:0 0 6px;font-size:22px;font-weight:950">Live Class</h2>
-  <p style="margin:0;color:#64748b;font-weight:700">
-    Faculty Live Class page Create by anjan
-  </p>
+  <div style="background:#e5e7eb;border-radius:10px;padding:10px;">
+
+    <table style="width:100%;border-collapse:collapse;font-size:14px;background:white;border-radius:8px;overflow:hidden;">
+
+      <thead style="background:#dbeafe;">
+        <tr>
+          <th style="padding:12px;text-align:left;"></th>
+          <th style="padding:12px;text-align:left;">Date</th>
+          <th style="padding:12px;text-align:left;">Time</th>
+          <th style="padding:12px;text-align:left;">Subject</th>
+          <th style="padding:12px;text-align:left;">Class</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for cls in todays_classes %}
+        <tr style="border-bottom:1px solid #e5e7eb;">
+
+          <!-- Action Column -->
+          <td style="padding:12px;white-space:nowrap;">
+
+            {% if cls.is_live %}
+              <a href="{% url 'faculty:start_live_class' cls.id %}" 
+                 style="color:#2563eb;font-weight:600;text-decoration:none;">
+                 Start Live Class
+              </a>
+
+              <span style="color:red;margin:0 6px;font-size:10px;">●</span>
+            {% endif %}
+
+            <a href="{% url 'faculty:reschedule_class' cls.id %}" 
+               style="color:#dc2626;font-weight:600;text-decoration:none;">
+               Reschedule Class
+            </a>
+
+          </td>
+
+          <!-- Date -->
+          <td style="padding:12px;">{{ cls.date }}</td>
+
+          <!-- Time -->
+          <td style="padding:12px;">{{ cls.time }}</td>
+
+          <!-- Subject -->
+          <td style="padding:12px;">{{ cls.subject }}</td>
+
+          <!-- Class -->
+          <td style="padding:12px;">{{ cls.class_name }}</td>
+
+        </tr>
+
+        {% empty %}
+        <tr>
+          <td colspan="5" style="padding:20px;text-align:center;color:#94a3b8;">
+            No classes scheduled for today.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+  </div>
+
 </div>
-{% endblock %}
