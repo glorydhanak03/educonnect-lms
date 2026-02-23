@@ -1094,32 +1094,26 @@ function smartFilter(){
     let searchValue = document.getElementById("commonSearch").value.toLowerCase();
     let dateValue = document.getElementById("commonDate").value;
 
-    let activeTable = null;
-
-    // Visible table detect
-    if(document.getElementById("parentTable").style.display !== "none"){
-        activeTable = document.getElementById("parentEnquiryTable");
-    } else {
-        activeTable = document.getElementById("studentEnquiryTable");
-    }
+    let activeTable = document.getElementById("parentTable").style.display !== "none"
+        ? document.getElementById("parentEnquiryTable")
+        : document.getElementById("studentEnquiryTable");
 
     let rows = activeTable.querySelectorAll("tr:not(:first-child)");
 
     rows.forEach(row => {
 
         let rowText = row.innerText.toLowerCase();
+
         let dateCell = row.querySelector("td[data-date]");
         let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
 
         let matchesSearch = rowText.includes(searchValue);
-        let matchesDate = dateValue === "" || rowDate === dateValue;
+        let matchesDate = !dateValue || rowDate === dateValue;
 
         row.style.display = (matchesSearch && matchesDate) ? "" : "none";
 
     });
-
 }
-
 
 /* ================= CLEAR FILTER ================= */
 
