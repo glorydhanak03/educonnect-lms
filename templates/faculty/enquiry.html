@@ -472,76 +472,137 @@ th{ background:#f9fafb; font-weight:600; }
 <th>Take Action</th>
 </tr>
 
-<!-- ROW 1 -->
 <tr>
-<td>SENQ-101</td>
-<td>Riya</td>
+<td>SENQ-201</td>
+<td>Aarav</td>
 <td>5th</td>
 <td>Fee</td>
-<td>10 Oct</td>
-<td>11:00 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
-</tr>
-
-<!-- ROW 2 -->
-<tr>
-<td>SENQ-102</td>
-<td>Arjun</td>
-<td>6th</td>
-<td>Complaint</td>
-<td>12 Oct</td>
-<td>01:30 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
-</tr>
-
-<!-- ROW 3 -->
-<tr>
-<td>SENQ-103</td>
-<td>Simran</td>
-<td>7th</td>
-<td>Academic</td>
-<td>13 Oct</td>
+<td data-date="2025-02-01">01 Feb 2025</td>
 <td>10:15 AM</td>
-<td class="status-cell status-complete">Complete</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
 </tr>
 
 <tr>
-<td>SENQ-104</td><td>Amit</td><td>8th</td><td>General</td>
-<td>15 Oct</td><td>11:00 AM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
+<td>SENQ-202</td>
+<td>Riya</td>
+<td>6th</td>
+<td>Academic</td>
+<td data-date="2025-02-03">03 Feb 2025</td>
+<td>11:30 AM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
 </tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>10th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>12th</td><td>Complaint</td><td>15 Feb</td><td>6:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-<tr><td>SENQ-107</td><td>Kavita</td><td>9th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cell status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>12th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-cell status-complete">Complete</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>SENQ-203</td>
+<td>Vivaan</td>
+<td>7th</td>
+<td>Complaint</td>
+<td data-date="2025-02-05">05 Feb 2025</td>
+<td>09:45 AM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>SENQ-105</td><td>Pooja</td><td>7th</td><td>Fee</td><td>15 Oct</td><td>11:00 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-<tr><td>SENQ-106</td><td>Suresh</td><td>10th</td><td>Complaint</td><td>15 Oct</td><td>6:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>SENQ-204</td>
+<td>Anaya</td>
+<td>8th</td>
+<td>Exam</td>
+<td data-date="2025-02-07">07 Feb 2025</td>
+<td>01:20 PM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>SENQ-107</td><td>Kavita</td><td>11th</td><td>General</td><td>18 Feb</td><td>4:30 PM</td><td class="status-cell status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-<tr><td>SENQ-108</td><td>Rohan</td><td>5th</td><td>Academic</td><td>20 Feb</td><td>8:00 PM</td><td class="status-cell status-complete">Complete</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>SENQ-205</td>
+<td>Aditya</td>
+<td>9th</td>
+<td>Leave</td>
+<td data-date="2025-02-09">09 Feb 2025</td>
+<td>12:00 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
+<tr>
+<td>SENQ-206</td>
+<td>Ishita</td>
+<td>10th</td>
+<td>Result</td>
+<td data-date="2025-02-11">11 Feb 2025</td>
+<td>02:10 PM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-207</td>
+<td>Kabir</td>
+<td>4th</td>
+<td>Transport</td>
+<td data-date="2025-02-13">13 Feb 2025</td>
+<td>08:40 AM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-208</td>
+<td>Myra</td>
+<td>3rd</td>
+<td>Library</td>
+<td data-date="2025-02-15">15 Feb 2025</td>
+<td>03:00 PM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-209</td>
+<td>Arjun</td>
+<td>2nd</td>
+<td>Sports</td>
+<td data-date="2025-02-17">17 Feb 2025</td>
+<td>11:10 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-210</td>
+<td>Saanvi</td>
+<td>1st</td>
+<td>Uniform</td>
+<td data-date="2025-02-19">19 Feb 2025</td>
+<td>09:00 AM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-211</td>
+<td>Dhruv</td>
+<td>8th</td>
+<td>Scholarship</td>
+<td data-date="2025-02-21">21 Feb 2025</td>
+<td>12:30 PM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
+
+<tr>
+<td>SENQ-212</td>
+<td>Meera</td>
+<td>6th</td>
+<td>Hostel</td>
+<td data-date="2025-02-23">23 Feb 2025</td>
+<td>04:15 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
 </table>
 </div>
@@ -562,65 +623,148 @@ th{ background:#f9fafb; font-weight:600; }
 </tr>
 
 <tr>
-<td>PENQ-201</td>
-<td>Mahesh</td>
-<td>Riya</td>
+<td>PENQ-301</td>
+<td>Ramesh</td>
+<td>Aarav</td>
 <td>5th</td>
-<td>Meeting</td>
-<td>20 Oct</td>
-<td>11:30 AM</td>
+<td>Fee</td>
+<td data-date="2025-02-02">02 Feb 2025</td>
+<td>10:45 AM</td>
 <td class="status-cell status-pending">Pending</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
+<td><select class="action-select"><option>Select</option></select></td>
 </tr>
 
 <tr>
-<td>PENQ-202</td>
+<td>PENQ-302</td>
 <td>Sunita</td>
-<td>Arjun</td>
+<td>Riya</td>
 <td>6th</td>
-<td>Fee</td>
-<td>21 Oct</td>
-<td>01:15 PM</td>
+<td>Exam</td>
+<td data-date="2025-02-04">04 Feb 2025</td>
+<td>01:10 PM</td>
 <td class="status-cell status-approved">Approved</td>
-<td>
-<select class="action-select" onchange="handleFacultyAction(this)">
-<option value="">Select Action</option>
-</select>
-</td>
+<td><select class="action-select"><option>Select</option></select></td>
 </tr>
 
-<tr><td>PENQ-203</td><td>Rajesh</td><td>Meera</td><td>7th</td><td>Admission</td><td>22 Oct</td><td>10:30 AM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>PENQ-303</td>
+<td>Mahesh</td>
+<td>Vivaan</td>
+<td>7th</td>
+<td>Complaint</td>
+<td data-date="2025-02-06">06 Feb 2025</td>
+<td>09:20 AM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>PENQ-204</td><td>Anita</td><td>Rohan</td><td>8th</td><td>Exam</td><td>23 Oct</td><td>11:45 AM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-</td></tr>
+<tr>
+<td>PENQ-304</td>
+<td>Anita</td>
+<td>Anaya</td>
+<td>8th</td>
+<td>Transport</td>
+<td data-date="2025-02-08">08 Feb 2025</td>
+<td>11:50 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>PENQ-205</td><td>Mahesh</td><td>Sneha</td><td>5th</td><td>Transport</td><td>24 Oct</td><td>09:15 AM</td><td class="status-cell status-rejected">Rejected</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>PENQ-305</td>
+<td>Rajesh</td>
+<td>Aditya</td>
+<td>9th</td>
+<td>Result</td>
+<td data-date="2025-02-10">10 Feb 2025</td>
+<td>02:40 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
+<tr>
+<td>PENQ-306</td>
+<td>Kavita</td>
+<td>Ishita</td>
+<td>10th</td>
+<td>Hostel</td>
+<td data-date="2025-02-12">12 Feb 2025</td>
+<td>12:05 PM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>PENQ-206</td><td>Kavita</td><td>Aditya</td><td>9th</td><td>Fee</td><td>25 Oct</td><td>02:00 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>PENQ-307</td>
+<td>Vijay</td>
+<td>Kabir</td>
+<td>4th</td>
+<td>Library</td>
+<td data-date="2025-02-14">14 Feb 2025</td>
+<td>03:25 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
+<tr>
+<td>PENQ-308</td>
+<td>Pooja</td>
+<td>Myra</td>
+<td>3rd</td>
+<td>Sports</td>
+<td data-date="2025-02-16">16 Feb 2025</td>
+<td>10:00 AM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>PENQ-207</td><td>Vikram</td><td>Pooja</td><td>6th</td><td>Admission</td><td>26 Oct</td><td>12:20 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>PENQ-309</td>
+<td>Suresh</td>
+<td>Arjun</td>
+<td>2nd</td>
+<td>Uniform</td>
+<td data-date="2025-02-18">18 Feb 2025</td>
+<td>09:35 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
+<tr>
+<td>PENQ-310</td>
+<td>Neha</td>
+<td>Saanvi</td>
+<td>1st</td>
+<td>Scholarship</td>
+<td data-date="2025-02-20">20 Feb 2025</td>
+<td>01:00 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-<tr><td>PENQ-208</td><td>Neha</td><td>Karan</td><td>10th</td><td>Exam</td><td>27 Oct</td><td>03:10 PM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
+<tr>
+<td>PENQ-311</td>
+<td>Deepak</td>
+<td>Dhruv</td>
+<td>8th</td>
+<td>Meeting</td>
+<td data-date="2025-02-22">22 Feb 2025</td>
+<td>11:15 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
-
-<tr><td>PENQ-209</td><td>Suresh</td><td>Tanvi</td><td>4th</td><td>Transport</td><td>28 Oct</td><td>08:40 AM</td><td class="status-cell status-rejected">Rejected</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-
-
-<tr><td>PENQ-210</td><td>Priya</td><td>Om</td><td>3rd</td><td>Fee</td><td>29 Oct</td><td>01:50 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-
-
-<tr><td>PENQ-211</td><td>Deepak</td><td>Ishita</td><td>8th</td><td>Admission</td><td>30 Oct</td><td>10:10 AM</td><td class="status-cell status-approved">Approved</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-
-
-<tr><td>PENQ-212</td><td>Shalini</td><td>Vivaan</td><td>5th</td><td>Exam</td><td>31 Oct</td><td>02:35 PM</td><td class="status-cell status-pending">Pending</td><td><select class="action-select" onchange="handleFacultyAction(this)"><option value="">Select Action</option></select></td></tr>
-
+<tr>
+<td>PENQ-312</td>
+<td>Shalini</td>
+<td>Meera</td>
+<td>6th</td>
+<td>Leave</td>
+<td data-date="2025-02-24">24 Feb 2025</td>
+<td>04:00 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select"><option>Select</option></select></td>
+</tr>
 
 </table>
 
@@ -1032,13 +1176,12 @@ function smartFilter() {
     let searchValue = document.getElementById("commonSearch").value.toLowerCase();
     let dateValue = document.getElementById("commonDate").value;
 
-    // Detect active table (jo visible aahe)
     let activeTable = null;
 
     if (document.getElementById("studentTab").classList.contains("active")) {
         activeTable = document.querySelector("#enquiryTable");
     } 
-    else if (document.getElementById("parentTab").classList.contains("active")) {
+    else {
         activeTable = document.querySelector("#parentEnquiryTable");
     }
 
@@ -1049,17 +1192,16 @@ function smartFilter() {
     rows.forEach(row => {
 
         let rowText = row.innerText.toLowerCase();
-        let rowDateCell = row.querySelector("td:nth-child(5)"); // date column adjust if needed
-        let rowDate = rowDateCell ? rowDateCell.innerText.trim() : "";
+        let dateCell = row.querySelector("td[data-date]");
+        let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
 
         let matchesSearch = rowText.includes(searchValue);
-        let matchesDate = dateValue === "" || rowDate.includes(dateValue);
+        let matchesDate = !dateValue || rowDate === dateValue;
 
         row.style.display = (matchesSearch && matchesDate) ? "" : "none";
 
     });
 }
-
 
 function clearSmartFilter() {
     document.getElementById("commonSearch").value = "";

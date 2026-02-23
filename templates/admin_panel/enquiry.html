@@ -993,37 +993,145 @@ Confirm Cancel
             <h3>Parent Previous Enquiries</h3>
 
             <table id="parentEnquiryTable" class="enquiry-table">
-                <tr>
-                    <th>ID</th>
-                    <th>Parent</th>
-                    <th>Student</th>
-                    <th>Class</th>
-                    <th>Type</th>
-                    <th>Date & Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+              <tr>
+<td>PENQ-101</td>
+<td>Rajesh Sharma</td>
+<td>Aarav</td>
+<td>8th Std</td>
+<td>Fee Issue</td>
+<td data-date="2025-10-10">10 Oct 2025 11:25 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>Approve</option>
+<option>Reject</option>
+<option>Reschedule</option>
+<option>View</option>
+</select>
+</td>
+</tr>
 
-                <!-- 12 rows demo -->
-                {% for i in "123456789012" %}
-                <tr>
-                    <td>ENQ-10{{forloop.counter}}</td>
-                    <td>Rajesh Sharma</td>
-                    <td>Aarav</td>
-                    <td>8th Std</td>
-                    <td>Fee Issue</td>
-                    <td>10 Oct 2025 11:25 AM</td>
-                    <td class="status-cell status-pending">Pending</td>
-                    <td>
-                        <select class="action-select" onchange="handleAction(this)">
-                            <option>Select</option>
-                            <option>✔ Mark as Complete</option>
-                            <option>❌ Cancel</option>
-                            <option>👁 View</option>
-                        </select>
-                    </td>
-                </tr>
-                {% endfor %}
+<tr>
+<td>PENQ-102</td>
+<td>Sneha Patil</td>
+<td>Riya</td>
+<td>7th Std</td>
+<td>Admission</td>
+<td data-date="2025-10-11">11 Oct 2025 09:15 AM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-103</td>
+<td>Vikas Jadhav</td>
+<td>Arjun</td>
+<td>6th Std</td>
+<td>Transport</td>
+<td data-date="2025-10-12">12 Oct 2025 02:40 PM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-104</td>
+<td>Anita Kulkarni</td>
+<td>Vedant</td>
+<td>5th Std</td>
+<td>Scholarship</td>
+<td data-date="2025-10-13">13 Oct 2025 10:05 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-105</td>
+<td>Mahesh Deshmukh</td>
+<td>Tanvi</td>
+<td>9th Std</td>
+<td>Exam Query</td>
+<td data-date="2025-10-14">14 Oct 2025 01:10 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-106</td>
+<td>Prakash More</td>
+<td>Rohan</td>
+<td>10th Std</td>
+<td>TC Request</td>
+<td data-date="2025-10-15">15 Oct 2025 11:00 AM</td>
+<td class="status-cell status-cancelled">Cancelled</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-107</td>
+<td>Kavita Joshi</td>
+<td>Sakshi</td>
+<td>4th Std</td>
+<td>Uniform</td>
+<td data-date="2025-10-16">16 Oct 2025 09:45 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-108</td>
+<td>Sunil Pawar</td>
+<td>Aditya</td>
+<td>3rd Std</td>
+<td>Bus Route</td>
+<td data-date="2025-10-17">17 Oct 2025 03:20 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-109</td>
+<td>Meena Kale</td>
+<td>Ishaan</td>
+<td>2nd Std</td>
+<td>Fee Structure</td>
+<td data-date="2025-10-18">18 Oct 2025 12:00 PM</td>
+<td class="status-cell status-completed">Completed</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-110</td>
+<td>Ajay Thakur</td>
+<td>Yash</td>
+<td>1st Std</td>
+<td>Books</td>
+<td data-date="2025-10-19">19 Oct 2025 10:50 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-111</td>
+<td>Shilpa Patwardhan</td>
+<td>Om</td>
+<td>6th Std</td>
+<td>Sports</td>
+<td data-date="2025-10-20">20 Oct 2025 02:15 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>PENQ-112</td>
+<td>Nitin Gawande</td>
+<td>Parth</td>
+<td>7th Std</td>
+<td>Leave Application</td>
+<td data-date="2025-10-21">21 Oct 2025 09:30 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
             </table>
 
             <!-- PARENT PAGINATION -->
@@ -1043,34 +1151,143 @@ Confirm Cancel
 
             <table id="studentEnquiryTable" class="enquiry-table">
                 <tr>
-                    <th>ID</th>
-                    <th>Student</th>
-                    <th>Class</th>
-                    <th>Type</th>
-                    <th>Date & Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+<td>SENQ-201</td>
+<td>Amit Patil</td>
+<td>10th Std</td>
+<td>Revision Session</td>
+<td data-date="2025-10-10">10 Oct 2025 12:30 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>Approve</option>
+<option>Reject</option>
+<option>Reschedule</option>
+<option>View</option>
+</select>
+</td>
+</tr>
 
-                {% for i in "123456789012" %}
-                <tr>
-                    <td>ENQ-20{{forloop.counter}}</td>
-                    <td>Amit</td>
-                    <td>10th</td>
-                    <td>Revision Session</td>
-                    <td>11 Oct 2025 12:30 PM</td>
-                    <td class="status-cell status-approved">Approved</td>
-                    <td>
-                        <select class="action-select" onchange="handleAction(this)">
-                            <option>Select</option>
-                            <option>✔ Mark as Complete</option>
-                            <option>❌ Cancel</option>
-                            <option>👁 View</option>
-                        </select>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
+<tr>
+<td>SENQ-202</td>
+<td>Riya Sharma</td>
+<td>9th Std</td>
+<td>Exam Doubt</td>
+<td data-date="2025-10-11">11 Oct 2025 10:00 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)"></select></td>
+</tr>
+
+<tr>
+<td>SENQ-203</td>
+<td>Arjun Deshmukh</td>
+<td>8th Std</td>
+<td>Project Guidance</td>
+<td data-date="2025-10-12">12 Oct 2025 02:10 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-204</td>
+<td>Sneha Kulkarni</td>
+<td>7th Std</td>
+<td>Sports Practice</td>
+<td data-date="2025-10-13">13 Oct 2025 09:40 AM</td>
+<td class="status-cell status-rejected">Rejected</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-205</td>
+<td>Rohan Pawar</td>
+<td>6th Std</td>
+<td>Lab Access</td>
+<td data-date="2025-10-14">14 Oct 2025 01:25 PM</td>
+<td class="status-cell status-completed">Completed</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-206</td>
+<td>Tanvi Jadhav</td>
+<td>5th Std</td>
+<td>Homework Query</td>
+<td data-date="2025-10-15">15 Oct 2025 11:15 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-207</td>
+<td>Aditya More</td>
+<td>4th Std</td>
+<td>Leave Request</td>
+<td data-date="2025-10-16">16 Oct 2025 03:00 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-208</td>
+<td>Sakshi Joshi</td>
+<td>3rd Std</td>
+<td>Fee Clarification</td>
+<td data-date="2025-10-17">17 Oct 2025 12:45 PM</td>
+<td class="status-cell status-cancelled">Cancelled</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-209</td>
+<td>Vedant Kale</td>
+<td>2nd Std</td>
+<td>Uniform Issue</td>
+<td data-date="2025-10-18">18 Oct 2025 10:30 AM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-210</td>
+<td>Ishaan Thakur</td>
+<td>1st Std</td>
+<td>Transport Query</td>
+<td data-date="2025-10-19">19 Oct 2025 09:10 AM</td>
+<td class="status-cell status-pending">Pending</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-211</td>
+<td>Parth Gawande</td>
+<td>8th Std</td>
+<td>Extra Class</td>
+<td data-date="2025-10-20">20 Oct 2025 02:55 PM</td>
+<td class="status-cell status-approved">Approved</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+
+<tr>
+<td>SENQ-212</td>
+<td>Om Patwardhan</td>
+<td>9th Std</td>
+<td>Scholarship Info</td>
+<td data-date="2025-10-21">21 Oct 2025 11:35 AM</td>
+<td class="status-cell status-completed">Completed</td>
+<td><select class="action-select" onchange="handleAction(this)">
+</select></td>
+</tr>
+</table>
 
             <!-- STUDENT PAGINATION -->
  <div class="pagination" id="studentPagination">
@@ -1089,29 +1306,30 @@ Confirm Cancel
 
 /* ================= SMART FILTER ================= */
 
-function smartFilter(){
+function smartFilter() {
 
     let searchValue = document.getElementById("commonSearch").value.toLowerCase();
     let dateValue = document.getElementById("commonDate").value;
 
-    let activeTable = document.getElementById("parentTable").style.display !== "none"
-        ? document.getElementById("parentEnquiryTable")
-        : document.getElementById("studentEnquiryTable");
+    filterTable("parentEnquiryTable", searchValue, dateValue);
+    filterTable("studentEnquiryTable", searchValue, dateValue);
+}
 
-    let rows = activeTable.querySelectorAll("tr:not(:first-child)");
+function filterTable(tableId, searchValue, dateValue) {
 
-    rows.forEach(row => {
+    let table = document.getElementById(tableId);
+    let rows = document.querySelectorAll(`#${tableId} tr`);
 
-        let rowText = row.innerText.toLowerCase();
+    rows.forEach((row) => {
 
+        let text = row.innerText.toLowerCase();
         let dateCell = row.querySelector("td[data-date]");
         let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
 
-        let matchesSearch = rowText.includes(searchValue);
-        let matchesDate = !dateValue || rowDate === dateValue;
+        let matchSearch = text.includes(searchValue);
+        let matchDate = !dateValue || rowDate === dateValue;
 
-        row.style.display = (matchesSearch && matchesDate) ? "" : "none";
-
+        row.style.display = (matchSearch && matchDate) ? "" : "none";
     });
 }
 
