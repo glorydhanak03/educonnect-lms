@@ -1252,48 +1252,46 @@ function handleFacultyAction(select) {
 }
 
 function updateDropdown(select, status) {
-
     let options = '<option value="">Select Action</option>';
 
-    if (status === "Pending") {
-        options += `
-            <option value="approve">Approve</option>
-            <option value="reject">Reject</option>
-            <option value="view">View</option>
-        `;
+    switch(status) {
+        case "Pending":
+            options += `
+                <option value="approve">Approve</option>
+                <option value="reschedule">Reschedule</option>
+                <option value="reject">Reject</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Approved":
+            options += `
+                <option value="complete">Mark as Complete</option>
+                <option value="cancel">Cancel</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Rescheduled":
+            options += `
+                <option value="complete">Mark as Complete</option>
+                <option value="cancel">Cancel</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Completed":
+            options += `
+                <option value="view">View</option>
+                <option value="feedback">Feedback</option>
+            `;
+            break;
+        case "Rejected":
+        case "Cancelled":
+            options += `<option value="view">View</option>`;
+            break;
+        default:
+            options += `<option value="view">View</option>`;
     }
 
-    else if (status === "Approved") {
-        options += `
-            <option value="complete">Mark as Complete</option>
-            <option value="reschedule">Reschedule</option>
-            <option value="cancel">Cancel</option>
-            <option value="view">View</option>
-        `;
-    }
-
-     else if(status === "Rescheduled"){
-        select.innerHTML += `
-            <option value="complete">Mark as Complete</option>
-            <option value="cancel">Cancel</option>
-        `;
-    }
-
-
-    else if (status === "Completed") {
-        options += `
-            <option value="view">View</option>
-            <option value="feedback">Feedback</option>
-        `;
-    }
-
-    else {
-        options += `
-            <option value="view">View</option>
-        `;
-    }
-
-    select.innerHTML = options;
+    select.innerHTML = options; 
 }
 
 function confirmComplete(){
