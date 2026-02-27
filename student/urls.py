@@ -16,4 +16,3 @@ urlpatterns = [
     path("announcement/", views.announcement, name="student_announcement"),
     path("my-account/", views.my_account, name="student_my_account"),
 ]
-
