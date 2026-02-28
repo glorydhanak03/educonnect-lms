@@ -67,7 +67,7 @@ def enquiry(request):
             message=request.POST.get("message"),
         )
 
-        messages.success(request, "Enquiry submitted successfully.")
+        return redirect("/parent/enquiry/?enquiry=success")
         return redirect("parent_app:enquiry")
 
 
@@ -90,12 +90,11 @@ def enquiry(request):
                 rating=request.POST.get("rating") or None,
                 attachment=request.FILES.get("attachment")
             )
-
-            messages.success(request, "Feedback submitted successfully.")
+            
+            return redirect("/parent/enquiry/?feedback=success")
         else:
-            messages.error(request, "Feedback already submitted.")
+            return redirect("/parent/enquiry/?feedback=already")
 
-        return redirect("parent_app:enquiry")
 
 
     # ================= BASE QUERYSET =================

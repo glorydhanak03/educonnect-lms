@@ -3,6 +3,8 @@
 {% block parent_content %}
 <br>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <style>
 
 /* ================= PAGE ================= */
@@ -254,10 +256,14 @@ th,td{
 
 </style>
 
-  <div style="text-align:right;font-size:20px;color:#01579B">
-        <a href="#" onclick="openGuidelines()">View Admin Enquiry Guidelines</a>
-    </div>
-<br>
+<div style="text-align:right; margin-bottom:10px;">
+    <button type="button" 
+            onclick="openGuidelines()"
+            style="padding:8px 16px; border:none; border-radius:8px; background:#2563eb; color:white; font-weight:500; cursor:pointer;">
+        View  Guidelines
+    </button>
+</div>
+
 <!-- ================= FORM ================= -->
 <form method="POST">
     {% csrf_token %}
@@ -327,12 +333,12 @@ th,td{
 
     <div class="form-group">
         <label>Date</label>
-        <input type="date" class="form-control" name="date" required>
+        <input type="text" class="form-control" name="date" placeholder="Select Date" required>
     </div>
 
     <div class="form-group">
         <label>Time Slot</label>
-        <input type="time" class="form-control" name="time_slot" required>
+        <input type="text" class="form-control" name="time_slot" required placeholder="Select time" required>
     </div>
 
     <div class="form-group">
@@ -362,7 +368,7 @@ th,td{
     </div>
 </div>
 
-<form method="get" style="display:flex; gap:10px; align-items:center;">
+<form method="get" id="filterForm" style="display:flex; gap:10px; align-items:center;">
 
     <!-- 🔍 Search -->
     <input type="text"
@@ -396,9 +402,9 @@ th,td{
     </button>
 
     <!-- ❌ Clear Button -->
-    <a href="{% url 'parent_app:enquiry' %}"
-       style="padding:6px 14px;border-radius:6px;background:#ef4444;color:white;text-decoration:none;">
-        Clear
+    <a href="{% url 'parent_app:enquiry' %}" onclick="localStorage.setItem('scrollPos', window.scrollY);" 
+    style="padding:6px 14px;border-radius:6px;background:#ef4444;color:white;text-decoration:none;">
+    Clear
     </a>
 
 </form>
@@ -407,6 +413,7 @@ th,td{
 <!-- ================= TABLE ================= -->
 <div class="my-enquiry">
 <h3>My Enquiries</h3>
+<div id="enquiryTableContainer">
 <table id="enquiryTable">
 <thead>
 <tr>
@@ -428,8 +435,8 @@ th,td{
 <td>{{ enquiry.get_send_to_display }}</td>
 <td>{{ enquiry.receiver_name }}</td>
 <td>{{ enquiry.get_enquiry_type_display }}</td>
-<td>{{ enquiry.date|date:"d M Y" }}</td>
-<td>{{ enquiry.time_slot|time:"h:i A" }}</td>
+<td>{{ enquiry.date}}</td>
+<td>{{ enquiry.time_slot }}</td>
 <td>
 <span class="status-badge status-{{ enquiry.status }}">
     {{ enquiry.get_status_display }}
@@ -477,33 +484,30 @@ th,td{
 </tr>
 {% endfor %}
 </tbody>
-
 </table>
 </div>
+</div>
 
-<div class="pagination-container">
+<div class="pagination-container" id="enquiryTableContainer">
 
     {% if enquiries.has_previous %}
-        <a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}">
-            Previous
-        </a>
+        <a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+           class="page-number">Previous</a>
     {% endif %}
 
     {% for num in enquiries.paginator.page_range %}
-        <a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}"
-           class="{% if enquiries.number == num %}active{% endif %}">
+        <a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+           class="page-number {% if enquiries.number == num %}active{% endif %}">
             {{ num }}
         </a>
     {% endfor %}
 
     {% if enquiries.has_next %}
-        <a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}">
-            Next
-        </a>
+        <a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+           class="page-number">Next</a>
     {% endif %}
 
 </div>
-
 <!-- ================= PARENT DETAILS POPUP ================= -->
 <div class="popup-overlay" id="detailsPopup">
     <div class="popup-box">
@@ -723,8 +727,26 @@ th,td{
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
+
+ // Date Picker
+    flatpickr("input[name='date']", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat:"d/m/Y",  
+    });
+
+    // Time Picker
+    flatpickr("input[name='time_slot']", {
+        enableTime: true,
+        noCalendar: true,    
+        dateFormat: "H:i",
+        altInput:true,
+        altFormat:"h:i K",  
+        time_24hr: false,
+    });
 
 function openDetails(id, parent, child, child_class, send_to, receiver, type, status, date, time, message){
     document.getElementById("d_id").innerText = "ENQ-" + id;
@@ -770,17 +792,24 @@ function openFeedbackFromTable(id){
 window.onload = function(){
     const params = new URLSearchParams(window.location.search);
 
+    // Enquiry alert
     if(params.get("enquiry") === "success"){
         alert("✅ Enquiry submitted successfully!");
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
+    // Feedback alert
     if(params.get("feedback") === "success"){
         alert("✅ Feedback submitted successfully!");
         window.history.replaceState({}, document.title, window.location.pathname);
     }
-};
 
+    // Already submitted feedback
+    if(params.get("feedback") === "already"){
+        alert("⚠️  Feedback submitted already!");
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+};
 
 
 function openFeedback(){
@@ -824,6 +853,21 @@ window.onclick = function(e){
 
  }
 
+const form = document.getElementById("filterForm");
+  
+  // Save scroll position before reload
+  form.addEventListener("submit", () => {
+    localStorage.setItem("scrollPos", window.scrollY);
+  });
+
+  // Restore scroll position on load
+  window.addEventListener("load", () => {
+    const pos = localStorage.getItem("scrollPos");
+    if(pos) {
+      window.scrollTo(0, parseInt(pos));
+      localStorage.removeItem("scrollPos");
+    }
+  });
 
 </script>
 
