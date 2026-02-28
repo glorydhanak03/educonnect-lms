@@ -1,5 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import redirect, get_object_or_404
+from .models import ParentEnquiry, ParentFeedback
+from django.contrib import messages
 
 
 def _parent_name(request) -> str:
@@ -43,10 +48,98 @@ def exam_results(request):
 def announcement(request):
     return render(request, "parent/announcement.html", {"display_name": _parent_name(request)})
 
-
 @login_required
 def enquiry(request):
-    return render(request, "parent/enquiry.html", {"display_name": _parent_name(request)})
+
+    # ================= SAVE ENQUIRY =================
+    if request.method == "POST" and "submit_enquiry" in request.POST:
+
+        ParentEnquiry.objects.create(
+            parent=request.user,
+            parent_name=request.POST.get("parent_name"),
+            child_name=request.POST.get("child_name"),
+            child_class=request.POST.get("child_class"),
+            send_to=request.POST.get("send_to"),
+            receiver_name=request.POST.get("receiver_name"),
+            enquiry_type=request.POST.get("enquiry_type"),
+            date=request.POST.get("date"),
+            time_slot=request.POST.get("time_slot"),
+            message=request.POST.get("message"),
+        )
+
+        messages.success(request, "Enquiry submitted successfully.")
+        return redirect("parent_app:enquiry")
+
+
+    # ================= SAVE FEEDBACK =================
+    if request.method == "POST" and "submit_feedback" in request.POST:
+
+        enquiry_id = request.POST.get("enquiry_id")
+
+        enquiry_obj = get_object_or_404(
+            ParentEnquiry,
+            id=enquiry_id,
+            parent=request.user
+        )
+
+        if not ParentFeedback.objects.filter(enquiry=enquiry_obj).exists():
+
+            ParentFeedback.objects.create(
+                enquiry=enquiry_obj,
+                comment=request.POST.get("comment"),
+                rating=request.POST.get("rating") or None,
+                attachment=request.FILES.get("attachment")
+            )
+
+            messages.success(request, "Feedback submitted successfully.")
+        else:
+            messages.error(request, "Feedback already submitted.")
+
+        return redirect("parent_app:enquiry")
+
+
+    # ================= BASE QUERYSET =================
+    base_queryset = ParentEnquiry.objects.filter(parent=request.user)
+
+    enquiry_list = base_queryset.order_by("-created_at")
+
+    # ================= SEARCH =================
+    search_query = request.GET.get("search")
+    if search_query:
+        enquiry_list = enquiry_list.filter(
+            Q(child_name__icontains=search_query) |
+            Q(receiver_name__icontains=search_query) |
+            Q(enquiry_type__icontains=search_query)
+        )
+
+    # ================= STATUS FILTER =================
+    status_filter = request.GET.get("status")
+    if status_filter:
+        enquiry_list = enquiry_list.filter(status=status_filter)
+
+    # ================= COUNTS (NO FILTER EFFECT) =================
+    total_count = base_queryset.count()
+    pending_count = base_queryset.filter(status="pending").count()
+    in_progress_count = base_queryset.filter(status="in_progress").count()
+    resolved_count = base_queryset.filter(status="resolved").count()
+
+    # ================= PAGINATION =================
+    paginator = Paginator(enquiry_list, 5)
+    page_number = request.GET.get("page")
+    enquiries = paginator.get_page(page_number)
+
+    context = {
+        "display_name": _parent_name(request),
+        "enquiries": enquiries,
+        "total_count": total_count,
+        "pending_count": pending_count,
+        "in_progress_count": in_progress_count,
+        "resolved_count": resolved_count,
+        "search_query": search_query,
+        "status_filter": status_filter,
+    }
+
+    return render(request, "parent/enquiry.html", context)
 
 
 @login_required
