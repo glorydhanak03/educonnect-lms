@@ -23,73 +23,90 @@ def dashboard(request):
 @login_required
 def enquiry(request):
 
-    # -------- SAVE ENQUIRY --------
+    # ================= SAVE ENQUIRY =================
     if request.method == "POST" and "submit_enquiry" in request.POST:
+
         Enquiry.objects.create(
             student=request.user,
-            student_name=request.POST.get("student_name"),
+            student_name=_student_name(request),  # readonly display_name
             student_class=request.POST.get("student_class"),
             send_to=request.POST.get("send_to"),
             receiver_name=request.POST.get("receiver_name"),
-            course_name=request.POST.get("course_name"),
+            course_name=request.POST.get("course_name") or "Not Specified",
             enquiry_type=request.POST.get("enquiry_type"),
             date=request.POST.get("date"),
             time_slot=request.POST.get("time_slot"),
             message=request.POST.get("message"),
         )
-        return redirect("student_enquiry")
 
-    # -------- SAVE FEEDBACK --------
+        return redirect("/student/enquiry/?enquiry=success")
+
+
+    # ================= SAVE FEEDBACK =================
     if request.method == "POST" and "submit_feedback" in request.POST:
+
         enquiry_id = request.POST.get("enquiry_id")
         enquiry_obj = get_object_or_404(
             Enquiry, id=enquiry_id, student=request.user
         )
 
-        attachment = request.FILES.get("attachment")
+        # prevent duplicate feedback
+        if hasattr(enquiry_obj, "feedback"):
+            return redirect("/student/enquiry/?feedback=already")
 
-        if not hasattr(enquiry_obj, "feedback"):
-            Feedback.objects.create(
-                enquiry=enquiry_obj,
-                rating=request.POST.get("rating"),
-                comment=request.POST.get("comment"),
-                attachment=attachment,   
-            )
+        rating_value = request.POST.get("rating")
+        rating_value = int(rating_value) if rating_value else None
 
-        return redirect("student_enquiry")
+        Feedback.objects.create(
+            enquiry=enquiry_obj,
+            rating=rating_value,
+            comment=request.POST.get("comment"),
+            attachment=request.FILES.get("attachment")
+        )
 
-    # -------- FETCH ENQUIRIES --------
-    enquiry_list = Enquiry.objects.filter(
-    student=request.user
-    ).order_by("-created_at")
-    
-   # -------- SEARCH FILTER (YAHAN ADD KARO) --------
+        return redirect("/student/enquiry/?feedback=success")
+
+
+    # ================= BASE QUERYSET =================
+    base_queryset = Enquiry.objects.filter(student=request.user).order_by("-created_at")
+
+    # ================= COUNTS =================
+    total_count = base_queryset.count()
+    pending_count = base_queryset.filter(status="pending").count()
+    in_progress_count = base_queryset.filter(status="in_progress").count()
+    resolved_count = base_queryset.filter(status="resolved").count()
+
+    # ================= FILTER =================
+    enquiry_list = base_queryset
+
     search_query = request.GET.get("search")
+    status_filter = request.GET.get("status")
+
     if search_query:
         enquiry_list = enquiry_list.filter(
             Q(enquiry_type__icontains=search_query) |
             Q(receiver_name__icontains=search_query) |
             Q(course_name__icontains=search_query)
-    )   
+        )
 
-    # -------- COUNTS (ADD YAHAN) --------
-    total_count = enquiry_list.count()
-    pending_count = enquiry_list.filter(status="pending").count()
-    resolved_count = enquiry_list.filter(status="resolved").count()
+    if status_filter:
+        enquiry_list = enquiry_list.filter(status=status_filter)
 
-    # -------- PAGINATION --------
+    # ================= PAGINATION =================
     paginator = Paginator(enquiry_list, 5)
     page_number = request.GET.get("page")
     enquiries = paginator.get_page(page_number)
 
-
     context = {
-    "display_name": _student_name(request),
-    "enquiries": enquiries,
-    "total_count": total_count,
-    "pending_count": pending_count,
-    "resolved_count": resolved_count,
-    } 
+        "display_name": _student_name(request),
+        "enquiries": enquiries,
+        "total_count": total_count,
+        "pending_count": pending_count,
+        "in_progress_count": in_progress_count,
+        "resolved_count": resolved_count,
+        "search_query": search_query,
+        "status_filter": status_filter,
+    }
 
     return render(request, "student/enquiry.html", context)
 

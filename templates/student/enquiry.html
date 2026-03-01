@@ -270,7 +270,7 @@ font-size:28px;
 
     <div class="form-group">
         <label>Student Name</label>
-        <input class="form-control" name="student_name">
+        <input class="form-control" name="student_name" value="{{ display_name }}" readonly>
     </div>
 
     <div class="form-group">
@@ -311,11 +311,18 @@ font-size:28px;
         <input type="text" class="form-control" name="course_name">
     </div>
 
-    <div class="form-group">
-        <label>Enquiry Type</label>
-        <input class="form-control" name="enquiry_type">
+  <div class="form-group">
+    <label>Enquiry Type</label>
+     <select class="form-control" name="enquiry_type">
+        <option value="">-- Select --</option>
+        <option value="technical">Technical Issue</option>
+        <option value="course">Course Related</option>
+        <option value="payment">Payment Issue</option>
+        <option value="general">General Query</option>
+        <option value="assignment">Assignment Help</option>
+        <option value="doubt">Doubt Session</option>
+      </select>
     </div>
-
     <div class="form-group">
         <label>Date</label>
         <input type="date" class="form-control" name="date">
@@ -356,25 +363,20 @@ font-size:28px;
 </div>
 
 <form method="GET" style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
+    <input type="text" name="search" placeholder="Search enquiries..."
+           value="{{ search_query }}" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
 
-    <input type="text"
-           name="search"
-           placeholder="Search enquiries..."
-           value="{{ request.GET.search }}"
-           style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
+    <select name="status" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
+        <option value="">All Status</option>
+        <option value="pending" {% if status_filter=='pending' %}selected{% endif %}>Pending</option>
+        <option value="in_progress" {% if status_filter=='in_progress' %}selected{% endif %}>In Progress</option>
+        <option value="resolved" {% if status_filter=='resolved' %}selected{% endif %}>Resolved</option>
+    </select>
 
-    <button type="submit"
-            style="padding:6px 12px; border-radius:6px; background:#2563eb; color:white; border:none;">
-        Search
-    </button>
-
-    <!-- CLEAR BUTTON ALWAYS VISIBLE -->
-    <a href="{% url 'student_enquiry' %}"
-       style="padding:6px 12px; border-radius:6px; background:#e74c3c; color:white; text-decoration:none;">
-        Clear
-    </a>
-
+    <button type="submit" class="page-btn">Filter</button>
+    <a href="{% url 'student_enquiry' %}" class="feedback-btn">Clear</a>
 </form>
+
 
 <!-- ================= TABLE ================= -->
 <div class="my-enquiry">
