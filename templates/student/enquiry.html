@@ -7,6 +7,10 @@
 <br>
 
 <style>
+.status-completed{
+    background:#dcfce7;
+    color:#166534;
+}
 
 /* ================= PAGE ================= */
 .enquiry-container{
@@ -255,31 +259,55 @@ font-size:28px;
 
 </style>
 
-{% if request.GET.enquiry == "success" %}
-<div id="successAlert" style="
+
+
+{% if request.GET.feedback == "success" or request.GET.feedback == "already" or request.GET.enquiry == "success" %}
+
+<div id="toastMessage" style="
     position:fixed;
-    top:50%;
+    top:20px;
     left:50%;
-    transform:translate(-50%,-50%);
-    background:#16a34a;
-    color:white;
-    padding:20px 40px;
-    border-radius:12px;
+    transform:translateX(-50%);
+    padding:14px 30px;
+    border-radius:8px;
     font-weight:600;
-    font-size:16px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    font-size:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
     z-index:2000;
+    color:white;
+
+    {% if request.GET.feedback == 'success' %}
+        background:#2563eb;
+    {% elif request.GET.feedback == 'already' %}
+        background:#f59e0b;
+    {% elif request.GET.enquiry == 'success' %}
+        background:#16a34a;
+    {% endif %}
 ">
-    ✅ Enquiry Submitted Successfully
+
+    {% if request.GET.feedback == "success" %}
+        ⭐ Feedback Submitted Successfully
+    {% elif request.GET.feedback == "already" %}
+        ⚠️ Feedback Already Submitted
+    {% elif request.GET.enquiry == "success" %}
+        ✅ Enquiry Submitted Successfully
+    {% endif %}
+
 </div>
 
 <script>
     setTimeout(function(){
-        document.getElementById("successAlert").style.display="none";
-        window.history.replaceState({}, document.title, "/student/enquiry/");
+        const toast = document.getElementById("toastMessage");
+        toast.style.opacity="0";
+        setTimeout(() => {
+            toast.remove();
+        }, 500);
+        window.history.replaceState({}, document.title, window.location.pathname);
     }, 2000);
 </script>
+
 {% endif %}
+
 
 <div style="text-align:right; margin-bottom:10px;"> 
      <button type="button"
@@ -394,7 +422,7 @@ font-size:28px;
 </div>
 
 <form method="GET" style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
-    <input type="text" name="search" placeholder="Search enquiries..."
+    <input type="text" name="search" placeholder="🔍 Search enquiries..."
            value="{{ search_query }}" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
 
     <select name="status" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
@@ -445,7 +473,17 @@ font-size:28px;
     </td>
     <td>
         {% if enquiry.status == "resolved" or enquiry.status == "completed" %}
-            <button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">Feedback</button>
+           {% if enquiry.feedback_exists %}
+        <span style="color:green;font-weight:600;">
+            Feedback Submitted
+        </span>
+        {% else %}
+           <button class="feedback-btn"
+            onclick="openFeedbackFromTable('{{ enquiry.id }}')">
+            Feedback
+           </button>
+           {% endif %}
+
         {% else %}
             <button class="view-btn"
 onclick="openDetails(
@@ -457,7 +495,7 @@ onclick="openDetails(
 '{{ enquiry.enquiry_type }}',
 '{{ enquiry.date }}',
 '{{ enquiry.time_slot }}',
-'{{ enquiry.message|escapejs }}',
+'{{ enquiry.message|escapejs }}'
 )">
 View Details
 </button>
@@ -472,19 +510,19 @@ View Details
 <div class="pagination-container">
 
 {% if enquiries.has_previous %}
-<a href="?page={{ enquiries.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}" class="page-btn" #enquiryTableSection>Previous</a>
+<a href="?page={{ enquiries.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}#enquiryTableSection" class="page-btn">Previous</a>
 {% endif %}
 
 {% for num in enquiries.paginator.page_range %}
     {% if enquiries.number == num %}
         <span class="page-number active">{{ num }}</span>
     {% else %}
-        <a href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}" class="page-number" #enquiryTableSection>{{ num }}</a>
+        <a href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}#enquiryTableSection" class="page-number" >{{ num }}</a>
     {% endif %}
 {% endfor %}
 
 {% if enquiries.has_next %}
-<a href="?page={{ enquiries.next_page_number }}&search={{ search_query }}&status={{ status_filter }}" class="page-btn" #enquiryTableSection>Next</a>
+<a href="?page={{ enquiries.next_page_number }}&search={{ search_query }}&status={{ status_filter }}#enquiryTableSection" class="page-btn" >Next</a>
 {% endif %}
 </div>
 </div>

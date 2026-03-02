@@ -256,6 +256,55 @@ th,td{
 
 </style>
 
+
+{% if request.GET.feedback == "success"  or request.GET.enquiry == "success" or request.GET.feedback == "already" %}
+
+<div id="toastMessage" style="
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:14px 30px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    z-index:2000;
+    color:white;
+
+    {% if request.GET.feedback == 'success' %}
+        background:#2563eb;
+    {% elif request.GET.feedback == 'already' %}
+        background:#f59e0b;
+    {% elif request.GET.enquiry == 'success' %}
+        background:#16a34a;
+    {% endif %}
+">
+
+    {% if request.GET.feedback == "success" %}
+        ⭐ Feedback Submitted Successfully
+    {% elif request.GET.feedback == "already" %}
+        ⚠️ Feedback Already Submitted
+    {% elif request.GET.enquiry == "success" %}
+        ✅ Enquiry Submitted Successfully
+    {% endif %}
+
+</div>
+
+<script>
+    setTimeout(function(){
+        const toast = document.getElementById("toastMessage");
+        toast.style.opacity="0";
+        setTimeout(() => {
+            toast.remove();
+        }, 500);
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }, 2000);
+</script>
+
+{% endif %}
+
+
 <div style="text-align:right; margin-bottom:10px;">
     <button type="button" 
             onclick="openGuidelines()"
@@ -373,7 +422,7 @@ th,td{
     <!-- 🔍 Search -->
     <input type="text"
            name="search"
-           placeholder="Search..."
+           placeholder="🔍 Search..."
            value="{{ request.GET.search }}"
            style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
 
@@ -788,28 +837,6 @@ function openFeedbackFromTable(id){
     document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
     document.querySelector("#feedbackPopup input[type='file']").value = "";
 }
-
-window.onload = function(){
-    const params = new URLSearchParams(window.location.search);
-
-    // Enquiry alert
-    if(params.get("enquiry") === "success"){
-        alert("✅ Enquiry submitted successfully!");
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
-    // Feedback alert
-    if(params.get("feedback") === "success"){
-        alert("✅ Feedback submitted successfully!");
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
-    // Already submitted feedback
-    if(params.get("feedback") === "already"){
-        alert("⚠️  Feedback submitted already!");
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-};
 
 
 function openFeedback(){
