@@ -19,24 +19,38 @@ def dashboard(request):
     })
 
 
-
 @login_required
 def enquiry(request):
 
     # ================= SAVE ENQUIRY =================
     if request.method == "POST" and "submit_enquiry" in request.POST:
 
+        student_class = request.POST.get("student_class")
+        send_to = request.POST.get("send_to")
+        receiver_name = request.POST.get("receiver_name")
+        course_name = request.POST.get("course_name") or "Not Specified"
+        enquiry_type = request.POST.get("enquiry_type")
+        date = request.POST.get("date")
+        time_slot = request.POST.get("time_slot")
+        message = request.POST.get("message")
+
+        if not date or not time_slot:
+            return redirect("/student/enquiry/?error=date_time_required")
+
+        if not student_class or not send_to or not enquiry_type or not message:
+            return redirect("/student/enquiry/?error=missing_fields")
+
         Enquiry.objects.create(
             student=request.user,
-            student_name=_student_name(request),  # readonly display_name
-            student_class=request.POST.get("student_class"),
-            send_to=request.POST.get("send_to"),
-            receiver_name=request.POST.get("receiver_name"),
-            course_name=request.POST.get("course_name") or "Not Specified",
-            enquiry_type=request.POST.get("enquiry_type"),
-            date=request.POST.get("date"),
-            time_slot=request.POST.get("time_slot"),
-            message=request.POST.get("message"),
+            student_name=_student_name(request),
+            student_class=student_class,
+            send_to=send_to,
+            receiver_name=receiver_name,
+            course_name=course_name,
+            enquiry_type=enquiry_type,
+            date=date,
+            time_slot=time_slot,
+            message=message,
         )
 
         return redirect("/student/enquiry/?enquiry=success")
@@ -46,11 +60,17 @@ def enquiry(request):
     if request.method == "POST" and "submit_feedback" in request.POST:
 
         enquiry_id = request.POST.get("enquiry_id")
+
         enquiry_obj = get_object_or_404(
-            Enquiry, id=enquiry_id, student=request.user
+            Enquiry,
+            id=enquiry_id,
+            student=request.user
         )
 
-        # prevent duplicate feedback
+        if enquiry.status not in ["resolved", "completed"]:
+            return redirect("/student/enquiry/?error=not_allowed")
+
+
         if hasattr(enquiry_obj, "feedback"):
             return redirect("/student/enquiry/?feedback=already")
 
@@ -68,7 +88,9 @@ def enquiry(request):
 
 
     # ================= BASE QUERYSET =================
-    base_queryset = Enquiry.objects.filter(student=request.user).order_by("-created_at")
+    base_queryset = Enquiry.objects.filter(
+        student=request.user
+    ).order_by("-created_at")
 
     # ================= COUNTS =================
     total_count = base_queryset.count()
@@ -79,8 +101,8 @@ def enquiry(request):
     # ================= FILTER =================
     enquiry_list = base_queryset
 
-    search_query = request.GET.get("search")
-    status_filter = request.GET.get("status")
+    search_query = request.GET.get("search", "")
+    status_filter = request.GET.get("status", "")
 
     if search_query:
         enquiry_list = enquiry_list.filter(
@@ -109,6 +131,7 @@ def enquiry(request):
     }
 
     return render(request, "student/enquiry.html", context)
+
 
 # ================= Other Pages =================
 

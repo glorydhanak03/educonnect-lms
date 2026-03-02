@@ -255,11 +255,42 @@ font-size:28px;
 
 </style>
 
-<!-- ================= FORM ================= -->
-<div style="text-align:right;font-size:20px;color:#01579B">
-    <a href="#" onclick="openGuidelines()">View Guidelines</a>
+{% if request.GET.enquiry == "success" %}
+<div id="successAlert" style="
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#16a34a;
+    color:white;
+    padding:20px 40px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:16px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    z-index:2000;
+">
+    ✅ Enquiry Submitted Successfully
 </div>
-<br>
+
+<script>
+    setTimeout(function(){
+        document.getElementById("successAlert").style.display="none";
+        window.history.replaceState({}, document.title, "/student/enquiry/");
+    }, 2000);
+</script>
+{% endif %}
+
+<div style="text-align:right; margin-bottom:10px;"> 
+     <button type="button"
+             onclick="openGuidelines()"
+             style="padding:8px 16px; border:none; border-radius:8px; background:#2563eb; color:white; font-weight:500; cursor:pointer;">
+        View Guidelines 
+     </button> 
+</div>
+
+
+<!-- ================= FORM ================= -->
 
 <form method="POST">
     {% csrf_token %}
@@ -325,12 +356,12 @@ font-size:28px;
     </div>
     <div class="form-group">
         <label>Date</label>
-        <input type="date" class="form-control" name="date">
+        <input type="date" class="form-control" name="date" required>
     </div>
 
     <div class="form-group">
         <label>Time Slot</label>
-        <input type="time" class="form-control" name="time_slot">
+        <input type="time" class="form-control" name="time_slot" required>
     </div>
 
     <div class="form-group">
@@ -368,9 +399,9 @@ font-size:28px;
 
     <select name="status" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
         <option value="">All Status</option>
-        <option value="pending" {% if status_filter=='pending' %}selected{% endif %}>Pending</option>
-        <option value="in_progress" {% if status_filter=='in_progress' %}selected{% endif %}>In Progress</option>
-        <option value="resolved" {% if status_filter=='resolved' %}selected{% endif %}>Resolved</option>
+        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>In Progress</option>
+        <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved</option>
     </select>
 
     <button type="submit" class="page-btn">Filter</button>
@@ -381,6 +412,7 @@ font-size:28px;
 <!-- ================= TABLE ================= -->
 <div class="my-enquiry">
 <h3>My Enquiries</h3>
+<div id="enquiryTableSection">
 <table id="enquiryTable">
 <thead>
         <tr>
@@ -412,7 +444,7 @@ font-size:28px;
     </span>
     </td>
     <td>
-        {% if enquiry.status == "resolved" %}
+        {% if enquiry.status == "resolved" or enquiry.status == "completed" %}
             <button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">Feedback</button>
         {% else %}
             <button class="view-btn"
@@ -425,7 +457,7 @@ onclick="openDetails(
 '{{ enquiry.enquiry_type }}',
 '{{ enquiry.date }}',
 '{{ enquiry.time_slot }}',
-'{{ enquiry.message|escapejs }}'
+'{{ enquiry.message|escapejs }}',
 )">
 View Details
 </button>
@@ -440,21 +472,21 @@ View Details
 <div class="pagination-container">
 
 {% if enquiries.has_previous %}
-<a href="?page={{ enquiries.previous_page_number }}" class="page-btn">«</a>
+<a href="?page={{ enquiries.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}" class="page-btn" #enquiryTableSection>Previous</a>
 {% endif %}
 
 {% for num in enquiries.paginator.page_range %}
     {% if enquiries.number == num %}
         <span class="page-number active">{{ num }}</span>
     {% else %}
-        <a href="?page={{ num }}" class="page-number">{{ num }}</a>
+        <a href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}" class="page-number" #enquiryTableSection>{{ num }}</a>
     {% endif %}
 {% endfor %}
 
 {% if enquiries.has_next %}
-<a href="?page={{ enquiries.next_page_number }}" class="page-btn">»</a>
+<a href="?page={{ enquiries.next_page_number }}&search={{ search_query }}&status={{ status_filter }}" class="page-btn" #enquiryTableSection>Next</a>
 {% endif %}
-
+</div>
 </div>
 
 </div>
@@ -544,7 +576,7 @@ View Details
 
     <br>
 
-    <button class="send-btn" onclick="openFeedback()">Provide Feedback</button>
+    <button id="detailsFeedbackBtn"  class="send-btn" onclick="openFeedback()" style="display:none;">Provide Feedback</button>
     <button class="feedback-btn" onclick="closePopup('detailsPopup')">
         Cancel
     </button>
@@ -674,6 +706,7 @@ function openDetails(id,name,student_class,send_to,receiver,type,date,time,messa
     document.getElementById("d_date").innerText = date;
     document.getElementById("d_time").innerText = time;
     document.getElementById("d_message").innerText = message;
+
 }
 
 function openFeedback(){
@@ -715,6 +748,22 @@ window.onclick = function(e){
         e.target.style.display = "none";
     }
 }
+
+ // Scroll position save before reload
+    window.addEventListener("beforeunload", function () {
+        localStorage.setItem("scrollPosition", window.scrollY);
+    });
+
+    // Scroll position restore after reload
+    window.addEventListener("load", function () {
+        const scrollPosition = localStorage.getItem("scrollPosition");
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            localStorage.removeItem("scrollPosition");
+        }
+    });
+
+
 
 </script>
 
