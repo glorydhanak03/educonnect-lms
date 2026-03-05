@@ -4,6 +4,34 @@
 
 {% block faculty_content %}
 
+{% if request.GET.status == "updated" %}
+
+<div id="toastMessage" style="
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#16a34a;
+color:white;
+padding:12px 20px;
+border-radius:8px;
+z-index:999;
+">
+
+Status Updated Successfully
+
+</div>
+
+<script>
+
+setTimeout(function(){
+document.getElementById("toastMessage").style.display="none";
+},3000)
+
+</script>
+
+{% endif %}
+
 <style>
 
 /* PAGE */
@@ -473,140 +501,83 @@ th{ background:#f9fafb; font-weight:600; }
 <th>Take Action</th>
 </tr>
 
+{% for enquiry in student_enquiries %}
 <tr>
-<td>SENQ-201</td>
-<td>Aarav</td>
-<td>5th</td>
-<td>Fee</td>
-<td data-date="2025-02-01">01 Feb 2025</td>
-<td>10:15 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
 
-<tr>
-<td>SENQ-202</td>
-<td>Riya</td>
-<td>6th</td>
-<td>Academic</td>
-<td data-date="2025-02-03">03 Feb 2025</td>
-<td>11:30 AM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>SENQ-{{ enquiry.id }}</td>
 
-<tr>
-<td>SENQ-203</td>
-<td>Vivaan</td>
-<td>7th</td>
-<td>Complaint</td>
-<td data-date="2025-02-05">05 Feb 2025</td>
-<td>09:45 AM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>{{ enquiry.student_name }}</td>
 
-<tr>
-<td>SENQ-204</td>
-<td>Anaya</td>
-<td>8th</td>
-<td>Exam</td>
-<td data-date="2025-02-07">07 Feb 2025</td>
-<td>01:20 PM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>{{ enquiry.student_class }}</td>
 
-<tr>
-<td>SENQ-205</td>
-<td>Aditya</td>
-<td>9th</td>
-<td>Leave</td>
-<td data-date="2025-02-09">09 Feb 2025</td>
-<td>12:00 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>{{ enquiry.enquiry_type }}</td>
 
-<tr>
-<td>SENQ-206</td>
-<td>Ishita</td>
-<td>10th</td>
-<td>Result</td>
-<td data-date="2025-02-11">11 Feb 2025</td>
-<td>02:10 PM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>{{ enquiry.date }}</td>
 
-<tr>
-<td>SENQ-207</td>
-<td>Kabir</td>
-<td>4th</td>
-<td>Transport</td>
-<td data-date="2025-02-13">13 Feb 2025</td>
-<td>08:40 AM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>{{ enquiry.time_slot }}</td>
 
-<tr>
-<td>SENQ-208</td>
-<td>Myra</td>
-<td>3rd</td>
-<td>Library</td>
-<td data-date="2025-02-15">15 Feb 2025</td>
-<td>03:00 PM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td class="status-{{ enquiry.status }}">
+    {{ enquiry.get_status_display }}
+</td>
 
-<tr>
-<td>SENQ-209</td>
-<td>Arjun</td>
-<td>2nd</td>
-<td>Sports</td>
-<td data-date="2025-02-17">17 Feb 2025</td>
-<td>11:10 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<td>
 
-<tr>
-<td>SENQ-210</td>
-<td>Saanvi</td>
-<td>1st</td>
-<td>Uniform</td>
-<td data-date="2025-02-19">19 Feb 2025</td>
-<td>09:00 AM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+<form method="POST"
+action="{% url 'update_student_enquiry_status' enquiry.id %}">
 
-<tr>
-<td>SENQ-211</td>
-<td>Dhruv</td>
-<td>8th</td>
-<td>Scholarship</td>
-<td data-date="2025-02-21">21 Feb 2025</td>
-<td>12:30 PM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select"onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+{% csrf_token %}
 
-<tr>
-<td>SENQ-212</td>
-<td>Meera</td>
-<td>6th</td>
-<td>Hostel</td>
-<td data-date="2025-02-23">23 Feb 2025</td>
-<td>04:15 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
+<select name="status" class="action-select" onchange="this.form.submit()">
+
+<option>Select</option>
+
+<option value="pending">Pending</option>
+
+<option value="approved">Approved</option>
+
+<option value="complete">Complete</option>
+
+<option value="rejected">Rejected</option>
+
+<option value="cancelled">Cancelled</option>
+
+<option value="rescheduled">Rescheduled</option>
+
+</select>
+
+</form>
+
+</td>
+
 </tr>
+{% endfor %}
 
 </table>
+
+<div class="pagination-container" id="studentPagination">
+
+{% if student_enquiries.has_previous %}
+<a href="?student_page={{ student_enquiries.previous_page_number }}&student_search={{ student_search }}&student_status={{ student_status }}"
+class="page-btn">Previous</a>
+{% endif %}
+
+{% for num in student_enquiries.paginator.page_range %}
+
+<a href="?student_page={{ num }}&student_search={{ student_search }}&student_status={{ student_status }}"
+    class="page-number {% if student_enquiries.number == num %}active{% endif %}">
+{{ num }}
+</a>
+
+{% endfor %}
+
+{% if student_enquiries.has_next %}
+<a href="?student_page={{ student_enquiries.next_page_number }}&student_search={{ student_search }}&student_status={{ student_status }}"
+class="page-btn">Next</a>
+{% endif %}
+
 </div>
+</div>
+
 
 <div id="parentTable" style="display:none;">
 
@@ -614,7 +585,7 @@ th{ background:#f9fafb; font-weight:600; }
 <tr>
 <th>ID</th>
 <th>Parent Name</th>
-<th>Student Name</th>
+<th>Child Name</th>
 <th>Class</th>
 <th>Enquiry Type</th>
 <th>Date</th>
@@ -623,175 +594,84 @@ th{ background:#f9fafb; font-weight:600; }
 <th>Take Action</th>
 </tr>
 
-<tr>
-<td>PENQ-301</td>
-<td>Ramesh</td>
-<td>Aarav</td>
-<td>5th</td>
-<td>Fee</td>
-<td data-date="2025-02-02">02 Feb 2025</td>
-<td>10:45 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+{% for enquiry in parent_enquiries %}
 
 <tr>
-<td>PENQ-302</td>
-<td>Sunita</td>
-<td>Riya</td>
-<td>6th</td>
-<td>Exam</td>
-<td data-date="2025-02-04">04 Feb 2025</td>
-<td>01:10 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
+
+<td>PENQ-{{ enquiry.id }}</td>
+
+<td>{{ enquiry.parent_name }}</td>
+
+<td>{{ enquiry.child_name }}</td>
+
+<td>{{ enquiry.child_class }}</td>
+
+<td>{{ enquiry.enquiry_type }}</td>
+
+<td>{{ enquiry.date }}</td>
+
+<td>{{ enquiry.time_slot }}</td>
+
+<td class="status-{{ enquiry.status }}">
+{{ enquiry.get_status_display }}
+</td>
+
+<td>
+
+<form method="POST"
+action="{% url 'update_parent_enquiry_status' enquiry.id %}">
+
+{% csrf_token %}
+
+<select name="status" class="action-select"
+onchange="this.form.submit()">
+
+<option>Select</option>
+
+<option value="pending">Pending</option>
+
+<option value="in_progress">In Progress</option>
+
+<option value="resolved">Resolved</option>
+
+</select>
+
+</form>
+
+</td>
+
 </tr>
 
-<tr>
-<td>PENQ-303</td>
-<td>Mahesh</td>
-<td>Vivaan</td>
-<td>7th</td>
-<td>Complaint</td>
-<td data-date="2025-02-06">06 Feb 2025</td>
-<td>09:20 AM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-304</td>
-<td>Anita</td>
-<td>Anaya</td>
-<td>8th</td>
-<td>Transport</td>
-<td data-date="2025-02-08">08 Feb 2025</td>
-<td>11:50 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-305</td>
-<td>Rajesh</td>
-<td>Aditya</td>
-<td>9th</td>
-<td>Result</td>
-<td data-date="2025-02-10">10 Feb 2025</td>
-<td>02:40 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-306</td>
-<td>Kavita</td>
-<td>Ishita</td>
-<td>10th</td>
-<td>Hostel</td>
-<td data-date="2025-02-12">12 Feb 2025</td>
-<td>12:05 PM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-307</td>
-<td>Vijay</td>
-<td>Kabir</td>
-<td>4th</td>
-<td>Library</td>
-<td data-date="2025-02-14">14 Feb 2025</td>
-<td>03:25 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-308</td>
-<td>Pooja</td>
-<td>Myra</td>
-<td>3rd</td>
-<td>Sports</td>
-<td data-date="2025-02-16">16 Feb 2025</td>
-<td>10:00 AM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-309</td>
-<td>Suresh</td>
-<td>Arjun</td>
-<td>2nd</td>
-<td>Uniform</td>
-<td data-date="2025-02-18">18 Feb 2025</td>
-<td>09:35 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-310</td>
-<td>Neha</td>
-<td>Saanvi</td>
-<td>1st</td>
-<td>Scholarship</td>
-<td data-date="2025-02-20">20 Feb 2025</td>
-<td>01:00 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-311</td>
-<td>Deepak</td>
-<td>Dhruv</td>
-<td>8th</td>
-<td>Meeting</td>
-<td data-date="2025-02-22">22 Feb 2025</td>
-<td>11:15 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
-
-<tr>
-<td>PENQ-312</td>
-<td>Shalini</td>
-<td>Meera</td>
-<td>6th</td>
-<td>Leave</td>
-<td data-date="2025-02-24">24 Feb 2025</td>
-<td>04:00 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleFacultyAction(this)"><option>Select</option></select></td>
-</tr>
+{% endfor %}
 
 </table>
 
+<div class="pagination-container" id="parentPagination">
+
+{% if parent_enquiries.has_previous %}
+<a href="?parent_page={{ parent_enquiries.previous_page_number }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-btn">Previous</a>
+{% endif %}
+
+{% for num in parent_enquiries.paginator.page_range %}
+
+<a href="?parent_page={{ num }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-number {% if parent_enquiries.number == num %}active{% endif %}">
+{{ num }}
+</a>
+
+{% endfor %}
+
+{% if parent_enquiries.has_next %}
+<a href="?parent_page={{ parent_enquiries.next_page_number }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-btn">Next</a>
+{% endif %}
+
+</div>
+
 </div>
 
 </div>
-</div>
-
-<!--PAGINATION-->
-<div class="pagination-container">
-    <button class="page-btn" onclick="prevPage()">Previous</button>
-
-    <button class="page-number active" onclick="goToPage(1)">1</button>
-      <button class="page-number" onclick="goToPage(2)">2</button>
-
-    <button class="page-btn" onclick="nextPage()">Next</button>
-</div>
-
-<!-- PARENT PAGINATION -->
-<div class="pagination-container" id="parentPagination" style="display:none;">
-    <button class="page-btn" onclick="prevParentPage()">Previous</button>
-
-    <button class="page-number parent-page active" onclick="showParentPage(1)">1</button>
-    <button class="page-number parent-page" onclick="showParentPage(2)">2</button>
-
-    <button class="page-btn" onclick="nextParentPage()">Next</button>
 </div>
 
 
@@ -1172,42 +1052,49 @@ function rate(star){
 }
 
 /* ================= Student and Parent enquiry filter ================= */
-function smartFilter() {
+function smartFilter(){
 
-    let searchValue = document.getElementById("commonSearch").value.toLowerCase();
-    let dateValue = document.getElementById("commonDate").value;
+let search = document.getElementById("commonSearch").value.toLowerCase();
+let date = document.getElementById("commonDate").value;
 
-    let activeTable = null;
+let tables = ["enquiryTable","parentEnquiryTable"];
 
-    if (document.getElementById("studentTab").classList.contains("active")) {
-        activeTable = document.querySelector("#enquiryTable");
-    } 
-    else {
-        activeTable = document.querySelector("#parentEnquiryTable");
-    }
+tables.forEach(function(tableId){
 
-    if (!activeTable) return;
+let rows = document.querySelectorAll("#"+tableId+" tr");
 
-    let rows = activeTable.querySelectorAll("tr:not(:first-child)");
+rows.forEach(function(row,index){
 
-    rows.forEach(row => {
+if(index==0) return;
 
-        let rowText = row.innerText.toLowerCase();
-        let dateCell = row.querySelector("td[data-date]");
-        let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
+let text = row.innerText.toLowerCase();
+let rowDate = row.cells[4].innerText;
 
-        let matchesSearch = rowText.includes(searchValue);
-        let matchesDate = !dateValue || rowDate === dateValue;
+let show = true;
 
-        row.style.display = (matchesSearch && matchesDate) ? "" : "none";
-
-    });
+if(search && !text.includes(search)){
+show=false;
 }
 
-function clearSmartFilter() {
-    document.getElementById("commonSearch").value = "";
-    document.getElementById("commonDate").value = "";
-    smartFilter();
+if(date && rowDate!=date){
+show=false;
+}
+
+row.style.display = show ? "" : "none";
+
+});
+
+});
+
+}
+
+function clearSmartFilter(){
+
+document.getElementById("commonSearch").value="";
+document.getElementById("commonDate").value="";
+
+smartFilter();
+
 }
 
 
@@ -1502,34 +1389,38 @@ document.addEventListener("DOMContentLoaded", function(){
     showPage(1);
 });
 
+
 function switchTab(type){
 
-    const tabs = document.querySelectorAll(".tab-item");
-    tabs.forEach(tab => tab.classList.remove("active"));
+const tabs = document.querySelectorAll(".tab-item");
+tabs.forEach(tab => tab.classList.remove("active"));
 
-    if(type === "student"){
-        tabs[0].classList.add("active");
+if(type === "student"){
 
-        document.getElementById("studentTable").style.display = "block";
-        document.getElementById("parentTable").style.display = "none";
+tabs[0].classList.add("active");
 
-        document.querySelector(".pagination-container").style.display = "flex";
-        document.getElementById("parentPagination").style.display = "none";
+document.getElementById("studentTable").style.display="block";
+document.getElementById("parentTable").style.display="none";
 
-        showPage(1);
-    }
-    else{
-        tabs[1].classList.add("active");
+document.getElementById("studentPagination").style.display="flex";
+document.getElementById("parentPagination").style.display="none";
 
-        document.getElementById("studentTable").style.display = "none";
-        document.getElementById("parentTable").style.display = "block";
-
-        document.querySelector(".pagination-container").style.display = "none";
-        document.getElementById("parentPagination").style.display = "flex";
-
-        showParentPage(1);
-    }
 }
+
+else{
+
+tabs[1].classList.add("active");
+
+document.getElementById("studentTable").style.display="none";
+document.getElementById("parentTable").style.display="block";
+
+document.getElementById("studentPagination").style.display="none";
+document.getElementById("parentPagination").style.display="flex";
+
+}
+
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("select").forEach(select => {
@@ -1541,4 +1432,3 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 {% endblock %}
-

@@ -8,7 +8,8 @@ from django.db.models import Q
 def _student_name(request):
     name = (request.user.first_name or request.user.username or "Student")
     if "@" in name:
-        name = name.split("@")[0]
+        name = name.split(
+            "@")[0]
     return name.strip().title()
 
 

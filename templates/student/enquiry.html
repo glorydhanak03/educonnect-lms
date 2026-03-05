@@ -446,7 +446,7 @@ font-size:28px;
         <tr>
             <th>ID</th>
             <th>Send To</th>
-            <th>Receiver</th>
+            <th>Faculty/Admin</th>
             <th>Course</th>
             <th>Type</th>
             <th>Date</th>
@@ -459,7 +459,7 @@ font-size:28px;
 <tbody>
 {% for enquiry in enquiries %}
 <tr>
-    <td>ENQ-{{ enquiry.id }}</td>
+    <td>SENQ-{{ enquiry.id }}</td>
     <td>{{ enquiry.get_send_to_display }}</td>
     <td>{{ enquiry.receiver_name }}</td>
     <td>{{ enquiry.course_name }}</td>
@@ -735,7 +735,7 @@ function openDetails(id,name,student_class,send_to,receiver,type,date,time,messa
 
     document.getElementById("detailsPopup").style.display="flex";
 
-    document.getElementById("d_id").innerText = "ENQ-" + id;
+    document.getElementById("d_id").innerText = "SENQ-" + id;
     document.getElementById("d_name").innerText = name;
     document.getElementById("d_class").innerText = student_class;
     document.getElementById("d_send_to").innerText = send_to;
@@ -748,7 +748,7 @@ function openDetails(id,name,student_class,send_to,receiver,type,date,time,messa
 }
 
 function openFeedback(){
-    let enquiryId = document.getElementById("d_id").innerText.replace("ENQ-","");
+    let enquiryId = document.getElementById("d_id").innerText.replace("SENQ-","");
     document.getElementById("feedback_enquiry_id").value = enquiryId;
     document.getElementById("detailsPopup").style.display="none";
     document.getElementById("feedbackPopup").style.display="flex";
@@ -801,10 +801,7 @@ window.onclick = function(e){
         }
     });
 
-
-
 </script>
 
+
 {% endblock %}
-
-

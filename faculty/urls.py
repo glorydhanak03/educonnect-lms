@@ -13,5 +13,17 @@ urlpatterns = [
     path("announcement/", views.announcement, name="faculty_announcement"),
     path("students/", views.students, name="faculty_students"),
     path("enquiry/", views.enquiry, name="faculty_enquiry"),
+
+path(
+"student-enquiry-status/<int:enquiry_id>/",
+views.update_student_enquiry_status,
+name="update_student_enquiry_status"
+),
+
+path(
+"parent-enquiry-status/<int:enquiry_id>/",
+views.update_parent_enquiry_status,
+name="update_parent_enquiry_status"
+),
     path("profile/", views.profile, name="faculty_profile"),
 ]

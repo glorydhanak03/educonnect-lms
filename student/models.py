@@ -87,3 +87,7 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback for Enquiry #{self.enquiry.id}"
+    
+    @property
+    def formatted_id(self):
+        return f"SENQ-{self.id}"

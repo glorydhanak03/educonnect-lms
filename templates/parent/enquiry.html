@@ -6,258 +6,262 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <style>
+    /* ================= PAGE ================= */
+    .enquiry-container {
+        padding: 30px;
+    }
 
-/* ================= PAGE ================= */
-.enquiry-container{
-    padding:30px;
-}
+    .enquiry-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+    }
 
-.enquiry-card{
-    background:#ffffff;
-    padding:35px;
-    border-radius:16px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-    margin-bottom:30px;
-}
+    .enquiry-title {
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
 
-.enquiry-title{
-    font-size:26px;
-    font-weight:600;
-    margin-bottom:20px;
-}
+    /* ================= FORM ================= */
+    .form-group {
+        margin-bottom: 14px;
+    }
 
-/* ================= FORM ================= */
-.form-group{
-    margin-bottom:14px;
-}
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        display: block;
+    }
 
-.form-group label{
-    font-weight:500;
-    margin-bottom:5px;
-    display:block;
-}
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #dcdcdc;
+    }
 
-.form-control{
-    width:100%;
-    padding:8px 12px;
-    border-radius:8px;
-    border:1px solid #dcdcdc;
-}
+    textarea.form-control {
+        height: 80px;
+    }
 
-textarea.form-control{
-    height:80px;
-}
+    .send-btn {
+        background: #3ca55c;
+        color: #fff;
+        padding: 8px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+    }
 
-.send-btn{
-    background:#3ca55c;
-    color:#fff;
-    padding:8px 30px;
-    border:none;
-    border-radius:8px;
-    font-weight:500;
-}
+    /* ================= TABLE ================= */
 
-/* ================= TABLE ================= */
+    #enquiryTable thead {
+        background: #f3f4f6;
+    }
 
-#enquiryTable thead {
-     background:#f3f4f6;
-}
+    .my-enquiry {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
 
-.my-enquiry{
-    background:#ffffff;
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
+    .my-enquiry h4 {
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
 
-.my-enquiry h4{
-    font-weight:600;
-    margin-bottom:15px;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+    th,
+    td {
+        padding: 10px;
+        border: 1px solid #e5e5e5;
+        text-align: center;
+        font-size: 14px;
+    }
 
-th,td{
-    padding:10px;
-    border:1px solid #e5e5e5;
-    text-align:center;
-    font-size:14px;
-}
+    .view-btn {
+        background: #28a745;
+        color: #fff;
+        padding: 5px 12px;
+        border: none;
+        border-radius: 6px;
+    }
 
-.view-btn{
-    background:#28a745;
-    color:#fff;
-    padding:5px 12px;
-    border:none;
-    border-radius:6px;
-}
-
-.feedback-btn{
-    background:#e74c3c;
-    color:#fff;
-    padding:5px 12px;
-    border:none;
-    border-radius:6px;
-    width:100px;
-}
-
-
-/* ========= Pagination ========= */
-
-.page-number{ 
-       padding:8px 14px; 
-       border-radius:6px; 
-       text-decoration:none; 
-       background:#f3f4f6; 
-       color:#111827;
-       font-weight:500;
-       transition:0.3s;
- } 
-.pagination-container{ 
-        display:flex; justify-content:center; 
-        gap:8px; 
-        margin-top:20px;
- } 
-.page-number:hover{
-         background:#2563eb;
-         color:white;
- }
- .page-number.active{
-          background:#2563eb; 
-          color:white; 
-}
- .page-btn{
-          text-decoration:none;
-          padding:8px 14px; 
-          border-radius:6px;
-          background:#2563eb; 
-          color:white; 
-          font-weight:500; 
-          transition:0.3s;
-  }
-
- .page-btn:hover{
-            background:#1e40af;
- }
-
- .status-badge{ 
-            padding:6px 12px;
-            border-radius:20px; 
-            font-size:13px; 
-            font-weight:600; 
- }
- 
-.status-pending{
-            background:#fef3c7; 
-            color:#92400e;
- }
-
-.status-in_progress{
-            background:#dbeafe; 
-            color:#1e40af; 
-  }
- 
-.status-resolved{ 
-             background:#dcfce7;
-             color:#166534; 
-  }
+    .feedback-btn {
+        background: #e74c3c;
+        color: #fff;
+        padding: 5px 12px;
+        border: none;
+        border-radius: 6px;
+        width: 100px;
+    }
 
 
-/* ================= POPUP ================= */
-.popup-overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.4);
-    backdrop-filter:blur(6px);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-}
+    /* ========= Pagination ========= */
 
-.popup-box{
-    width:750px;
-    background:#fff;
-    border-radius:16px;
-    padding:25px;
-    position:relative;
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);
-}
+    .page-number {
+        padding: 8px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        background: #f3f4f6;
+        color: #111827;
+        font-weight: 500;
+        transition: 0.3s;
+    }
 
-.popup-title{
-    font-size:24px;
-    font-weight:600;
-    margin-bottom:20px;
-}
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
 
-.close-btn{
-    position:absolute;
-    right:20px;
-    top:20px;
-    font-size:22px;
-    cursor:pointer;
-}
+    .page-number:hover {
+        background: #2563eb;
+        color: white;
+    }
 
-.popup-header{
-    background:#FBF9F9;
-    padding:18px 25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #eee;
-    width:107%;
-    margin-top:-26px;
-    margin-left:-25px;
-    border-radius: 16px 16px 0 0;
-}
+    .page-number.active {
+        background: #2563eb;
+        color: white;
+    }
 
-.popup-title{
-    font-size:22px;
-    font-weight:600;
-    display:flex;
-    margin-top:20px;
-}
+    .page-btn {
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        background: #2563eb;
+        color: white;
+        font-weight: 500;
+        transition: 0.3s;
+    }
 
-/* BODY */
-.popup-body{
-    padding:25px;
-}
+    .page-btn:hover {
+        background: #1e40af;
+    }
 
-.popup-body table tr{
-    border-bottom:1px solid #eee;
-}
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-in_progress {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-resolved {
+        background: #dcfce7;
+        color: #166534;
+    }
 
 
-/* ================= STARS ================= */
-.star-rating{
-    font-size:28px;
-    color:#ccc;
-    cursor:pointer;
-}
+    /* ================= POPUP ================= */
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(6px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
 
-.star-rating .active{
-    color:gold;
-}
+    .popup-box {
+        width: 750px;
+        background: #fff;
+        border-radius: 16px;
+        padding: 25px;
+        position: relative;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
 
-.guideline-badge{
-    background:#e8f0ff;
-    padding:8px 14px;
-    border-radius:8px;
-    font-weight:600;
-    display:inline-block;
-    margin:10px 0;
-}
+    .popup-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
 
+    .close-btn {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .popup-header {
+        background: #FBF9F9;
+        padding: 18px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        width: 107%;
+        margin-top: -26px;
+        margin-left: -25px;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .popup-title {
+        font-size: 22px;
+        font-weight: 600;
+        display: flex;
+        margin-top: 20px;
+    }
+
+    /* BODY */
+    .popup-body {
+        padding: 25px;
+    }
+
+    .popup-body table tr {
+        border-bottom: 1px solid #eee;
+    }
+
+
+    /* ================= STARS ================= */
+    .star-rating {
+        font-size: 28px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star-rating .active {
+        color: gold;
+    }
+
+    .guideline-badge {
+        background: #e8f0ff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-block;
+        margin: 10px 0;
+    }
 </style>
 
 
-{% if request.GET.feedback == "success"  or request.GET.enquiry == "success" or request.GET.feedback == "already" %}
+{% if request.GET.feedback == "success" or request.GET.enquiry == "success" or request.GET.feedback == "already" %}
 
 <div id="toastMessage" style="
     position:fixed;
@@ -282,19 +286,19 @@ th,td{
 ">
 
     {% if request.GET.feedback == "success" %}
-        ⭐ Feedback Submitted Successfully
+    ⭐ Feedback Submitted Successfully
     {% elif request.GET.feedback == "already" %}
-        ⚠️ Feedback Already Submitted
+    ⚠️ Feedback Already Submitted
     {% elif request.GET.enquiry == "success" %}
-        ✅ Enquiry Submitted Successfully
+    ✅ Enquiry Submitted Successfully
     {% endif %}
 
 </div>
 
 <script>
-    setTimeout(function(){
+    setTimeout(function () {
         const toast = document.getElementById("toastMessage");
-        toast.style.opacity="0";
+        toast.style.opacity = "0";
         setTimeout(() => {
             toast.remove();
         }, 500);
@@ -306,10 +310,9 @@ th,td{
 
 
 <div style="text-align:right; margin-bottom:10px;">
-    <button type="button" 
-            onclick="openGuidelines()"
-            style="padding:8px 16px; border:none; border-radius:8px; background:#2563eb; color:white; font-weight:500; cursor:pointer;">
-        View  Guidelines
+    <button type="button" onclick="openGuidelines()"
+        style="padding:8px 16px; border:none; border-radius:8px; background:#2563eb; color:white; font-weight:500; cursor:pointer;">
+        View Guidelines
     </button>
 </div>
 
@@ -317,143 +320,135 @@ th,td{
 <form method="POST">
     {% csrf_token %}
 
-<div class="enquiry-card">
+    <div class="enquiry-card">
 
-    
-    <!-- Enquiry Icon -->
-    <div class="enquiry-title">👥 Enquiry</div>
 
-  
-    <div class="form-group">
-        <label>Parent Name</label>
-        <input class="form-control" name="parent_name" value="{{ display_name }}" readonly>
+        <!-- Enquiry Icon -->
+        <div class="enquiry-title">👥 Enquiry</div>
+
+
+        <div class="form-group">
+            <label>Parent Name</label>
+            <input class="form-control" name="parent_name" value="{{ display_name }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Child Name</label>
+            <input class="form-control" name="child_name">
+        </div>
+
+        <div class="form-group">
+            <label>Class</label>
+            <select class="form-control" name="child_class" required>
+                <option value="">-- Select Class --</option>
+                <option>1st Std</option>
+                <option>2nd Std</option>
+                <option>3rd Std</option>
+                <option>4th Std</option>
+                <option>5th Std</option>
+                <option>6th Std</option>
+                <option>7th Std</option>
+                <option>8th Std</option>
+                <option>9th Std</option>
+                <option>10th Std</option>
+                <option>11th Std</option>
+                <option>12th Std</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Send To</label>
+            <select class="form-control" name="send_to" required>
+                <option value="">-- Select --</option>
+                <option value="admin">Admin</option>
+                <option value="faculty">Faculty</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Faculty / Admin Name</label>
+            <input type="text" class="form-control" name="receiver_name" placeholder="Enter Faculty / Admin Name">
+        </div>
+
+        <div class="form-group">
+            <label>Enquiry Type</label>
+            <select class="form-control" name="enquiry_type" required>
+                <option value="">-- Select Type --</option>
+                <option value="technical">Technical Issue</option>
+                <option value="academic">Academic Related</option>
+                <option value="fees">Fees Related</option>
+                <option value="attendance">Attendance</option>
+                <option value="result">Result</option>
+                <option value="performance">Performance</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Date</label>
+            <input type="text" class="form-control" name="date" placeholder="Select Date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Time Slot</label>
+            <input type="text" class="form-control" name="time_slot" required placeholder="Select time" required>
+        </div>
+
+        <div class="form-group">
+            <label>Message / Specific Request</label>
+            <textarea class="form-control" name="message" required></textarea>
+        </div>
+
+        <button type="submit" name="submit_enquiry" class="send-btn">Send Enquiry</button>
+
     </div>
-
-    <div class="form-group">
-        <label>Child Name</label>
-        <input class="form-control" name="child_name">
-    </div>
-
-<div class="form-group">
-<label>Class</label>
-<select class="form-control"  name="child_class" required>
-    <option value="">-- Select Class --</option>
-    <option>1st Std</option>
-    <option>2nd Std</option>
-    <option>3rd Std</option>
-    <option>4th Std</option>
-    <option>5th Std</option>
-    <option>6th Std</option>
-    <option>7th Std</option>
-    <option>8th Std</option>
-    <option>9th Std</option>
-    <option>10th Std</option>
-    <option>11th Std</option>
-    <option>12th Std</option>
-</select>
-</div>
-
-<div class="form-group">
-    <label>Send To</label>
-    <select class="form-control"  name="send_to" required>
-        <option value="">-- Select --</option>
-        <option value="admin">Admin</option>
-        <option value="faculty">Faculty</option>
-    </select>
-</div>
-
-    <div class="form-group">
-        <label>Faculty / Admin Name</label>
-        <input type="text" class="form-control" name="receiver_name"  placeholder="Enter Faculty / Admin Name">
-    </div>
-
-    <div class="form-group">
-        <label>Enquiry Type</label>
-        <select class="form-control" name="enquiry_type" required>
-        <option value="">-- Select Type --</option>
-        <option value="technical">Technical Issue</option>
-        <option value="academic">Academic Related</option>
-        <option value="fees">Fees Related</option>
-        <option value="attendance">Attendance</option>
-        <option value="result">Result</option>
-        <option value="performance">Performance</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Date</label>
-        <input type="text" class="form-control" name="date" placeholder="Select Date" required>
-    </div>
-
-    <div class="form-group">
-        <label>Time Slot</label>
-        <input type="text" class="form-control" name="time_slot" required placeholder="Select time" required>
-    </div>
-
-    <div class="form-group">
-        <label>Message / Specific Request</label>
-        <textarea class="form-control" name="message" required></textarea>
-    </div>
-
-    <button type="submit" name="submit_enquiry" class="send-btn" >Send Enquiry</button>
-   
-</div>
 </form>
 
 <div style="display:flex;gap:20px;margin-bottom:20px;">
-    <div class="enquiry-card" style="flex:1;text-align:center;"> 
-    <h4>Total</h4> 
-    <h2>{{ total_count }}</h2> 
-    </div>
- 
     <div class="enquiry-card" style="flex:1;text-align:center;">
-    <h4>Pending</h4> 
-    <h2 style="color:#f59e0b;">{{ pending_count }}</h2> 
+        <h4>Total</h4>
+        <h2>{{ total_count }}</h2>
     </div>
 
-    <div class="enquiry-card" style="flex:1;text-align:center;"> 
-    <h4>Resolved</h4>
-    <h2 style="color:#16a34a;">{{ resolved_count }}</h2> 
+    <div class="enquiry-card" style="flex:1;text-align:center;">
+        <h4>Pending</h4>
+        <h2 style="color:#f59e0b;">{{ pending_count }}</h2>
+    </div>
+
+    <div class="enquiry-card" style="flex:1;text-align:center;">
+        <h4>Resolved</h4>
+        <h2 style="color:#16a34a;">{{ resolved_count }}</h2>
     </div>
 </div>
 
 <form method="get" id="filterForm" style="display:flex; gap:10px; align-items:center;">
 
     <!-- 🔍 Search -->
-    <input type="text"
-           name="search"
-           placeholder="🔍 Search..."
-           value="{{ request.GET.search }}"
-           style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
+    <input type="text" name="search" placeholder="🔍 Search..." value="{{ request.GET.search }}"
+        style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
 
     <!-- 📌 Status Filter -->
-    <select name="status"
-            style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
+    <select name="status" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
         <option value="">All Status</option>
-        <option value="pending"
-            {% if request.GET.status == "pending" %}selected{% endif %}>
+        <option value="pending" {% if request.GET.status == " pending " %}selected{% endif %}>
             Pending
         </option>
-        <option value="in_progress"
-            {% if request.GET.status == "in_progress" %}selected{% endif %}>
+        <option value="in_progress" {% if request.GET.status == " in_progress " %}selected{% endif %}>
             In Progress
         </option>
-        <option value="resolved"
-            {% if request.GET.status == "resolved" %}selected{% endif %}>
+        <option value="resolved" {% if request.GET.status == "resolved" %}selected{% endif %}>
             Resolved
         </option>
     </select>
 
     <!-- 🔘 Submit -->
-    <button type="submit"
-            style="padding:6px 14px;border-radius:6px;border:none;background:#2563eb;color:white;">
+    <button type="submit" style="padding:6px 14px;border-radius:6px;border:none;background:#2563eb;color:white;">
         Filter
     </button>
 
     <!-- ❌ Clear Button -->
-    <a href="{% url 'parent_app:enquiry' %}" onclick="localStorage.setItem('scrollPos', window.scrollY);" 
-    style="padding:6px 14px;border-radius:6px;background:#ef4444;color:white;text-decoration:none;">
-    Clear
+    <a href="{% url 'parent_app:enquiry' %}" onclick="localStorage.setItem('scrollPos', window.scrollY);"
+        style="padding:6px 14px;border-radius:6px;background:#ef4444;color:white;text-decoration:none;">
+        Clear
     </a>
 
 </form>
@@ -461,56 +456,54 @@ th,td{
 
 <!-- ================= TABLE ================= -->
 <div class="my-enquiry">
-<h3>My Enquiries</h3>
-<div id="enquiryTableContainer">
-<table id="enquiryTable">
-<thead>
-<tr>
-<th>ID</th>
-<th>Send To</th>
-<th>Faculty/Admin</th>
-<th>Type</th>
-<th>Date</th>
-<th>Time</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-</thead>
+    <h3>My Enquiries</h3>
+    <div id="enquiryTableContainer">
+        <table id="enquiryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Send To</th>
+                    <th>Faculty/Admin</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-<tbody>
-{% for enquiry in enquiries %}
-<tr>
-<td>ENQ-{{ enquiry.id }}</td>
-<td>{{ enquiry.get_send_to_display }}</td>
-<td>{{ enquiry.receiver_name }}</td>
-<td>{{ enquiry.get_enquiry_type_display }}</td>
-<td>{{ enquiry.date}}</td>
-<td>{{ enquiry.time_slot }}</td>
-<td>
-<span class="status-badge status-{{ enquiry.status }}">
-    {{ enquiry.get_status_display }}
-</span>
-</td>
+            <tbody>
+                {% for enquiry in enquiries %}
+                <tr>
+                    <td>PENQ-{{ enquiry.id }}</td>
+                    <td>{{ enquiry.get_send_to_display }}</td>
+                    <td>{{ enquiry.receiver_name }}</td>
+                    <td>{{ enquiry.get_enquiry_type_display }}</td>
+                    <td>{{ enquiry.date}}</td>
+                    <td>{{ enquiry.time_slot }}</td>
+                    <td>
+                        <span class="status-badge status-{{ enquiry.status }}">
+                            {{ enquiry.get_status_display }}
+                        </span>
+                    </td>
 
-<td>
+                    <td>
 
-{% if enquiry.status == "resolved" %}
+                        {% if enquiry.status == "resolved" %}
 
-    {% if not enquiry.parent_feedback %}
-        <button class="feedback-btn"
-        onclick="openFeedbackFromTable('{{ enquiry.id }}')">
-        Feedback
-        </button>
-    {% else %}
-        <span style="color:green;font-weight:600;">
-            Feedback Submitted
-        </span>
-    {% endif %}
+                        {% if not enquiry.parent_feedback %}
+                        <button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">
+                            Feedback
+                        </button>
+                        {% else %}
+                        <span style="color:green;font-weight:600;">
+                            Feedback Submitted
+                        </span>
+                        {% endif %}
 
-{% else %}
+                        {% else %}
 
-    <button class="view-btn"
-    onclick="openDetails(
+                        <button class="view-btn" onclick="openDetails(
     '{{ enquiry.id }}',
     '{{ enquiry.parent_name }}',
     '{{ enquiry.child_name }}',
@@ -523,37 +516,37 @@ th,td{
     '{{ enquiry.time_slot }}',
     '{{ enquiry.message|escapejs }}'
     )">
-    View Details
-    </button>
+                            View Details
+                        </button>
 
-{% endif %}
+                        {% endif %}
 
-</td>
+                    </td>
 
-</tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="pagination-container" id="enquiryTableContainer">
 
     {% if enquiries.has_previous %}
-        <a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-           class="page-number">Previous</a>
+    <a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+        class="page-number">Previous</a>
     {% endif %}
 
     {% for num in enquiries.paginator.page_range %}
-        <a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-           class="page-number {% if enquiries.number == num %}active{% endif %}">
-            {{ num }}
-        </a>
+    <a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+        class="page-number {% if enquiries.number == num %}active{% endif %}">
+        {{ num }}
+    </a>
     {% endfor %}
 
     {% if enquiries.has_next %}
-        <a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-           class="page-number">Next</a>
+    <a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
+        class="page-number">Next</a>
     {% endif %}
 
 </div>
@@ -566,8 +559,8 @@ th,td{
 
             <div class="popup-title" style="display:flex;align-items:center;gap:10px;">
                 <svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
-                    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                    <line x1="14" y1="2" x2="14" y2="8" stroke="white" stroke-width="2"/>
+                    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <line x1="14" y1="2" x2="14" y2="8" stroke="white" stroke-width="2" />
                 </svg>
                 <span>Enquiry Details</span>
             </div>
@@ -675,7 +668,7 @@ th,td{
 
             <div class="popup-title" style="display:flex;align-items:center;gap:10px;">
                 <svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
-                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"/>
+                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z" />
                 </svg>
                 <span>Provide Feedback</span>
             </div>
@@ -693,12 +686,7 @@ th,td{
             <input type="hidden" name="rating" id="rating_input">
 
             <!-- Comment -->
-            <textarea 
-                class="form-control" 
-                name="comment" 
-                required 
-                placeholder="Write your feedback here..."
-            ></textarea>
+            <textarea class="form-control" name="comment" required placeholder="Write your feedback here..."></textarea>
 
             <br>
 
@@ -735,166 +723,167 @@ th,td{
 
 <!-- ================= GUIDELINES POPUP ================= -->
 <div class="popup-overlay" id="guidelinesPopup">
-<div class="popup-box">
-<div class="popup-header">
-<span class="close-btn" onclick="closePopup('guidelinesPopup')">✖</span>
-<div class="popup-title" style="display:flex;align-items:center;gap:10px;">
-    <svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
-        <path d="M12 2 2 7v6c0 5 3.8 9.7 10 11 6.2-1.3 10-6 10-11V7l-10-5z"/>
-    </svg>
-    <span>Enquiry Guidelines</span>
-</div>
-</div>
-<br><br>
+    <div class="popup-box">
+        <div class="popup-header">
+            <span class="close-btn" onclick="closePopup('guidelinesPopup')">✖</span>
+            <div class="popup-title" style="display:flex;align-items:center;gap:10px;">
+                <svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+                    <path d="M12 2 2 7v6c0 5 3.8 9.7 10 11 6.2-1.3 10-6 10-11V7l-10-5z" />
+                </svg>
+                <span>Enquiry Guidelines</span>
+            </div>
+        </div>
+        <br><br>
 
-<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
-    <svg width="20" height="20" fill="#2563eb" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-        <text x="12" y="16" text-anchor="middle" font-size="14" fill="white">!</text>
-    </svg>
-    <span>General Rule</span>
-</div>
-<ul>
-<li>All enquiries must be submitted with accurate and complete information.</li>
-<li>Enquiries will be reviewed within 24–48 working hours.</li>
-<li>Duplicate enquiries for the same issue should be avoided.</li>
-</ul>
+        <div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+            <svg width="20" height="20" fill="#2563eb" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <text x="12" y="16" text-anchor="middle" font-size="14" fill="white">!</text>
+            </svg>
+            <span>General Rule</span>
+        </div>
+        <ul>
+            <li>All enquiries must be submitted with accurate and complete information.</li>
+            <li>Enquiries will be reviewed within 24–48 working hours.</li>
+            <li>Duplicate enquiries for the same issue should be avoided.</li>
+        </ul>
 
-<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
-    <svg width="22" height="22" fill="#16a34a" viewBox="0 0 24 24">
-        <path d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zM8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zM8 13c-2.67 0-8 1.34-8 4v2h10v-2c0-2.66-5.33-4-8-4zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.98 1.97 3.45v2h7v-2c0-2.66-5.33-4-8-4z"/>
-    </svg>
-    <span>Parent</span>
-</div>
-<ul>
-<li>Clearly mention your child’s full name and class/grade.</li>
-<li>Use your registered parent account while submitting enquiries.</li>
-<li>Select the correct enquiry category before submission.</li>
-<li>For fee-related issues, attach payment proof if applicable.</li>
-</ul>
+        <div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+            <svg width="22" height="22" fill="#16a34a" viewBox="0 0 24 24">
+                <path
+                    d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zM8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zM8 13c-2.67 0-8 1.34-8 4v2h10v-2c0-2.66-5.33-4-8-4zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.98 1.97 3.45v2h7v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+            <span>Parent</span>
+        </div>
+        <ul>
+            <li>Clearly mention your child’s full name and class/grade.</li>
+            <li>Use your registered parent account while submitting enquiries.</li>
+            <li>Select the correct enquiry category before submission.</li>
+            <li>For fee-related issues, attach payment proof if applicable.</li>
+        </ul>
 
-</div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
 
- // Date Picker
+    // Date Picker
     flatpickr("input[name='date']", {
         dateFormat: "Y-m-d",
         altInput: true,
-        altFormat:"d/m/Y",  
+        altFormat: "d/m/Y",
     });
 
     // Time Picker
     flatpickr("input[name='time_slot']", {
         enableTime: true,
-        noCalendar: true,    
+        noCalendar: true,
         dateFormat: "H:i",
-        altInput:true,
-        altFormat:"h:i K",  
+        altInput: true,
+        altFormat: "h:i K",
         time_24hr: false,
     });
 
-function openDetails(id, parent, child, child_class, send_to, receiver, type, status, date, time, message){
-    document.getElementById("d_id").innerText = "ENQ-" + id;
-    document.getElementById("d_parent").innerText = parent;
-    document.getElementById("d_child").innerText = child;
-    document.getElementById("d_class").innerText = child_class;
-    document.getElementById("d_send_to").innerText = send_to;
-    document.getElementById("d_receiver").innerText = receiver;
-    document.getElementById("d_type").innerText = type;
-    document.getElementById("d_status").innerText = status;
-    document.getElementById("d_date").innerText = date;
-    document.getElementById("d_time").innerText = time;
-    document.getElementById("d_message").innerText = message;
+    function openDetails(id, parent, child, child_class, send_to, receiver, type, status, date, time, message) {
+        document.getElementById("d_id").innerText = "PENQ-" + id;
+        document.getElementById("d_parent").innerText = parent;
+        document.getElementById("d_child").innerText = child;
+        document.getElementById("d_class").innerText = child_class;
+        document.getElementById("d_send_to").innerText = send_to;
+        document.getElementById("d_receiver").innerText = receiver;
+        document.getElementById("d_type").innerText = type;
+        document.getElementById("d_status").innerText = status;
+        document.getElementById("d_date").innerText = date;
+        document.getElementById("d_time").innerText = time;
+        document.getElementById("d_message").innerText = message;
 
-    document.getElementById("feedback_enquiry_id").value = id;
+        document.getElementById("feedback_enquiry_id").value = id;
 
-    if(status === "Resolved"){
-        document.getElementById("detailsFeedbackBtn").style.display="inline-block";
-    } else {
-        document.getElementById("detailsFeedbackBtn").style.display="none";
-    }
+        if (status === "Resolved") {
+            document.getElementById("detailsFeedbackBtn").style.display = "inline-block";
+        } else {
+            document.getElementById("detailsFeedbackBtn").style.display = "none";
+        }
 
-    document.getElementById("detailsPopup").style.display="flex";
+        document.getElementById("detailsPopup").style.display = "flex";
 
-    // Reset feedback popup on open
-    document.getElementById("rating_input").value = "";
-    document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
-    document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
-    document.querySelector("#feedbackPopup input[type='file']").value = "";
-}
-
-function openFeedbackFromTable(id){
-    document.getElementById("feedback_enquiry_id").value = id;
-    document.getElementById("feedbackPopup").style.display="flex";
-
-    // Reset feedback form
-    document.getElementById("rating_input").value = "";
-    document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
-    document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
-    document.querySelector("#feedbackPopup input[type='file']").value = "";
-}
-
-
-function openFeedback(){
-    document.getElementById("feedbackPopup").style.display="flex";
-}
-
-function openGuidelines(){
-    document.getElementById("guidelinesPopup").style.display="flex";
-}
-
-function closePopup(id){
-    document.getElementById(id).style.display="none";
-
-    // Feedback popup reset
-    if(id === "feedbackPopup"){
+        // Reset feedback popup on open
         document.getElementById("rating_input").value = "";
         document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
         document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
-        document.querySelector("#feedbackPopup input[name='attachment']").value = "";
+        document.querySelector("#feedbackPopup input[type='file']").value = "";
     }
-}
 
-/* ⭐ Dynamic Star Rating */
-function rate(star){
-    let stars=document.querySelectorAll("#stars span");
-    stars.forEach((s,i)=>{
-        if(i<star){
-            s.classList.add("active");
-        }else{
-            s.classList.remove("active");
+    function openFeedbackFromTable(id) {
+        document.getElementById("feedback_enquiry_id").value = id;
+        document.getElementById("feedbackPopup").style.display = "flex";
+
+        // Reset feedback form
+        document.getElementById("rating_input").value = "";
+        document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
+        document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
+        document.querySelector("#feedbackPopup input[type='file']").value = "";
+    }
+
+
+    function openFeedback() {
+        document.getElementById("feedbackPopup").style.display = "flex";
+    }
+
+    function openGuidelines() {
+        document.getElementById("guidelinesPopup").style.display = "flex";
+    }
+
+    function closePopup(id) {
+        document.getElementById(id).style.display = "none";
+
+        // Feedback popup reset
+        if (id === "feedbackPopup") {
+            document.getElementById("rating_input").value = "";
+            document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
+            document.querySelector("#feedbackPopup textarea[name='comment']").value = "";
+            document.querySelector("#feedbackPopup input[name='attachment']").value = "";
+        }
+    }
+
+    /* ⭐ Dynamic Star Rating */
+    function rate(star) {
+        let stars = document.querySelectorAll("#stars span");
+        stars.forEach((s, i) => {
+            if (i < star) {
+                s.classList.add("active");
+            } else {
+                s.classList.remove("active");
+            }
+        });
+        document.getElementById("rating_input").value = star;
+    }
+
+
+    window.onclick = function (e) {
+        if (e.target.classList.contains("popup-overlay")) {
+            e.target.style.display = "none";
+        }
+
+    }
+
+    const form = document.getElementById("filterForm");
+
+    // Save scroll position before reload
+    form.addEventListener("submit", () => {
+        localStorage.setItem("scrollPos", window.scrollY);
+    });
+
+    // Restore scroll position on load
+    window.addEventListener("load", () => {
+        const pos = localStorage.getItem("scrollPos");
+        if (pos) {
+            window.scrollTo(0, parseInt(pos));
+            localStorage.removeItem("scrollPos");
         }
     });
-   document.getElementById("rating_input").value = star;
-}
-
-
-window.onclick = function(e){ 
-    if(e.target.classList.contains("popup-overlay")){
-              e.target.style.display = "none";
-       }
-
- }
-
-const form = document.getElementById("filterForm");
-  
-  // Save scroll position before reload
-  form.addEventListener("submit", () => {
-    localStorage.setItem("scrollPos", window.scrollY);
-  });
-
-  // Restore scroll position on load
-  window.addEventListener("load", () => {
-    const pos = localStorage.getItem("scrollPos");
-    if(pos) {
-      window.scrollTo(0, parseInt(pos));
-      localStorage.removeItem("scrollPos");
-    }
-  });
 
 </script>
 
