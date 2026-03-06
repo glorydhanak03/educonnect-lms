@@ -56,8 +56,8 @@ def study_material(request):
 def announcement(request):
     if request.method == "POST":
         title = request.POST.get("title")
-        std_class = request.POST.get("std_class")
-        subject = request.POST.get("subject")
+        std_class = request.POST.get("std_class", "")
+        subject = request.POST.get("subject", "")
         post_to = request.POST.get("post_to")
         announcement_text = request.POST.get("announcement")
 
@@ -69,7 +69,7 @@ def announcement(request):
             post_to=post_to,
             announcement=announcement_text
         )
-        return redirect('faculty_announcement')  # reload page after post
+        return redirect('/faculty/announcement/?status=posted')
 
     # fetch faculty announcements
     announcements = FacultyAnnouncement.objects.filter(faculty=request.user).order_by('-created_at')
@@ -77,7 +77,41 @@ def announcement(request):
         "display_name": _faculty_name(request),
         "announcements": announcements
     })
+@login_required
+def edit_announcement(request, ann_id):
 
+    announcement = get_object_or_404(
+        FacultyAnnouncement,
+        id=ann_id,
+        faculty=request.user
+    )
+
+    if request.method == "POST":
+
+        announcement.title = request.POST.get("title")
+        announcement.std_class = request.POST.get("std_class")
+        announcement.subject = request.POST.get("subject")
+        announcement.post_to = request.POST.get("post_to")
+        announcement.announcement = request.POST.get("announcement")
+
+        announcement.save()
+
+        return redirect('/faculty/announcement/?status=updated')
+
+    return redirect('/faculty/announcement/')
+
+@login_required
+def delete_announcement(request, ann_id):
+
+    announcement = get_object_or_404(
+        FacultyAnnouncement,
+        id=ann_id,
+        faculty=request.user
+    )
+
+    announcement.delete()
+
+    return redirect('/faculty/announcement/?status=deleted')
 
 @login_required
 def students(request):

@@ -14,8 +14,8 @@ class FacultyAnnouncement(models.Model):
     )
     title = models.CharField(max_length=200)
     announcement = models.TextField()
-    std_class = models.CharField(max_length=50)
-    subject = models.CharField(max_length=50)
+    std_class = models.CharField(max_length=50,blank=True)
+    subject = models.CharField(max_length=50,blank=True)
     post_to = models.CharField(max_length=20, choices=POST_TO_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 

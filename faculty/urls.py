@@ -11,6 +11,17 @@ urlpatterns = [
     path("assignments/", views.assignments, name="faculty_assignments"),
     path("study-material/", views.study_material, name="faculty_study_material"),
     path("announcement/", views.announcement, name="faculty_announcement"),
+    path(
+        "announcement/edit/<int:ann_id>/",
+        views.edit_announcement,
+        name="edit_announcement"
+    ),
+
+    path(
+        "announcement/delete/<int:ann_id>/",
+        views.delete_announcement,
+        name="delete_announcement"
+    ),
     path("students/", views.students, name="faculty_students"),
     path("enquiry/", views.enquiry, name="faculty_enquiry"),
 
@@ -27,3 +38,4 @@ name="update_parent_enquiry_status"
 ),
     path("profile/", views.profile, name="faculty_profile"),
 ]
+
