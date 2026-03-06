@@ -465,25 +465,37 @@ th{ background:#f9fafb; font-weight:600; }
  </div>
 
 <br>
+
+<form method="GET">
+
 <div class="filter-bar">
 
-    <input type="text"
-           id="commonSearch"
-           placeholder="🔍 Search by ID or Name"
-           class="filter-input"
-           onkeyup="smartFilter()">
+<input
+type="text"
+name="search"
+placeholder="🔍 Search by ID or Name"
+class="filter-input"
+value="{{ search }}"
+>
 
-    <input type="date"
-           id="commonDate"
-           class="filter-input"
-           onchange="smartFilter()">
+<input
+type="date"
+name="date"
+class="filter-input"
+value="{{ date }}"
+>
 
-    <button onclick="clearSmartFilter()"
-            class="filter-clear-btn">
-        Clear
-    </button>
+<button type="submit" class="page-btn">
+Search
+</button>
+
+<a href="{% url 'faculty_enquiry' %}" class="filter-clear-btn">
+Clear
+</a>
 
 </div>
+
+</form>
 
 <div class="enquiry-card">
 

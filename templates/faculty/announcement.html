@@ -2,221 +2,257 @@
 {% block faculty_content %}
 
 <style>
-body{
-    background:#eaf2f9;
-}
+    body {
+        background: #eaf2f9;
+    }
 
-/* Header */
-.top-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
+    /* Header */
+    .top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-.top-header h1{
-    font-size:36px;
-    font-weight:700;
-}
+    .top-header h1 {
+        font-size: 36px;
+        font-weight: 700;
+    }
 
-.plus-icon{
-    color:#2f80ed;
-    font-size:45px;
-    cursor:pointer;
-}
+    .plus-icon {
+        color: #2f80ed;
+        font-size: 45px;
+        cursor: pointer;
+    }
 
-.view-admin{
-    color:#2f80ed;
-    font-weight:600;
-    cursor:pointer;
-}
+    .view-admin {
+        color: #2f80ed;
+        font-weight: 600;
+        cursor: pointer;
+    }
 
-#openAdmin{
-    font-size:20px;
-}
+    #openAdmin {
+        font-size: 20px;
+    }
 
-/* Cards */
-.card-box{
-    background:#fff;
-    padding:22px;
-    border-radius:18px;
-    margin-bottom:20px;
-    box-shadow:0 6px 15px rgba(0,0,0,0.12);
-}
+    /* Cards */
+    .card-box {
+        background: #fff;
+        padding: 22px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
 
-.card-box h3{
-    font-size:22px;
-    font-weight:700;
-}
+    .card-box h3 {
+        font-size: 22px;
+        font-weight: 700;
+    }
 
-.meta{
-    margin:8px 0;
-    font-size:14px;
-    color:#555;
-}
+    .meta {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #555;
+    }
 
-.badge-new{
-    background:#4e73df;
-    color:#fff;
-    padding:4px 10px;
-    border-radius:12px;
-    font-size:12px;
-}
+    .badge-new {
+        background: #4e73df;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+    }
 
-.view-details{
-    color:#2f80ed;
-    cursor:pointer;
-    font-weight:600;
-}
+    .view-details {
+        color: #2f80ed;
+        cursor: pointer;
+        font-weight: 600;
+    }
 
-/* Overlay */
-.overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    backdrop-filter: blur(6px);
-    background:rgba(0,0,0,0.35);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-}
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-/* Popup */
-.popup{
-    background:#fff;
-    width:650px;
-    padding:35px;
-    border-radius:30px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.3);
-    animation:pop 0.3s ease-in-out;
-}
+    .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 0;
+    }
 
-@keyframes pop{
-    from{transform:scale(0.8);opacity:0;}
-    to{transform:scale(1);opacity:1;}
-}
+    .card-actions button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        color: #2f80ed;
+        transition: 0.2s;
+    }
 
-.popup h2{
-    font-size:34px;
-    font-weight:700;
-    color:#2f80ed;
-    margin-bottom:25px;
-    text-align:center;
-}
+    .card-actions button.delete-btn {
+        color: #e63946;
+    }
 
-.popup label{
-    font-weight:600;
-    margin-top:10px;
-    display:block;
-}
+    .card-actions button:hover {
+        opacity: 0.7;
+    }
 
-.popup input,
-.popup select,
-.popup textarea{
-    width:100%;
-    padding:12px;
-    margin-top:6px;
-    margin-bottom:18px;
-    border-radius:12px;
-    border:1px solid #ccc;
-    font-size:15px;
-}
+    /* Overlay */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(6px);
+        background: rgba(0, 0, 0, 0.35);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
 
-.popup textarea{
-    height:130px;
-    resize:none;
-}
+    /* Popup */
+    .popup {
+        background: #fff;
+        width: 650px;
+        padding: 35px;
+        border-radius: 30px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        animation: pop 0.3s ease-in-out;
+    }
 
-/* Checkbox Row */
-.checkbox-row{
-    display:flex;
-    gap:30px;
-    margin-bottom:20px;
-}
+    @keyframes pop {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
 
-.checkbox-row label{
-    font-weight:500;
-}
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 
-/* Buttons */
-.button-row{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-}
+    .popup h2 {
+        font-size: 34px;
+        font-weight: 700;
+        color: #2f80ed;
+        margin-bottom: 25px;
+        text-align: center;
+    }
 
-.btn-primary{
-    background:#2f80ed;
-    color:#fff;
-    padding:10px 30px;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-}
+    .popup label {
+        font-weight: 600;
+        margin-top: 10px;
+        display: block;
+    }
 
-.btn-cancel{
-    background:transparent;
-    color:#2f80ed;
-    font-weight:600;
-    border:none;
-    font-size:16px;
-}
+    .popup input,
+    .popup select,
+    .popup textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 6px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
 
-/* Admin Popup Design */
-.admin-popup{
-    width:750px;
-}
+    .popup textarea {
+        height: 130px;
+        resize: none;
+    }
 
-.popup-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
+    /* Checkbox Row */
+    .checkbox-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
 
-.close-x{
-    font-size:28px;
-    cursor:pointer;
-}
+    .checkbox-row label {
+        font-weight: 500;
+    }
 
-.admin-card{
-    background:#f7f9fc;
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
-}
+    /* Buttons */
+    .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+    }
 
-.admin-title-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+    .btn-primary {
+        background: #2f80ed;
+        color: #fff;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+    }
 
-.admin-card h3{
-    font-size:20px;
-    font-weight:700;
-}
+    .btn-cancel {
+        background: transparent;
+        color: #2f80ed;
+        font-weight: 600;
+        border: none;
+        font-size: 16px;
+    }
 
-.badge-new{
-    background:#4e73df;
-    color:#fff;
-    padding:4px 10px;
-    border-radius:12px;
-    font-size:12px;
-    margin-right:5px;
-}
+    /* Admin Popup Design */
+    .admin-popup {
+        width: 750px;
+    }
 
-.badge-active{
-    background:#28a745;
-    color:#fff;
-    padding:4px 10px;
-    border-radius:12px;
-    font-size:12px;
-}
+    .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
+    .close-x {
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    .admin-card {
+        background: #f7f9fc;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .admin-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .admin-card h3 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .badge-new {
+        background: #4e73df;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+
+    .badge-active {
+        background: #28a745;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+    }
 </style>
 
 <!-- HEADER -->
@@ -225,27 +261,25 @@ body{
     <span class="view-admin" id="openAdmin">View Admin Announcements</span>
 </div>
 
-<!-- SAMPLE FACULTY ANNOUNCEMENTS -->
-<div class="card-box">
-    <h3>Class Test Reminder</h3>
-    <div class="meta">Posted To : Students</div>
-    <div class="meta">Class: 7A | Subject: Math | Oct 4, 2025</div>
-    <p>📝 Reminder: The Unit Test on “Trigonometry” will be held on Monday, Oct 6. Revise all exercise questions before the test.</p>
-</div>
+<h2>My Latest Announcements</h2>
 
+{% for ann in announcements %}
 <div class="card-box">
-    <h3>PTM Scheduled</h3>
-    <div class="meta">Posted To : Parents</div>
-    <div class="meta">Class: 9 | Subject: Science | Oct 3, 2025</div>
-    <p>🗓️ Parent–Teacher Meeting is scheduled for Oct 7 (Tuesday) at 9:00 AM in Room 204. Please be on time.</p>
+    <div class="card-header">
+        <h3>{{ ann.title }}</h3>
+        <div class="card-actions">
+            <button class="edit-btn" data-id="{{ ann.id }}">✏️ Edit</button>
+            <button class="delete-btn" data-id="{{ ann.id }}">🗑️ Delete</button>
+        </div>
+    </div>
+    <div class="meta">Posted To : {{ ann.post_to }}</div>
+    <div class="meta">Class: {{ ann.std_class }} | Subject: {{ ann.subject }} | {{ ann.created_at|date:"M d, Y" }}</div>
+    <p>{{ ann.announcement }}</p>
 </div>
+{% empty %}
+<p>No announcements posted yet.</p>
+{% endfor %}
 
-<div class="card-box">
-    <h3>Holiday Announcement</h3>
-    <div class="meta">Posted To : All</div>
-    <div class="meta">Class: 9 | Subject: Science | Oct 3, 2025</div>
-    <p>🌴 School will remain closed on Oct 2 for Gandhi Jayanti. Regular classes will resume on Oct 3.</p>
-</div>
 
 
 <!-- ADD ANNOUNCEMENT POPUP -->
@@ -253,53 +287,57 @@ body{
     <div class="popup">
         <h2>New Announcement</h2>
 
-        <label>Title</label>
-        <input type="text" placeholder="Enter Title">
+        <form method="POST">
+            {% csrf_token %}
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Enter Title" required>
 
-        <label>Class</label>
-        <select>
-            <option>Select Class</option>
-            <option>5th Std</option>
-            <option>6th Std</option>
-            <option>7th Std</option>
-            <option>8th Std</option>
-            <option>9th Std</option>
-            <option>10th Std</option>
-            <option>11th Std</option>
-            <option>12th Std</option>
-        </select>
+            <label>Class</label>
+            <select name="std_class" required>
+                <option value="">Select Class</option>
+                <option>5th Std</option>
+                <option>6th Std</option>
+                <option>7th Std</option>
+                <option>8th Std</option>
+                <option>9th Std</option>
+                <option>10th Std</option>
+                <option>11th Std</option>
+                <option>12th Std</option>
+            </select>
 
-        <label>Subject</label>
-        <select>
-            <option>Select Subject</option>
-            <option>Math</option>
-            <option>Science</option>
-            <option>English</option>
-            <option>History</option>
-            <option>Computer</option>
-        </select>
+            <label>Subject</label>
+            <select name="subject" required>
+                <option value="">Select Subject</option>
+                <option>Math</option>
+                <option>Science</option>
+                <option>English</option>
+                <option>History</option>
+                <option>Computer</option>
+            </select>
 
-        <label>Post To</label>
-        <div class="checkbox-row">
-            <label><input type="checkbox"> Students</label>
-            <label><input type="checkbox"> Parents</label>
-            <label><input type="checkbox"> Both</label>
-        </div>
+            <label>Post To</label>
+            <select name="post_to" required>
+                <option value="">Select</option>
+                <option value="Students">Students</option>
+                <option value="Parents">Parents</option>
+                <option value="Both">Both</option>
+            </select>
 
-        <label>Announcement</label>
-        <textarea placeholder="Write announcement here..."></textarea>
+            <label>Announcement</label>
+            <textarea name="announcement" placeholder="Write announcement here..." required></textarea>
 
-        <div class="button-row">
-            <button class="btn-primary">Post</button>
-            <button class="btn-cancel closePopup">Cancel</button>
-        </div>
+            <div class="button-row">
+                <button type="submit" class="btn-primary">Post</button>
+                <button type="button" class="btn-cancel closePopup">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- ADMIN ANNOUNCEMENTS POPUP -->
 <div class="overlay" id="adminPopup">
     <div class="popup admin-popup">
-        
+
         <div class="popup-header">
             <h2>Admin Announcement for Faculty</h2>
             <span class="closePopup close-x">&times;</span>
@@ -315,7 +353,7 @@ body{
                 </div>
             </div>
 
-            <div class="meta">Posted on 25 Feb 2026  •  By Admin</div>
+            <div class="meta">Posted on 25 Feb 2026 • By Admin</div>
             <hr>
 
             <p>
@@ -323,10 +361,7 @@ body{
                 The Academic Office is organizing a Research & Publication Workshop on Thursday, 20th February 2026.
             </p>
 
-            <div class="view-details"
-                data-title="Research & Publication Workshop"
-                data-date="25 Feb 2026"
-                data-content="Dear Faculty,
+            <div class="view-details" data-title="Research & Publication Workshop" data-date="25 Feb 2026" data-content="Dear Faculty,
 The Academic Office is organizing a Research & Publication Workshop on Thursday, 20th February 2026, from 10:00 AM to 1:00 PM in the Conference Hall.
 The workshop will focus on research methodologies, paper writing, and journal submissions.
 All faculty members are encouraged to attend. Kindly register by 18 Feb 2026.">
@@ -341,17 +376,14 @@ All faculty members are encouraged to attend. Kindly register by 18 Feb 2026.">
                 <span class="badge-active">Active</span>
             </div>
 
-            <div class="meta">Posted on 25 Feb 2026  •  By Admin</div>
+            <div class="meta">Posted on 25 Feb 2026 • By Admin</div>
             <hr>
             <p>
                 Dear Faculty,<br>
                 We are pleased to announce a training session on Online Teaching Tools scheduled for Monday.
             </p>
 
-            <div class="view-details"
-                data-title="Online Teaching Tools Training"
-                data-date="25 Feb 2026"
-                data-content="Training session on Google Classroom, Zoom and LMS usage.
+            <div class="view-details" data-title="Online Teaching Tools Training" data-date="25 Feb 2026" data-content="Training session on Google Classroom, Zoom and LMS usage.
 Timing: 11 AM to 2 PM.
 All faculty must attend.">
                 View Details
@@ -393,45 +425,60 @@ All faculty must attend.">
 
 <script>
 
-/* OPEN ADD POPUP */
-document.getElementById("openAdd").addEventListener("click", function(){
-    document.getElementById("addPopup").style.display="flex";
-});
-
-/* CLOSE POPUP */
-document.querySelectorAll(".closePopup").forEach(btn=>{
-    btn.addEventListener("click", function(){
-        document.querySelectorAll(".overlay").forEach(p=>p.style.display="none");
+    /* OPEN ADD POPUP */
+    document.getElementById("openAdd").addEventListener("click", function () {
+        document.getElementById("addPopup").style.display = "flex";
     });
-});
 
-/* OPEN ADMIN POPUP */
-document.getElementById("openAdmin").addEventListener("click", function(){
-    document.getElementById("adminPopup").style.display="flex";
-});
-
-/* BACK BUTTON */
-document.getElementById("backBtn").addEventListener("click", function(){
-    document.getElementById("detailPopup").style.display="none";
-    document.getElementById("adminPopup").style.display="flex";
-});
-
-/* VIEW DETAILS */
-document.querySelectorAll(".view-details").forEach(btn=>{
-    btn.addEventListener("click", function(){
-
-        const title = this.getAttribute("data-title");
-        const date = this.getAttribute("data-date");
-        const content = this.getAttribute("data-content");
-
-        document.getElementById("detailTitle").innerText = title;
-        document.getElementById("detailDate").innerText = "Posted on " + date + " • By Admin";
-        document.getElementById("detailContent").innerText = content;
-
-        document.getElementById("adminPopup").style.display="none";
-        document.getElementById("detailPopup").style.display="flex";
+    /* CLOSE POPUP */
+    document.querySelectorAll(".closePopup").forEach(btn => {
+        btn.addEventListener("click", function () {
+            document.querySelectorAll(".overlay").forEach(p => p.style.display = "none");
+        });
     });
-});
+
+    /* OPEN ADMIN POPUP */
+    document.getElementById("openAdmin").addEventListener("click", function () {
+        document.getElementById("adminPopup").style.display = "flex";
+    });
+
+    /* BACK BUTTON */
+    document.getElementById("backBtn").addEventListener("click", function () {
+        document.getElementById("detailPopup").style.display = "none";
+        document.getElementById("adminPopup").style.display = "flex";
+    });
+
+    /* VIEW DETAILS */
+    document.querySelectorAll(".view-details").forEach(btn => {
+        btn.addEventListener("click", function () {
+
+            const title = this.getAttribute("data-title");
+            const date = this.getAttribute("data-date");
+            const content = this.getAttribute("data-content");
+
+            document.getElementById("detailTitle").innerText = title;
+            document.getElementById("detailDate").innerText = "Posted on " + date + " • By Admin";
+            document.getElementById("detailContent").innerText = content;
+
+            document.getElementById("adminPopup").style.display = "none";
+            document.getElementById("detailPopup").style.display = "flex";
+        });
+    });
+
+    document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            alert("Edit functionality will open here for this announcement.");
+            // You can later open the addPopup and prefill data for editing
+        });
+    });
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            if (confirm("Are you sure you want to delete this announcement?")) {
+                btn.closest(".card-box").remove();
+            }
+        });
+    });
 
 </script>
 
