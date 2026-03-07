@@ -376,6 +376,68 @@ font-weight:600;
         transform: translateY(-2px);
         box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
     }
+
+    form.filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+        align-items: center;
+        background: #f7f9fc;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    form.filter-form input[type="text"],
+    form.filter-form select {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        min-width: 150px;
+        transition: 0.2s;
+    }
+
+    form.filter-form input[type="text"]:focus,
+    form.filter-form select:focus {
+        outline: none;
+        border-color: #2f80ed;
+        box-shadow: 0 0 5px rgba(47, 128, 237, 0.3);
+    }
+
+    form.filter-form button {
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: none;
+        background: #2f80ed;
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    form.filter-form button:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+    
+    form.filter-form .btn-clear {
+       padding: 10px 20px;
+       border-radius: 12px;
+       background: #e5e7eb;
+       color: #2f80ed;
+       font-weight: 600;
+       text-decoration: none;
+       transition: 0.3s;
+    }
+
+    form.filter-form .btn-clear:hover {
+       background: #d1d5db;
+       transform: translateY(-1px);
+    }
 </style>
 
 <!-- HEADER -->
@@ -390,6 +452,44 @@ font-weight:600;
 
 
 <h2>My Announcements</h2>
+<!-- FILTER FORM -->
+<form method="GET" class="filter-form">
+    <input type="text" name="search" placeholder="🔍 Search by title" value="{{ search_query }}">
+
+    <select name="class">
+        <option value="">All Classes</option>
+        <option {% if filter_class == "5th Std" %}selected{% endif %}>5th Std</option>
+        <option {% if filter_class == "6th Std" %}selected{% endif %}>6th Std</option>
+        <option {% if filter_class == "7th Std" %}selected{% endif %}>7th Std</option>
+        <option {% if filter_class == "8th Std" %}selected{% endif %}>8th Std</option>
+        <option {% if filter_class == "9th Std" %}selected{% endif %}>9th Std</option>
+        <option {% if filter_class == "10th Std" %}selected{% endif %}>10th Std</option>
+        <option {% if filter_class == "11th Std" %}selected{% endif %}>11th Std</option>
+        <option {% if filter_class == "12th Std" %}selected{% endif %}>12th Std</option>
+        <option {% if filter_class == "All Class" %}selected{% endif %}>All Class</option>
+    </select>
+
+    <select name="subject">
+        <option value="">All Subjects</option>
+        <option {% if filter_subject == "Math" %}selected{% endif %}>Math</option>
+        <option {% if filter_subject == "Science" %}selected{% endif %}>Science</option>
+        <option {% if filter_subject == "English" %}selected{% endif %}>English</option>
+        <option {% if filter_subject == "History" %}selected{% endif %}>History</option>
+        <option {% if filter_subject == "Computer" %}selected{% endif %}>Computer</option>
+        <option {% if filter_subject == "All Subject" %}selected{% endif %}>All Subject</option>
+    </select>
+
+    <select name="post_to">
+        <option value="">All</option>
+        <option value="Students" {% if filter_post_to == "Students" %}selected{% endif %}>Students</option>
+        <option value="Parents" {% if filter_post_to == "Parents" %}selected{% endif %}>Parents</option>
+        <option value="Both" {% if filter_post_to == "Both" %}selected{% endif %}>Both</option>
+    </select>
+
+    <button type="submit">Filter</button>
+    <a href="{% url 'faculty_announcement' %}" class="btn-clear">Clear Filter</a>
+
+</form>
 
 {% for ann in announcements %}
 <div class="card-box">
