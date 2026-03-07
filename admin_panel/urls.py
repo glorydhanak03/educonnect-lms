@@ -23,6 +23,23 @@ urlpatterns = [
     path("courses/", views.manage_courses, name="admin_manage_courses"),
     path("analytics/", views.analytics_report, name="admin_analytics_report"),
     path("announcement/", views.announcement, name="admin_announcement"),
+    path(
+        "announcement/create/",
+         views.create_announcement,
+         name="create_admin_announcement"
+        ),
+ 
+    path(
+        "announcement/update/<int:id>/",
+         views.update_announcement,
+         name="update_admin_announcement"
+        ),
+
+    path(
+        "announcement/delete/<int:id>/",
+        views.delete_announcement,
+        name="delete_admin_announcement"
+        ),
     path("enquiry/", views.enquiry, name="admin_enquiry"),
     path("settings/", views.settings, name="admin_settings"),
 ]

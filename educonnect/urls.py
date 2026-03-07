@@ -31,5 +31,7 @@ urlpatterns = [
     path("student/", include("student.urls")),
     path("faculty/", include("faculty.urls")),
     path("parent/", include("parent.urls")),
+    path("admin-panel/", include("admin_panel.urls")),
+
   
 ]

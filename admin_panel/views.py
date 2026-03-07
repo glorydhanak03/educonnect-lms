@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
-
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import JsonResponse
+from .models import AdminAnnouncement
 
 # -------------------------
 # HELPERS
@@ -124,9 +125,85 @@ def analytics_report(request):
     return render(request, "admin_panel/analytics_report.html")
 
 
-@login_required
 def announcement(request):
-    return render(request, "admin_panel/announcement.html")
+
+    selected_category = request.GET.get("category", "All")
+
+    announcements = AdminAnnouncement.objects.all().order_by("-created_at")
+
+    category_map = {
+        "Students": [],
+        "Faculty": [],
+        "Parents": [],
+    }
+
+    for ann in announcements:
+
+        ann.display_name = ann.sender.first_name or "Admin"
+
+        for cat in ann.categories:
+
+            if selected_category != "All" and cat != selected_category:
+                continue
+
+            if cat in category_map:
+                category_map[cat].append(ann)
+
+    return render(request, "admin_panel/announcement.html", {
+        "category_map": category_map,
+        "selected_category": selected_category
+    })
+
+
+@login_required
+def create_announcement(request):
+
+    if request.method == "POST":
+
+        title = request.POST.get("title")
+        message = request.POST.get("message")
+        categories = request.POST.getlist("categories")
+
+        AdminAnnouncement.objects.create(
+            title=title,
+            message=message,
+            categories=categories,
+            sender=request.user
+        )
+
+        return redirect("/admin-panel/announcement/?status=posted")
+
+
+@login_required
+def update_announcement(request, id):
+
+    ann = get_object_or_404(AdminAnnouncement, id=id)
+
+    if request.method == "POST":
+
+        ann.title = request.POST.get("title")
+        ann.message = request.POST.get("message")
+
+        categories = request.POST.getlist("categories")
+        if categories:
+            ann.categories = categories
+
+        ann.save()
+
+        return redirect("/admin-panel/announcement/?status=updated")
+
+    return redirect("/admin-panel/announcement/")
+
+
+@login_required
+def delete_announcement(request, id):
+
+    ann = get_object_or_404(AdminAnnouncement, id=id)
+
+    if request.method == "POST":
+        ann.delete()
+
+    return redirect("/admin-panel/announcement/?status=deleted")
 
 
 @login_required

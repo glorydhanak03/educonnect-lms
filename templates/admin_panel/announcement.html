@@ -3,168 +3,500 @@
 {% block admin_title %}Admin | Announcement{% endblock %}
 
 {% block admin_content %}
+{% if request.GET.status == "posted" %}
+<div class="toast toast-success">
+    Announcement Posted Successfully
+</div>
+{% endif %}
+
+{% if request.GET.status == "updated" %}
+<div class="toast toast-update">
+    Announcement Updated Successfully
+</div>
+{% endif %}
+
+{% if request.GET.status == "deleted" %}
+<div class="toast toast-delete">
+    Announcement Deleted Successfully
+</div>
+{% endif %}
+
 <style>
-/* === Existing CSS + Modal / JS styling merged === */
-.page-wrapper{
-    background:#e9f0f8;
-    padding:25px;
-    border-radius:10px;
-}
-.page-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
-.page-header h2{
-    font-size:24px;
-    font-weight:600;
-}
-.controls{
-    display:flex;
-    gap:10px;
-}
-.controls input,
-.controls select{
-    padding:8px 12px;
-    border-radius:6px;
-    border:1px solid #ccc;
-    font-size:14px;
-}
-.send-btn{
-    background:#6c63ff;
-    color:#fff;
-    padding:8px 14px;
-    border-radius:6px;
-    text-decoration:none;
-    font-size:14px;
-}
-.section-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-.category-box{
-    background:#fff;
-    border-radius:12px;
-    padding:20px;
-    position:relative;
-    box-shadow:0 3px 8px rgba(0,0,0,0.08);
-}
-.category-box::before{
-    content:"";
-    position:absolute;
-    left:0;
-    top:0;
-    bottom:0;
-    width:6px;
-    background:#ff4d4d;
-    border-top-left-radius:12px;
-    border-bottom-left-radius:12px;
-}
-.category-title{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:15px;
-}
-.announcement-item{
-    background:#fde2e2;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-}
-.announcement-item h5{
-    margin:0;
-    font-size:15px;
-    font-weight:600;
-}
-.announcement-item p{
-    margin:4px 0;
-    font-size:13px;
-}
-.meta{
-    font-size:12px;
-    color:#555;
-}
-.open-modal-btn{
-    background:#007bff;
-    color:white;
-    padding:8px 14px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
-.modal-overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.4);
-    backdrop-filter: blur(6px);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-}
-.modal-box{
-    background:#fff;
-    width:500px;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.2);
-}
-.modal-box h2{
-    margin-bottom:15px;
-}
-.modal-box input,
-.modal-box select,
-.modal-box textarea{
-    width:100%;
-    padding:10px;
-    margin-bottom:12px;
-    border-radius:8px;
-    border:1px solid #ccc;
-}
-.modal-box textarea{
-    height:100px;
-    resize:none;
-}
-.modal-buttons{
-    display:flex;
-    gap:10px;
-}
-.submit-btn{
-    background:blue;
-    color:white;
-    padding:8px 16px;
-    border:none;
-    border-radius:6px;
-}
-.cancel-btn{
-    background:red;
-    color:white;
-    padding:8px 16px;
-    border:none;
-    border-radius:6px;
-}
-.action-icons span{
-    cursor:pointer;
-    margin-left:8px;
-}
-.toast{
-    position:fixed;
-    top:20px;
-    right:20px;
-    background:#28a745;
-    color:white;
-    padding:10px 16px;
-    border-radius:8px;
-    box-shadow:0 3px 8px rgba(0,0,0,0.2);
-}
+    /* === Existing CSS + Modal / JS styling merged === */
+    .page-wrapper {
+        background: #e3f0ff;
+        padding: 25px;
+        border-radius: 10px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+    }
+
+    .controls input,
+    .controls select {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .send-btn {
+        background: #6c63ff;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .section-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .category-box:last-child {
+        grid-column: 1/span 2;
+        justify-self: center;
+        width: 50%;
+    }
+
+    .category-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .category-box::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: #ff4d4d;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+
+    .category-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .announcement-item {
+        background: #fde2e2;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .announcement-item h5 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .announcement-item p {
+        margin: 4px 0;
+        font-size: 13px;
+    }
+
+    .meta {
+        font-size: 12px;
+        color: #555;
+    }
+
+    .open-modal-btn {
+        background: #007bff;
+        color: white;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(6px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .modal-box {
+        background: #fff;
+        width: 500px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-box h2 {
+        margin-bottom: 15px;
+    }
+
+    .modal-box input,
+    .modal-box select,
+    .modal-box textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .modal-box textarea {
+        height: 100px;
+        resize: none;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* ===== Edit Announcement Modal ===== */
+
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(6px);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        animation: fadeIn 0.25s ease;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        width: 420px;
+        padding: 28px;
+        border-radius: 14px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        position: relative;
+        animation: scaleUp 0.25s ease;
+    }
+
+    /* Title */
+    .modal-content h3 {
+        font-size: 20px;
+        margin-bottom: 18px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .modal-content .cancel-btn {
+        background: #e5e7eb !important;
+        color: #374151 !important;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .modal-content .cancel-btn:hover {
+        background: #d1d5db !important;
+    }
+
+    /* Close button */
+    .close {
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        font-size: 20px;
+        cursor: pointer;
+        color: #6b7280;
+    }
+
+    .close:hover {
+        color: #ef4444;
+    }
+
+    /* Inputs */
+    .modal-content input,
+    .modal-content textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        margin-bottom: 14px;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Buttons */
+    .modal-content button {
+        background: #4f46e5;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .modal-content button:hover {
+        background: #4338ca;
+    }
+
+    /* Animations */
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+    @keyframes scaleUp {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .close {
+        float: right;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .modal input,
+    .modal textarea {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        padding: 8px;
+    }
+
+    .modal button {
+        padding: 8px 15px;
+        cursor: pointer;
+    }
+
+    .modal-box label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        display: block;
+        margin-bottom: 4px;
+        margin-top: 8px;
+    }
+
+    .modal-box input:focus,
+    .modal-box textarea:focus,
+    .modal-box select:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+
+    .submit-btn {
+        background: blue;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+    }
+
+    .cancel-btn {
+        background: #e5e7eb;
+        color: #374151;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .cancel-btn:hover {
+        background: #d1d5db;
+    }
+
+    .action-icons span {
+        cursor: pointer;
+        margin-left: 8px;
+    }
+
+
+    .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 25px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 999;
+    }
+
+    .toast-success {
+        background: #16a34a;
+    }
+
+    .toast-update {
+        background: #2563eb;
+    }
+
+    .toast-delete {
+        background: #dc2626;
+    }
+
+    select[multiple] {
+        height: 120px;
+    }
+
+    .action-icons button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .action-icons button:focus {
+        outline: none;
+    }
+
+    .action-icons button:hover {
+        transform: scale(1.1);
+    }
+
+    .category-box {
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .announcement-list {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 5px;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+
+    }
+
+    .announcement-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .announcement-list::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+
+    .announcement-list::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #94a3b8, #64748b);
+        border-radius: 10px;
+    }
+
+    .announcement-list::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #64748b, #475569);
+    }
+
+    .announcement-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: 0.2s;
+    }
+
+    .delete-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(5px);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .delete-box {
+        background: white;
+        padding: 30px;
+        border-radius: 14px;
+        width: 380px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-box h3 {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .delete-box p {
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .delete-btn {
+        background: #dc2626;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .delete-btn:hover {
+        background: #b91c1c;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -172,121 +504,294 @@
         <h2>🔔 Announcement & Notifications</h2>
         <div class="controls">
             <input type="text" id="searchBox" placeholder="Search...">
-            <select id="filterCategory">
-                <option value="All">All Categories</option>
-                <option value="Students">Students</option>
-                <option value="Faculty">Faculty</option>
-                <option value="Parents">Parents</option>
-                <option value="Exams">Exams</option>
-                <option value="Payments">Payments</option>
-                <option value="Results">Results</option>
+            <select id="filterCategory" onchange="filterCategory()">
+
+                <option value="All" {% if selected_category == "All" %}selected{% endif %}>All Categories</option>
+                <option value="Students" {% if selected_category == "Students" %}selected{% endif %}>Students</option>
+                <option value="Faculty" {% if selected_category == "Faculty" %}selected{% endif %}>Faculty</option>
+                <option value="Parents" {% if selected_category == "Parents" %}selected{% endif %}>Parents</option>
+
             </select>
             <button class="open-modal-btn" onclick="openModal()">Send Announcement & Notifications</button>
         </div>
     </div>
 
-    <div class="section-grid" id="announcementGrid">
-        <!-- JS renders announcements -->
+    <div class="section-grid">
+
+        {% for category, items in category_map.items %}
+
+        <div class="category-box">
+
+            <div class="category-title">
+                📂 {{ category }}
+            </div>
+
+            <div class="announcement-list">
+
+                {% for ann in items %}
+
+                <div class="announcement-item" data-category="{{ category }}">
+
+                    <div>
+                        <h5>{{ ann.title }}</h5>
+                        <p>{{ ann.message }}</p>
+
+                        <div class="meta">
+                            By {{ ann.display_name}} | {{ ann.created_at|date:"d M Y H:i" }}
+                        </div>
+                    </div>
+
+                    <div class="action-icons">
+
+                        <button
+                            onclick="openEditModal('{{ ann.id }}','{{ ann.title|escapejs }}','{{ ann.message|escapejs }}')">
+                            ✏️
+                        </button>
+
+                        <button onclick="openDeleteModal('{{ ann.id }}')">🗑️</button>
+
+                    </div>
+
+                </div>
+
+                {% empty %}
+                <p>No announcements</p>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
     </div>
-</div>
 
-<!-- Modal -->
-<div id="announcementModal" class="modal-overlay">
-    <div class="modal-box">
-        <h2 id="modalTitle">Add Announcement</h2>
+    <!--Update Announcement-->
+    <div id="editModal" class="modal">
 
-        <input type="text" id="title" placeholder="Enter Title">
-        <input type="text" value="Admin" disabled>
-        <label>Select Categories (multi-select)</label>
-        <select id="audience" multiple>
-            <option value="Students">Students</option>
-            <option value="Faculty">Faculty</option>
-            <option value="Parents">Parents</option>
-            <option value="Exams">Exams</option>
-            <option value="Payments">Payments</option>
-            <option value="Results">Results</option>
-        </select>
-        <textarea id="message" placeholder="Enter description..."></textarea>
+        <div class="modal-content">
 
-        <div class="modal-buttons">
-            <button type="button" class="submit-btn" onclick="submitAnnouncement()">Submit</button>
-            <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+            <span class="close" onclick="closeEditModal()">&times;</span>
+
+            <h3>Edit Announcement</h3>
+
+            <form method="POST" id="editForm">
+
+                {% csrf_token %}
+
+                <label>Title</label>
+                <input type="text" name="title" id="editTitle" required>
+
+                <label>Message</label>
+                <textarea name="message" id="editMessage" rows="4" required></textarea>
+
+
+                <div style="display:flex; justify-content:flex-end; gap:10px;">
+
+                    <button type="button" onclick="closeEditModal()" class="cancel-btn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="submit-btn">
+                        Update
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+
+    <div id="deleteModal" class="delete-modal">
+
+        <div class="delete-box">
+
+            <h3>Delete Announcement</h3>
+
+            <p>Are you sure you want to delete this announcement?</p>
+
+            <div class="delete-actions">
+
+                <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+
+                <form method="POST" id="deleteForm">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal -->
+    <div id="announcementModal" class="modal-overlay">
+        <div class="modal-box">
+
+            <h2>Add Announcement</h2>
+
+            <form method="POST" action="{% url 'admin_panel:create_admin_announcement' %}">
+                {% csrf_token %}
+
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Enter Title" required>
+
+                <label>Sender</label>
+                <input type="text" value="Admin" disabled>
+
+                <label>Select Categories</label>
+                <select name="categories" multiple required>
+                    <option value="Students">Students</option>
+                    <option value="Faculty">Faculty</option>
+                    <option value="Parents">Parents</option>
+                </select>
+
+                <label>Message</label>
+                <textarea name="message" placeholder="Enter description..." required></textarea>
+
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn">Submit</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+
+            </form>
+
         </div>
     </div>
-</div>
 
-<div id="toast" class="toast" style="display:none;">Done! 🎉</div>
+    <div id="toast" class="toast" style="display:none;">Done! 🎉</div>
 
-<script>
-// === State ===
-let announcements = {Students:[], Faculty:[], Parents:[], Exams:[], Payments:[], Results:[]};
-let editInfo = null;
+    <script>
 
-// === Modal Functions ===
-function openModal(){document.getElementById("announcementModal").style.display="flex";}
-function closeModal(){document.getElementById("announcementModal").style.display="none"; clearModalForm();}
-function clearModalForm(){document.getElementById("title").value="";document.getElementById("message").value=""; const select=document.getElementById("audience"); for(let i=0;i<select.options.length;i++) select.options[i].selected=false; editInfo=null; document.getElementById("modalTitle").innerText="Add Announcement";}
+        function openModal() {
+            document.getElementById("announcementModal").style.display = "flex"
+        }
 
-// === Add/Edit Announcement ===
-function submitAnnouncement(){
-    const title=document.getElementById("title").value.trim();
-    const message=document.getElementById("message").value.trim();
-    const categories=Array.from(document.getElementById("audience").selectedOptions).map(o=>o.value);
-    const sender="Admin";
-    const timestamp=new Date().toLocaleString();
-    if(!title||!message||categories.length===0){alert("Fill all fields and select at least one category"); return;}
-    const item={title,message,sender,timestamp};
-    if(editInfo){
-        const {cat,index}=editInfo;
-        announcements[cat][index]=item;
-        categories.forEach(c=>{if(!announcements[c].includes(item)) announcements[c].push(item);});
-        editInfo=null;
-    } else {categories.forEach(cat=>announcements[cat].push({...item}));}
-    showToast();
-    closeModal();
-    renderAnnouncements();
-}
+        function closeModal() {
+            document.getElementById("announcementModal").style.display = "none"
+        }
 
-// === Delete/Edit ===
-function deleteAnnouncement(cat,index){if(!confirm(`Delete this announcement from ${cat}?`)) return; announcements[cat].splice(index,1); renderAnnouncements();}
-function editAnnouncement(cat,index){const item=announcements[cat][index]; document.getElementById("title").value=item.title; document.getElementById("message").value=item.message; const select=document.getElementById("audience"); for(let i=0;i<select.options.length;i++){select.options[i].selected = itemCategoryExists(select.options[i].value,cat);} editInfo={cat,index}; document.getElementById("modalTitle").innerText="Edit Announcement"; openModal();}
-function itemCategoryExists(optionValue,cat){return optionValue===cat;}
+        window.onclick = function (e) {
+            const modal = document.getElementById("announcementModal")
+            if (e.target == modal) {
+                modal.style.display = "none"
+            }
+        }
 
-// === Render Announcements ===
-function renderAnnouncements(){
-    const grid=document.getElementById("announcementGrid");
-    grid.innerHTML="";
-    const filterCat=document.getElementById("filterCategory").value;
-    const search=document.getElementById("searchBox").value.toLowerCase();
-    for(let cat in announcements){
-        if(filterCat!=="All"&&filterCat!==cat) continue;
-        const items=announcements[cat].filter(a=>a.title.toLowerCase().includes(search)||a.message.toLowerCase().includes(search));
-        const box=document.createElement("div"); box.className="category-box";
-        const titleDiv=document.createElement("div"); titleDiv.className="category-title"; titleDiv.innerText=cat; box.appendChild(titleDiv);
-        if(items.length===0){ const p=document.createElement("p"); p.innerText="No Announcements"; box.appendChild(p);}
-        items.forEach((a,i)=>{const itemDiv=document.createElement("div"); itemDiv.className="announcement-item";
-        itemDiv.innerHTML=`<div>
-            <h5>${a.title}</h5>
-            <p>${a.message}</p>
-            <div class="meta">By: ${a.sender} | ${a.timestamp}</div>
-        </div>
-        <div class="action-icons">
-            <span onclick="editAnnouncement('${cat}',${i})" title="Edit">✏️</span>
-            <span onclick="deleteAnnouncement('${cat}',${i})" title="Delete">🗑️</span>
-        </div>`; box.appendChild(itemDiv);});
-        grid.appendChild(box);
-    }
-}
+        const toasts = document.querySelectorAll(".toast")
 
-// === Toast ===
-function showToast(){const t=document.getElementById("toast"); t.style.display="block"; setTimeout(()=>{t.style.display="none";},2000);}
+        toasts.forEach(t => {
+            setTimeout(() => {
+                t.style.display = "none"
+                window.history.replaceState({}, document.title, window.location.pathname)
+            }, 3000)
+        })
 
-// === Search/Filter ===
-document.getElementById("searchBox").addEventListener("input",renderAnnouncements);
-document.getElementById("filterCategory").addEventListener("change",renderAnnouncements);
+        // function filterCategory() {
+        //     let category = document.getElementById("filterCategory").value
+        //     window.location.href = "/admin-panel/announcement/?category=" + category
+        // }
 
-// === Initial Render ===
-renderAnnouncements();
-</script>
+        function filterCategory() {
 
-{% endblock %}
+            let selected = document.getElementById("filterCategory").value
+
+            document.querySelectorAll(".announcement-item").forEach(item => {
+
+                let category = item.getAttribute("data-category")
+
+                if (selected === "All" || category === selected) {
+                    item.style.display = "flex"
+                }
+                else {
+                    item.style.display = "none"
+                }
+
+            })
+
+        }
+
+
+        document.getElementById("searchBox").addEventListener("keyup", function () {
+
+            let value = this.value.toLowerCase()
+
+            document.querySelectorAll(".announcement-item").forEach(item => {
+
+                let text = item.innerText.toLowerCase()
+
+                if (text.includes(value)) {
+                    item.style.display = "flex"
+                }
+                else {
+                    item.style.display = "none"
+                }
+
+            })
+
+        })
+
+        function openEditModal(id, title, message) {
+
+            document.getElementById("editModal").style.display = "flex"
+
+            document.getElementById("editTitle").value = title
+            document.getElementById("editMessage").value = message
+
+            document.getElementById("editForm").action =
+                "/admin-panel/announcement/update/" + id + "/"
+
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none"
+        }
+
+        function openDeleteModal(id) {
+
+            document.getElementById("deleteModal").style.display = "flex"
+
+            document.getElementById("deleteForm").action =
+                "/admin-panel/announcement/delete/" + id + "/"
+
+        }
+
+        function closeDeleteModal() {
+
+            document.getElementById("deleteModal").style.display = "none"
+
+        }
+
+        function applyFilters() {
+
+            let searchValue = document.getElementById("searchBox").value.toLowerCase()
+            let selectedCategory = document.getElementById("filterCategory").value
+
+            document.querySelectorAll(".announcement-item").forEach(item => {
+
+                let text = item.innerText.toLowerCase()
+                let category = item.getAttribute("data-category")
+
+                let matchSearch = text.includes(searchValue)
+                let matchCategory = selectedCategory === "All" || category === selectedCategory
+
+                if (matchSearch && matchCategory) {
+                    item.style.display = "flex"
+                } else {
+                    item.style.display = "none"
+                }
+
+            })
+        }
+
+        document.getElementById("searchBox").addEventListener("keyup", applyFilters)
+        document.getElementById("filterCategory").addEventListener("change", applyFilters)
+    </script>
+
+    {% endblock %}
