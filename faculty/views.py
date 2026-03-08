@@ -9,6 +9,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import FacultyAnnouncement
+from admin_panel.models import AdminAnnouncement
+from django.utils import timezone
+from datetime import timedelta
 
 def _faculty_name(request):
     name = (request.user.first_name or request.user.username or "Faculty")
@@ -52,10 +55,62 @@ def study_material(request):
     return render(request, "faculty/study_material.html", {"display_name": _faculty_name(request)})
 
 
+# @login_required
+# def announcement(request):
+#     if request.method == "POST":
+#         # === POST: Add new announcement===
+#         title = request.POST.get("title")
+#         std_class = request.POST.get("std_class", "")
+#         subject = request.POST.get("subject", "")
+#         post_to = request.POST.get("post_to")
+#         announcement_text = request.POST.get("announcement")
+
+#         FacultyAnnouncement.objects.create(
+#             faculty=request.user,
+#             title=title,
+#             std_class=std_class,
+#             subject=subject,
+#             post_to=post_to,
+#             announcement=announcement_text
+#         )
+#         return redirect('/faculty/announcement/?status=posted')
+
+#     # === GET: Fetch & filter faculty announcements ===
+#     announcements = FacultyAnnouncement.objects.filter(faculty=request.user)
+
+#     # GET parameters for filtering
+#     search_query = request.GET.get("search", "").strip()
+#     filter_class = request.GET.get("class", "")
+#     filter_subject = request.GET.get("subject", "")
+#     filter_post_to = request.GET.get("post_to", "")
+
+#     # Apply filters only if values exist
+#     if search_query:
+#         announcements = announcements.filter(title__icontains=search_query)
+#     if filter_class:
+#         announcements = announcements.filter(std_class=filter_class)
+#     if filter_subject:
+#         announcements = announcements.filter(subject=filter_subject)
+#     if filter_post_to:
+#         announcements = announcements.filter(post_to=filter_post_to)
+
+#     # Order by newest first
+#     announcements = announcements.order_by('-created_at')
+
+#     return render(request, "faculty/announcement.html", {
+#         "display_name": _faculty_name(request),
+#         "announcements": announcements,
+#         "search_query": search_query,
+#         "filter_class": filter_class,
+#         "filter_subject": filter_subject,
+#         "filter_post_to": filter_post_to
+#     })
+
+
 @login_required
 def announcement(request):
+    # === Existing POST logic for faculty announcement ===
     if request.method == "POST":
-        # === POST: Add new announcement===
         title = request.POST.get("title")
         std_class = request.POST.get("std_class", "")
         subject = request.POST.get("subject", "")
@@ -72,16 +127,14 @@ def announcement(request):
         )
         return redirect('/faculty/announcement/?status=posted')
 
-    # === GET: Fetch & filter faculty announcements ===
+    # === Existing GET logic for faculty announcements ===
     announcements = FacultyAnnouncement.objects.filter(faculty=request.user)
 
-    # GET parameters for filtering
     search_query = request.GET.get("search", "").strip()
     filter_class = request.GET.get("class", "")
     filter_subject = request.GET.get("subject", "")
     filter_post_to = request.GET.get("post_to", "")
 
-    # Apply filters only if values exist
     if search_query:
         announcements = announcements.filter(title__icontains=search_query)
     if filter_class:
@@ -91,12 +144,23 @@ def announcement(request):
     if filter_post_to:
         announcements = announcements.filter(post_to=filter_post_to)
 
-    # Order by newest first
     announcements = announcements.order_by('-created_at')
+
+    # === NEW: Fetch Admin Announcements for Faculty ===
+    admin_announcements = AdminAnnouncement.objects.filter(
+        categories__contains=["Faculty"]
+    ).order_by('-created_at')
+
+    # Set display name for each admin announcement
+    for ann in admin_announcements:
+        ann.display_name = ann.sender.first_name or "Admin"
+        ann.is_new = ann.created_at >= timezone.now() - timedelta(days=3)
+
 
     return render(request, "faculty/announcement.html", {
         "display_name": _faculty_name(request),
         "announcements": announcements,
+        "admin_announcements": admin_announcements,  # pass to template
         "search_query": search_query,
         "filter_class": filter_class,
         "filter_subject": filter_subject,

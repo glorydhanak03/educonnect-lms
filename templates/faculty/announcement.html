@@ -310,7 +310,39 @@ font-weight:600;
     /* Admin Popup Design */
     .admin-popup {
         width: 750px;
+        max-height: 80vh;        
+        overflow-y: auto;        
+        padding: 25px;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        position: relative;
     }
+
+    .admin-popup::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 10px;
+}
+
+.admin-popup::-webkit-scrollbar-thumb {
+    background: #2f80ed;
+    border-radius: 10px;
+}
+
+.admin-popup::-webkit-scrollbar-track {
+    background: #e5e7eb;
+    border-radius: 10px;
+}
+
+.admin-popup .popup-header {
+    position: sticky;       
+    top: 0;                  
+    background: #fff;        
+    z-index: 10;             
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc; 
+}
 
     .popup-header {
         display: flex;
@@ -326,9 +358,9 @@ font-weight:600;
 
     .admin-card {
         background: #f7f9fc;
-        padding: 20px;
+        padding: 15px 20px;
         border-radius: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .admin-title-row {
@@ -438,6 +470,23 @@ font-weight:600;
        background: #d1d5db;
        transform: translateY(-1px);
     }
+
+#detailPopup .close-x {
+    position: absolute;
+    top: -14px;       
+    right: -1px;     
+    font-size: 28px;
+    font-weight: 700;
+    color: #555;
+    cursor: pointer;
+    transition: 0.2s;
+    z-index: 20;    
+}
+
+#detailPopup .close-x:hover {
+    color: #e63946;
+    transform: scale(1.2);
+}
 </style>
 
 <!-- HEADER -->
@@ -640,61 +689,42 @@ font-weight:600;
     </div>
 </div>
 
+
 <!-- ADMIN ANNOUNCEMENTS POPUP -->
 <div class="overlay" id="adminPopup">
     <div class="popup admin-popup">
 
         <div class="popup-header">
-            <h2>Admin Announcement for Faculty</h2>
+            <h2>Admin Announcements for Faculty</h2>
             <span class="closePopup close-x">&times;</span>
         </div>
 
-        <!-- Announcement Card 1 -->
+        {% for ann in admin_announcements %}
         <div class="admin-card">
             <div class="admin-title-row">
-                <h3>Research & Publication Workshop</h3>
+                <h3>{{ ann.title }}</h3>
                 <div>
+                    {% if ann.is_new %}
                     <span class="badge-new">New</span>
-                    <span class="badge-active">Active</span>
+                    {% endif %}
                 </div>
             </div>
 
-            <div class="meta">Posted on 25 Feb 2026 • By Admin</div>
+            <div class="meta">Posted on {{ ann.created_at|date:"d M Y" }} • By {{ ann.display_name }}</div>
             <hr>
 
-            <p>
-                Dear Faculty,<br>
-                The Academic Office is organizing a Research & Publication Workshop on Thursday, 20th February 2026.
-            </p>
+            <p>{{ ann.message|linebreaks }}</p>
 
-            <div class="view-details" data-title="Research & Publication Workshop" data-date="25 Feb 2026" data-content="Dear Faculty,
-The Academic Office is organizing a Research & Publication Workshop on Thursday, 20th February 2026, from 10:00 AM to 1:00 PM in the Conference Hall.
-The workshop will focus on research methodologies, paper writing, and journal submissions.
-All faculty members are encouraged to attend. Kindly register by 18 Feb 2026.">
+            <div class="view-details"
+                data-title="{{ ann.title }}"
+                data-date="{{ ann.created_at|date:'d M Y' }}"
+                data-content="{{ ann.message|escapejs }}">
                 View Details
             </div>
         </div>
-
-        <!-- Announcement Card 2 -->
-        <div class="admin-card">
-            <div class="admin-title-row">
-                <h3>Online Teaching Tools Training</h3>
-                <span class="badge-active">Active</span>
-            </div>
-
-            <div class="meta">Posted on 25 Feb 2026 • By Admin</div>
-            <hr>
-            <p>
-                Dear Faculty,<br>
-                We are pleased to announce a training session on Online Teaching Tools scheduled for Monday.
-            </p>
-
-            <div class="view-details" data-title="Online Teaching Tools Training" data-date="25 Feb 2026" data-content="Training session on Google Classroom, Zoom and LMS usage.
-Timing: 11 AM to 2 PM.
-All faculty must attend.">
-                View Details
-            </div>
-        </div>
+        {% empty %}
+        <p>No admin announcements available.</p>
+        {% endfor %}
 
     </div>
 </div>
