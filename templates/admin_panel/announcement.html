@@ -537,7 +537,7 @@
                         <p>{{ ann.message }}</p>
 
                         <div class="meta">
-                            By {{ ann.display_name}} | {{ ann.created_at|date:"d M Y H:i" }}
+                            📤 Posted to <b>{{ category }}</b> | {{ ann.created_at|date:"d M Y H:i" }}
                         </div>
                     </div>
 
@@ -636,7 +636,7 @@
 
             <h2>Add Announcement</h2>
 
-            <form method="POST" action="{% url 'admin_panel:create_admin_announcement' %}">
+            <form method="POST" action="{% url 'admin_panel:create_announcement' %}" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <label>Title</label>

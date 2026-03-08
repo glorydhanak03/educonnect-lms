@@ -98,76 +98,194 @@
     from{transform:scale(0.8); opacity:0;}
     to{transform:scale(1); opacity:1;}
 }
+
+.filter-bar{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.filter-bar input{
+    padding:10px;
+    border-radius:20px;
+    border:1px solid #ccc;
+    width:220px;
+}
+
+.filter-bar select{
+    padding:10px;
+    border-radius:20px;
+    border:1px solid #ccc;
+}
+
+/* ===== TOP BAR ===== */
+
+.top-bar{
+    position:sticky;
+    top:0;
+    background:#ffffff;
+    padding:5px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+    border-bottom:1px solid #eee;
+    margin-bottom:20px;
+    border-radius: 7px;
+}
+
+.page-title{
+    font-size:26px;
+    font-weight:700;
+}
+
+.search-container{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.search-container input{
+    padding:10px 15px;
+    border-radius:20px;
+    border:1px solid #ccc;
+    width:220px;
+    outline:none;
+}
+
+.search-container input:focus{
+    border-color:#2563eb;
+}
+
+.search-container select{
+    padding:10px 12px;
+    border-radius:20px;
+    border:1px solid #ccc;
+}
+
+#clearBtn{
+    padding:9px 16px;
+    border:none;
+    border-radius:20px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+#clearBtn:hover{
+    background:#1e4ed8;
+}
+
+.no-announcement{
+    text-align:center;
+    padding:60px;
+    font-size:18px;
+    color:#777;
+    background:#fff;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
 </style>
 
 <div class="page-wrapper">
 
-    <div class="page-header">
-        <h2>📢 Announcement</h2>
+    <div class="top-bar">
+
+    <h2 class="page-title">📢 Announcement</h2>
+
+    <div class="search-container">
+
+        <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="🔍 Search announcements..."
+        >
+
+        <select id="senderFilter">
+            <option value="">All</option>
+            <option value="Admin">Admin</option>
+            <option value="Faculty">Faculty</option>
+        </select>
+
+        <button id="clearBtn">Clear</button>
+
     </div>
 
-    <!-- Announcement 1 -->
-    <div class="announcement-card">
-        <h3>Final Term Result Out</h3>
-        <div class="meta">By: Principal | 12 Dec 2025, 10:30 AM</div>
-        <p>We are pleased to inform you that the Final Term Results have been officially released.</p>
-        <span class="view-btn" onclick="openPopup('popup1')">View Details</span>
-    </div>
+</div>
+    {% for ann in announcements %}
 
-    <!-- Announcement 2 -->
-    <div class="announcement-card">
-        <h3>PTM Scheduled</h3>
-        <div class="meta">By: Admin | 12 Dec 2025, 10:30 AM</div>
-        <p>A Parent-Teacher Meeting has been scheduled for 30 October at 10:00 AM.</p>
-        <span class="view-btn" onclick="openPopup('popup2')">View Details</span>
-    </div>
+<div class="announcement-card" data-sender="{{ ann.type|title }}">
+<h3>
+{{ ann.title }}
 
-    <!-- Announcement 3 -->
-    <div class="announcement-card">
-        <h3>Holiday Announcement</h3>
-        <div class="meta">By: Faculty | 12 Dec 2025, 10:30 AM</div>
-        <p>The school will remain closed on 15 October in celebration of Dussehra.</p>
-        <span class="view-btn" onclick="openPopup('popup3')">View Details</span>
-    </div>
+{% if ann.is_new %}
+<span style="
+background:#2563eb;
+color:white;
+padding:2px 8px;
+border-radius:10px;
+font-size:12px;
+margin-left:8px;
+">
+NEW
+</span>
+{% endif %}
+</h3>
+
+<div class="meta">
+By: {{ ann.sender }} |
+{{ ann.created_at|date:"d M Y" }},
+{{ ann.created_at|time:"h:i A" }}
+</div>
+
+<p>{{ ann.message|truncatewords:20 }}</p>
+
+<span class="view-btn"
+onclick="openPopup('popup{{ forloop.counter }}')">
+View Details
+</span>
+
+</div>
+
+{% empty %}
+
+<div class="no-announcement">
+📭 No announcements available
+</div>
+
+{% endfor %}
 
 </div>
 
 <!-- ================= POPUPS ================= -->
 
-<div class="popup-overlay" id="popup1">
-    <div class="popup-box">
-        <span class="close-btn" onclick="closePopup('popup1')">✖</span>
-        <h3>Final Term Result Out</h3>
-        <p>
-            Subject-wise marks & grades<br>
-            Overall percentage & rank<br>
-            Attendance summary<br>
-            Teacher feedback & improvement areas
-        </p>
-    </div>
+{% for ann in announcements %}
+
+<div class="popup-overlay" id="popup{{ forloop.counter }}">
+
+<div class="popup-box">
+
+<span class="close-btn"
+onclick="closePopup('popup{{ forloop.counter }}')">
+✖
+</span>
+
+<h3>{{ ann.title }}</h3>
+
+<div class="meta">
+By {{ ann.sender }} |
+{{ ann.created_at|date:"d M Y H:i" }}
 </div>
 
-<div class="popup-overlay" id="popup2">
-    <div class="popup-box">
-        <span class="close-btn" onclick="closePopup('popup2')">✖</span>
-        <h3>PTM Scheduled</h3>
-        <p>
-            Parent-Teacher Meeting on 30 October at 10:00 AM.<br>
-            Please confirm your attendance via dashboard.
-        </p>
-    </div>
+<p>
+{{ ann.message|linebreaks }}
+</p>
+
+</div>
 </div>
 
-<div class="popup-overlay" id="popup3">
-    <div class="popup-box">
-        <span class="close-btn" onclick="closePopup('popup3')">✖</span>
-        <h3>Holiday Announcement</h3>
-        <p>
-            School closed on 15 October for Dussehra.<br>
-            Classes resume next working day.
-        </p>
-    </div>
-</div>
+{% endfor %}
 
 <script>
 function openPopup(id){
@@ -177,6 +295,48 @@ function openPopup(id){
 function closePopup(id){
     document.getElementById(id).style.display="none";
 }
+
+const searchInput = document.getElementById("searchInput");
+const senderFilter = document.getElementById("senderFilter");
+
+searchInput.addEventListener("keyup", filterAnnouncements);
+senderFilter.addEventListener("change", filterAnnouncements);
+
+function filterAnnouncements(){
+
+    const searchValue = searchInput.value.toLowerCase();
+    const senderValue = senderFilter.value;
+
+    const cards = document.querySelectorAll(".announcement-card");
+
+    cards.forEach(card => {
+
+        const title = card.querySelector("h3").childNodes[0].nodeValue.toLowerCase();
+        const sender = card.getAttribute("data-sender");
+
+        let matchSearch = title.includes(searchValue);
+        let matchSender = senderValue === "" || sender === senderValue;
+
+        if(matchSearch && matchSender){
+            card.style.display="block";
+        }else{
+            card.style.display="none";
+        }
+
+    });
+
+}
+
+const clearBtn = document.getElementById("clearBtn");
+
+clearBtn.addEventListener("click", () => {
+
+    searchInput.value = "";
+    senderFilter.value = "";
+
+    filterAnnouncements();
+
+});
 </script>
 
 {% endblock %}

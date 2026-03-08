@@ -4,229 +4,307 @@
 {% block student_content %}
 
 <style>
+    .page-wrapper {
+        display: flex;
+        gap: 20px;
+    }
 
-.page-wrapper{
-    display:flex;
-    gap:20px;
-}
+    /* LEFT SIDE */
+    .left-section {
+        width: 100%;
+        background: #eaf0ff;
+        padding: 25px;
+        border-radius: 12px;
+    }
 
-/* LEFT SIDE */
-.left-section{
-    width:100%;
-    background:#eaf0ff;
-    padding:25px;
-    border-radius:12px;
-}
+    .announcement-card {
+        background: #ffffff;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 18px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
 
-.announcement-card{
-    background:#ffffff;
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:18px;
-    box-shadow:0 3px 8px rgba(0,0,0,0.08);
-}
+    .badge {
+        float: right;
+        background: #28a745;
+        color: #fff;
+        padding: 4px 12px;
+        font-size: 12px;
+        border-radius: 15px;
+    }
 
-.badge{
-    float:right;
-    background:#28a745;
-    color:#fff;
-    padding:4px 12px;
-    font-size:12px;
-    border-radius:15px;
-}
+    .meta {
+        font-size: 12px;
+        color: #666;
+        margin: 6px 0;
+    }
 
-.meta{
-    font-size:12px;
-    color:#666;
-    margin:6px 0;
-}
+    .view-link {
+        color: #007bff;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 500;
+    }
 
-.view-link{
-    color:#007bff;
-    font-size:13px;
-    cursor:pointer;
-    font-weight:500;
-}
+    /* CENTER POPUP */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(6px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
 
-/* CENTER POPUP */
-.modal-overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.4);
-    backdrop-filter: blur(6px);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-}
+    .modal-box {
+        background: #ffffff;
+        width: 500px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
 
-.modal-box{
-    background:#ffffff;
-    width:500px;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 5px 25px rgba(0,0,0,0.2);
-    position:relative;
-}
+    .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
 
-.close-btn{
-    position:absolute;
-    right:15px;
-    top:10px;
-    font-size:20px;
-    cursor:pointer;
-}
+    .new-badge {
+        background: #007bff;
+        color: #fff;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        margin-left: 8px;
+    }
 
-.new-badge{
-    background:#007bff;
-    color:#fff;
-    font-size:11px;
-    padding:4px 8px;
-    border-radius:8px;
-    margin-left:8px;
-}
+    .active-badge {
+        background: #28a745;
+        color: #fff;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        margin-left: 6px;
+    }
 
-.active-badge{
-    background:#28a745;
-    color:#fff;
-    font-size:11px;
-    padding:4px 8px;
-    border-radius:8px;
-    margin-left:6px;
-}
+    .top-bar {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        margin-bottom: 20px;
+        border-radius: 7px;
+    }
 
+    .page-title {
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .search-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-container input {
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+    }
+
+    .search-container select {
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+    }
+
+    #clearBtn {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .new-badge {
+        background: #2563eb;
+        color: #fff;
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 8px;
+        margin-left: 8px;
+    }
+
+    .no-announcement {
+        text-align: center;
+        padding: 60px;
+        font-size: 18px;
+        color: #777;
+        background: #fff;
+        border-radius: 12px;
+    }
 </style>
 
 
 <div class="page-wrapper">
 
-    <div class="left-section">       
-       <h1>📢 Announcements</h1>
+    <div class="left-section">
+        <div class="top-bar">
 
-        <!-- 1 -->
-        <div class="announcement-card">
-            <span class="badge">Active</span>
-            <h4>Exam Schedule Update</h4>
-            <div class="meta">Posted on 10 Feb 2026 • By Admin</div>
-            <p>The exam timetable for the upcoming semester has been updated.</p>
-            <div class="view-link" onclick="openModal('modal1')">View Details</div>
+            <h2 class="page-title">📢 Announcements</h2>
+
+            <div class="search-container">
+
+                <input type="text" id="searchInput" placeholder="🔍 Search announcements...">
+
+                <select id="senderFilter">
+                    <option value="">All</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Faculty">Faculty</option>
+                </select>
+
+                <button id="clearBtn">Clear</button>
+
+            </div>
         </div>
 
-        <!-- 2 -->
-        <div class="announcement-card">
-            <span class="badge">Active</span>
-            <h4>Campus Event: Science Fair</h4>
-            <div class="meta">Posted on 5 Feb 2026 • By Faculty</div>
-            <p>Join us for the Annual Science Fair this Friday!</p>
-            <div class="view-link" onclick="openModal('modal2')">View Details</div>
+        {% for ann in announcements %}
+
+        <div class="announcement-card" data-sender="{{ ann.type|title }}">
+
+            <h4>
+                {{ ann.title }}
+
+                {% if ann.is_new %}
+                <span class="new-badge">NEW</span>
+                {% endif %}
+
+            </h4>
+
+            <div class="meta">
+                Posted on {{ ann.created_at|date:"d M Y" }} • By {{ ann.sender }}
+            </div>
+
+            <p>{{ ann.message|truncatewords:20 }}</p>
+
+            <div class="view-link" onclick="openModal('modal{{ forloop.counter }}')">
+                View Details
+            </div>
+
         </div>
 
-        <!-- 3 -->
-        <div class="announcement-card">
-            <span class="badge">Active</span>
-            <h4>Library Hours Extended</h4>
-            <div class="meta">Posted on 10 Feb 2026 • By Admin</div>
-            <p>The library will be open until 9 PM during exam period.</p>
-            <div class="view-link" onclick="openModal('modal3')">View Details</div>
+        {% empty %}
+
+        <div class="no-announcement">
+            📭 No announcements available
         </div>
 
-     </div>
+        {% endfor %}
+
+    </div>
 </div>
 
 
 <!-- CENTER POPUP -->
-     <div class="modal-overlay" id="modal1">
+{% for ann in announcements %}
+
+<div class="modal-overlay" id="modal{{ forloop.counter }}">
+
     <div class="modal-box">
-        <span class="close-btn" onclick="closeModal('modal1')">✖</span>
-         <h3>
-            Exam Schedule Update
-            <span class="new-badge">New</span>
-            <span class="active-badge">Active</span>
+
+        <span class="close-btn" onclick="closeModal('modal{{ forloop.counter }}')">
+            ✖
+        </span>
+
+        <h3>
+            {{ ann.title }}
+
+            {% if ann.is_new %}
+            <span class="new-badge">NEW</span>
+            {% endif %}
+
         </h3>
 
         <div class="meta">
-            Posted on 10 Feb 2026 • By Admin
+            Posted on {{ ann.created_at|date:"d M Y H:i" }} • By {{ ann.sender }}
         </div>
 
         <hr>
 
         <p>
-            The exam timetable for the upcoming semester has been updated.
-            Please check the new schedule in the ‘Exam’ Section.
+            {{ ann.message|linebreaks }}
         </p>
 
-        <ul>
-            <li><strong>Exam Start Date:</strong> 15 March 2026</li>
-            <li><strong>Hall Tickets Available:</strong> 10 March 2026</li>
-        </ul>
     </div>
 </div>
-<div class="modal-overlay" id="modal2">
-    <div class="modal-box">
-        <span class="close-btn" onclick="closeModal('modal2')">✖</span>
-        <h3>
-    Annual Science Fair 2026
-    <span class="active-badge">Active</span>
-</h3>
 
-<div class="meta">
-    Posted on 12 Feb 2026 • By Admin
-</div>
-
-<hr>
-
-<p>
-    Our school is organizing the Annual Science Fair 2026.
-    Students are encouraged to participate and showcase their innovative projects.
-</p>
-
-<ul>
-    <li><strong>Event Date:</strong> 25 March 2026</li>
-    <li><strong>Registration Deadline:</strong> 18 March 2026</li>
-</ul>
-
-    </div>
-</div>
-<div class="modal-overlay" id="modal3">
-    <div class="modal-box">
-        <span class="close-btn" onclick="closeModal('modal3')">✖</span>
-        <h3>
-    Library Hours Extended
-    <span class="active-badge">Active</span>
-</h3>
-
-<div class="meta">
-    Posted on 13 Feb 2026 • By Admin
-</div>
-
-<hr>
-
-<p>
-    To support students during the examination period,
-    library working hours have been extended for better study access.
-</p>
-
-<ul>
-    <li><strong>New Closing Time:</strong> 7:30 PM</li>
-    <li><strong>Effective From:</strong> 15 Feb 2026</li>
-</ul>
-
-    </div>
-</div>
-    
+{% endfor %}
 
 
 <script>
-function openModal(id){
-    document.getElementById(id).style.display="flex";
-}
+    function openModal(id) {
+        document.getElementById(id).style.display = "flex";
+    }
 
-function closeModal(id){
-    document.getElementById(id).style.display="none";
-}
+    function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    const senderFilter = document.getElementById("senderFilter");
+
+    searchInput.addEventListener("keyup", filterAnnouncements);
+    senderFilter.addEventListener("change", filterAnnouncements);
+
+    function filterAnnouncements() {
+
+        const searchValue = searchInput.value.toLowerCase();
+        const senderValue = senderFilter.value;
+
+        const cards = document.querySelectorAll(".announcement-card");
+
+        cards.forEach(card => {
+
+            const title = card.querySelector("h4").innerText.toLowerCase();
+            const sender = card.getAttribute("data-sender");
+
+            let matchSearch = title.includes(searchValue);
+            let matchSender = senderValue === "" || sender === senderValue;
+
+            if (matchSearch && matchSender) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+    }
+
+    const clearBtn = document.getElementById("clearBtn");
+
+    clearBtn.addEventListener("click", () => {
+
+        searchInput.value = "";
+        senderFilter.value = "";
+
+        filterAnnouncements();
+
+    });
 </script>
 
 {% endblock %}

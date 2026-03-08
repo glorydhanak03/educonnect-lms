@@ -487,6 +487,15 @@ font-weight:600;
     color: #e63946;
     transform: scale(1.2);
 }
+
+.no-announcement {
+        text-align: center;
+        padding: 60px;
+        font-size: 18px;
+        color: #777;
+        background: #fff;
+        border-radius: 12px;
+    }
 </style>
 
 <!-- HEADER -->
@@ -563,7 +572,9 @@ font-weight:600;
     <p>{{ ann.announcement }}</p>
 </div>
 {% empty %}
-<p>No announcements posted yet.</p>
+<div class="no-announcement">
+    📭 No announcements posted yet.
+</div>
 {% endfor %}
 
 <div class="overlay" id="deletePopup">

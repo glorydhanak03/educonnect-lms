@@ -3,6 +3,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Enquiry, Feedback
 from django.db.models import Q
+from admin_panel.models import AdminAnnouncement
+from faculty.models import FacultyAnnouncement
+from django.utils import timezone
+from datetime import timedelta
+
 
 
 def _student_name(request):
@@ -191,12 +196,62 @@ def payments(request):
         "display_name": _student_name(request)
     })
 
-
 @login_required
 def announcement(request):
-    return render(request, "student/announcement.html", {
-        "display_name": _student_name(request)
-    })
+
+    # Admin announcements for Students
+    admin_ann = AdminAnnouncement.objects.filter(
+        categories__icontains="Student"
+    )
+
+    # Faculty announcements for Students
+    faculty_ann = FacultyAnnouncement.objects.filter(
+        post_to__icontains="Student"
+    ) | FacultyAnnouncement.objects.filter(
+        post_to__icontains="Both"
+    )
+
+    announcements = []
+
+    # Admin
+    for ann in admin_ann:
+        announcements.append({
+            "title": ann.title,
+            "message": ann.message,
+            "sender": "Admin",
+            "created_at": ann.created_at,
+            "type": "admin"
+        })
+
+    # Faculty
+    for ann in faculty_ann:
+        announcements.append({
+            "title": ann.title,
+            "message": ann.announcement,
+            "sender":"Faculty",
+            "created_at": ann.created_at,
+            "type": "faculty"
+        })
+
+    # latest first
+    announcements = sorted(
+        announcements,
+        key=lambda x: x["created_at"],
+        reverse=True
+    )
+
+    # NEW badge logic
+    for ann in announcements:
+        ann["is_new"] = timezone.now() - ann["created_at"] < timedelta(days=2)
+
+    return render(
+        request,
+        "student/announcement.html",
+        {
+            "announcements": announcements,
+            "display_name": _student_name(request)
+        }
+    )
 
 
 @login_required

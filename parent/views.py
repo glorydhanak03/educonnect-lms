@@ -5,6 +5,10 @@ from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
 from .models import ParentEnquiry, ParentFeedback
 from django.contrib import messages
+from admin_panel.models import AdminAnnouncement
+from faculty.models import FacultyAnnouncement
+from django.utils import timezone
+from datetime import timedelta
 
 
 def _parent_name(request) -> str:
@@ -44,9 +48,64 @@ def exam_results(request):
     return render(request, "parent/exam_results.html", {"display_name": _parent_name(request)})
 
 
+
+
 @login_required
 def announcement(request):
-    return render(request, "parent/announcement.html", {"display_name": _parent_name(request)})
+
+    admin_ann = AdminAnnouncement.objects.filter(
+        categories__icontains= "Parents"
+    )
+
+    faculty_ann = FacultyAnnouncement.objects.filter(
+           post_to__icontains="Parent"
+) | FacultyAnnouncement.objects.filter(
+    post_to__icontains="Both"
+)
+
+    announcements = []
+
+    # Admin announcements
+    for ann in admin_ann:
+
+        announcements.append({
+            "title": ann.title,
+            "message": ann.message,
+            "sender": "Admin",
+            "created_at": ann.created_at,
+            "type": "admin"
+        })
+
+    # Faculty announcements
+    for ann in faculty_ann:
+
+        announcements.append({
+            "title": ann.title,
+            "message": ann.announcement,
+            "sender": "Faculty",
+            "created_at": ann.created_at,
+            "type": "faculty"
+        })
+
+    # Sort by latest
+    announcements = sorted(
+        announcements,
+        key=lambda x: x["created_at"],
+        reverse=True
+    )
+
+    # NEW badge logic
+    for ann in announcements:
+        ann["is_new"] = timezone.now() - ann["created_at"] < timedelta(days=2)
+
+    return render(
+        request,
+        "parent/announcement.html",
+        {
+            "announcements": announcements,
+            "display_name": _parent_name(request)
+        }
+    )
 
 @login_required
 def enquiry(request):

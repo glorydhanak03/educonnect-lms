@@ -26,7 +26,7 @@ urlpatterns = [
     path(
         "announcement/create/",
          views.create_announcement,
-         name="create_admin_announcement"
+         name="create_announcement"
         ),
  
     path(
