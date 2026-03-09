@@ -27,3 +27,21 @@ class AdminAnnouncement(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class AdminGuideline(models.Model):
+
+    ROLE_CHOICES = (
+        ("student","Student"),
+        ("parent","Parent"),
+        ("faculty","Faculty"),
+    )
+
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.role} - Guideline"

@@ -5,6 +5,9 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from .models import AdminAnnouncement
+from .models import AdminGuideline
+from django.views.decorators.csrf import csrf_exempt
+
 
 # -------------------------
 # HELPERS
@@ -208,7 +211,55 @@ def delete_announcement(request, id):
 
 @login_required
 def enquiry(request):
-    return render(request, "admin_panel/enquiry.html")
+
+    guidelines = AdminGuideline.objects.all().order_by("-id")
+
+    return render(request,"admin_panel/enquiry.html",{
+        "guidelines":guidelines
+    })
+
+
+# ADD GUIDELINE
+@csrf_exempt
+def add_guideline(request):
+
+    if request.method == "POST":
+
+        role = request.POST.get("role")
+        message = request.POST.get("message")
+
+        AdminGuideline.objects.create(
+            role=role,
+            message=message
+        )
+
+        return JsonResponse({"status":"added"})
+
+
+# DELETE GUIDELINE
+@csrf_exempt
+def delete_guideline(request,id):
+
+    guideline = AdminGuideline.objects.get(id=id)
+    guideline.delete()
+
+    return JsonResponse({"status":"deleted"})
+
+
+# UPDATE GUIDELINE
+@csrf_exempt
+def update_guideline(request,id):
+
+    if request.method == "POST":
+
+        guideline = AdminGuideline.objects.get(id=id)
+
+        guideline.message = request.POST.get("message")
+        guideline.role = request.POST.get("role")
+
+        guideline.save()
+
+        return JsonResponse({"status":"updated"})
 
 
 @login_required

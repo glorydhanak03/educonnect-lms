@@ -41,5 +41,9 @@ urlpatterns = [
         name="delete_admin_announcement"
         ),
     path("enquiry/", views.enquiry, name="admin_enquiry"),
+
+path("add-guideline/", views.add_guideline, name="add_guideline"),
+path("delete-guideline/<int:id>/", views.delete_guideline, name="delete_guideline"),
+path("update-guideline/<int:id>/", views.update_guideline, name="update_guideline"),
     path("settings/", views.settings, name="admin_settings"),
 ]
