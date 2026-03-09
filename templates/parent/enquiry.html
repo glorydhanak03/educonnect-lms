@@ -429,10 +429,10 @@
     <!-- 📌 Status Filter -->
     <select name="status" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
         <option value="">All Status</option>
-        <option value="pending" {% if request.GET.status == " pending " %}selected{% endif %}>
+        <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>
             Pending
         </option>
-        <option value="in_progress" {% if request.GET.status == " in_progress " %}selected{% endif %}>
+        <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>
             In Progress
         </option>
         <option value="resolved" {% if request.GET.status == "resolved" %}selected{% endif %}>

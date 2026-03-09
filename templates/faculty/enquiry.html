@@ -528,7 +528,7 @@ Clear
 
 <td>{{ enquiry.time_slot }}</td>
 
-<td class="status-{{ enquiry.status }}">
+<td class="status-cell status-{{ enquiry.status }}">
     {{ enquiry.get_status_display }}
 </td>
 
@@ -539,21 +539,14 @@ action="{% url 'update_student_enquiry_status' enquiry.id %}">
 
 {% csrf_token %}
 
-<select name="status" class="action-select" onchange="this.form.submit()">
+<select name="status" class="action-select" onchange="handleFacultyAction(this)">
 
-<option>Select</option>
-
-<option value="pending">Pending</option>
-
-<option value="approved">Approved</option>
-
+<option value="">Select</option>
+<option value="approved">Approve</option>
+<option value="rescheduled">Reschedule</option>
+<option value="rejected">Reject</option>
 <option value="complete">Complete</option>
-
-<option value="rejected">Rejected</option>
-
-<option value="cancelled">Cancelled</option>
-
-<option value="rescheduled">Rescheduled</option>
+<option value="cancelled">Cancel</option>
 
 </select>
 
@@ -624,7 +617,7 @@ class="page-btn">Next</a>
 
 <td>{{ enquiry.time_slot }}</td>
 
-<td class="status-{{ enquiry.status }}">
+<td class="status-cell status-{{ enquiry.status }}">
 {{ enquiry.get_status_display }}
 </td>
 
@@ -635,16 +628,34 @@ action="{% url 'update_parent_enquiry_status' enquiry.id %}">
 
 {% csrf_token %}
 
-<select name="status" class="action-select"
-onchange="this.form.submit()">
+<select name="status" class="action-select" onchange="handleFacultyAction(this)">
 
-<option>Select</option>
+{% if enquiry.status == "pending" %}
 
-<option value="pending">Pending</option>
+<option value="">Select</option>
+<option value="approved">Approve</option>
+<option value="rescheduled">Reschedule</option>
+<option value="rejected">Reject</option>
 
-<option value="in_progress">In Progress</option>
+{% elif enquiry.status == "approved" or enquiry.status == "rescheduled" %}
 
-<option value="resolved">Resolved</option>
+<option value="">Select</option>
+<option value="completed">Mark Complete</option>
+<option value="cancelled">Cancel</option>
+
+{% elif enquiry.status == "completed" %}
+
+<option value="">Completed</option>
+
+{% elif enquiry.status == "rejected" %}
+
+<option value="">Rejected</option>
+
+{% elif enquiry.status == "cancelled" %}
+
+<option value="">Cancelled</option>
+
+{% endif %}
 
 </select>
 

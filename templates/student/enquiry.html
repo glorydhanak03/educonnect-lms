@@ -173,6 +173,31 @@ th,td{
     color:#166534;
 }
 
+.status-approved{
+background:#dbeafe;
+color:#1e40af;
+}
+
+.status-rescheduled{
+background:#fef3c7;
+color:#92400e;
+}
+
+.status-completed{
+background:#dcfce7;
+color:#166534;
+}
+
+.status-rejected{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.status-cancelled{
+background:#f3f4f6;
+color:#374151;
+}
+
 /* ================= POPUP ================= */
 .popup-overlay{
     position:fixed;
@@ -472,7 +497,7 @@ font-size:28px;
     </span>
     </td>
     <td>
-        {% if enquiry.status == "resolved" or enquiry.status == "completed" %}
+        {% if enquiry.status == "completed" %}
            {% if enquiry.feedback_exists %}
         <span style="color:green;font-weight:600;">
             Feedback Submitted

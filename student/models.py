@@ -11,11 +11,13 @@ class Enquiry(models.Model):
     )
 
     STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('in_progress', 'In Progress'),
-        ('resolved', 'Resolved'),
-    )
-
+    ('pending', 'Pending'),
+    ('approved', 'Approved'),
+    ('rescheduled', 'Rescheduled'),
+    ('completed', 'Completed'),
+    ('rejected', 'Rejected'),
+    ('cancelled', 'Cancelled'),
+)
     ENQUIRY_TYPE_CHOICES = (
         ('technical', 'Technical Issue'),
         ('course', 'Course Related'),
