@@ -5,8 +5,10 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from .models import AdminAnnouncement
-from .models import AdminGuideline
 from django.views.decorators.csrf import csrf_exempt
+from student.models import Enquiry
+from parent.models import ParentEnquiry
+from admin_panel.models import AdminGuideline
 
 
 # -------------------------
@@ -214,9 +216,71 @@ def enquiry(request):
 
     guidelines = AdminGuideline.objects.all().order_by("-id")
 
+    student_enquiries = Enquiry.objects.filter(send_to="admin").order_by("-created_at")
+
+    parent_enquiries = ParentEnquiry.objects.filter(send_to="admin").order_by("-created_at")
+
+    latest_student = student_enquiries.first()
+    latest_parent = parent_enquiries.first()
+
+    latest_enquiry = None
+    latest_type = None
+
+    if latest_student and latest_parent:
+
+        if latest_student.created_at > latest_parent.created_at:
+            latest_enquiry = latest_student
+            latest_type = "student"
+        else:
+            latest_enquiry = latest_parent
+            latest_type = "parent"
+
+    elif latest_student:
+        latest_enquiry = latest_student
+        latest_type = "student"
+
+    elif latest_parent:
+        latest_enquiry = latest_parent
+        latest_type = "parent"
+
     return render(request,"admin_panel/enquiry.html",{
-        "guidelines":guidelines
+
+        "guidelines":guidelines,
+        "student_enquiries":student_enquiries,
+        "parent_enquiries":parent_enquiries,
+        "latest_enquiry":latest_enquiry,
+        "latest_type":latest_type
+
     })
+
+@login_required
+def approve_enquiry(request,id,type):
+
+    if type=="student":
+        enquiry = get_object_or_404(Enquiry,id=id)
+
+    else:
+        enquiry = get_object_or_404(ParentEnquiry,id=id)
+
+    enquiry.status="approved"
+    enquiry.save()
+
+    return redirect("admin_enquiry")
+
+
+@login_required
+def reject_enquiry(request,id,type):
+
+    if type=="student":
+        enquiry = get_object_or_404(Enquiry,id=id)
+
+    else:
+        enquiry = ParentEnquiry.objects.get(id=id)
+
+    enquiry.status="rejected"
+    enquiry.save()
+
+    return redirect("admin_enquiry")
 
 
 # ADD GUIDELINE
@@ -240,10 +304,12 @@ def add_guideline(request):
 @csrf_exempt
 def delete_guideline(request,id):
 
-    guideline = AdminGuideline.objects.get(id=id)
-    guideline.delete()
+    if request.method == "POST":
 
-    return JsonResponse({"status":"deleted"})
+        guideline = AdminGuideline.objects.get(id=id)
+        guideline.delete()
+
+        return JsonResponse({"status":"deleted"})
 
 
 # UPDATE GUIDELINE

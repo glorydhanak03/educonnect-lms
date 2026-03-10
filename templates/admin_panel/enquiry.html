@@ -6,6 +6,19 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+#toastMessage{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#16a34a;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+z-index:999;
+font-weight:600;
+display:none;
+}
 /* ================= WRAPPER ================= */
 
 .enquiry-wrapper{
@@ -211,7 +224,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 }
 
 #guidelineContent{
-    max-height:100px;   
+    max-height:180px;   
     overflow-y:auto;    
     padding:5px;
     margin-top:5px;        
@@ -585,10 +598,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 }
 
 .guideline-card{
-background:#f5f5f5;
+background:#ffffff;
 padding:15px;
 border-radius:8px;
-margin-bottom:10px;
+margin-bottom:1px;
 }
 
 .guideline-actions button{
@@ -598,21 +611,199 @@ cursor:pointer;
 font-size:16px;
 margin-right:10px;
 }
+
+/* ================= ADD GUIDELINE POPUP ================= */
+#guidelinePopup .popup-box{
+    width:500px;
+    max-width:90%;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+#guidelinePopup.active .popup-box{
+    transform:scale(1);
+}
+
+#guidelinePopup .popup-header{
+    background:#f3f4f6;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #e5e7eb;
+}
+
+#guidelinePopup .popup-title{
+    font-size:20px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+#guidelinePopup .popup-body{
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+#guidelinePopup .popup-body label{
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+#guidelinePopup .input-style,
+#guidelinePopup .textarea-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    font-size:14px;
+    font-family:inherit;
+    resize:none;
+}
+
+#guidelinePopup .textarea-style{
+    height:100px;
+}
+
+#guidelinePopup .send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+#guidelinePopup .send-btn:hover{
+    background:#1e40af;
+}
+
+/* ===== GUIDELINE LIST ===== */
+
+#guidelineContent{
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:250px;
+overflow-y:auto;
+padding-right:5px;
+}
+
+/* SINGLE GUIDELINE CARD */
+
+.guideline-item{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+
+background:#f9fafb;
+padding:12px 14px;
+border-radius:8px;
+
+border:1px solid #e5e7eb;
+
+transition:0.3s;
+}
+
+.guideline-item:hover{
+background:#f3f4f6;
+}
+
+/* TEXT */
+
+.guideline-text p{
+font-size:14px;
+margin:0 0 5px 0;
+color:#111827;
+}
+
+.guideline-role{
+font-size:12px;
+background:#e0e7ff;
+color:#3730a3;
+padding:3px 8px;
+border-radius:6px;
+}
+
+/* ACTION BUTTONS */
+
+.guideline-actions{
+display:flex;
+gap:6px;
+}
+
+.guideline-actions button{
+border:none;
+background:#f1f5f9;
+width:32px;
+height:32px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:0.2s;
+}
+
+.guideline-actions button:hover{
+transform:scale(1.05);
+}
+
+/* EDIT */
+
+.edit-btn{
+color:#2563eb;
+}
+
+.edit-btn:hover{
+background:#dbeafe;
+}
+
+/* DELETE */
+
+.delete-btn{
+color:#dc2626;
+}
+
+.delete-btn:hover{
+background:#fee2e2;
+}
+
+.action-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.approve-btn{
+    background:#16a34a;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+.reject-btn{
+    background:#dc2626;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
 </style>
 
-<div id="toastMessage" style="
-position:fixed;
-top:20px;
-left:50%;
-transform:translateX(-50%);
-background:#16a34a;
-color:white;
-padding:12px 25px;
-border-radius:8px;
-display:none;
-z-index:9999;
-">
-</div>
 
 <div class="enquiry-wrapper">
 
@@ -627,32 +818,71 @@ z-index:9999;
 
         <!-- ENQUIRY DETAILS (VIEW ONLY) -->
         <div class="details-card">
-            <div class="guideline-header">
-            <h3>Enquiry Details</h3>
-            </div>
 
-            <div class="detail-row"><b>Name :</b> <span id="dName">Rajesh Sharma</span></div>
-            <div class="detail-row"><b>Class :</b> <span id="dClass">8th Std</span></div>
-            <div class="detail-row"><b>Enquiry Type :</b> <span id="dType">Fee Issue</span></div>
-            <div class="detail-row"><b>Date & Time :</b> <span id="dDate">10 Oct 2025, 11:25 AM</span></div>
+<div class="guideline-header">
+<h3>Enquiry Details</h3>
+</div>
 
-            <div class="message-box">
-                I faced fees issue while submitting payment.
-            </div>
+<br>
 
-            <div class="action-buttons">
-                <button class="approve-btn">Approve</button>
-                <button class="reject-btn">Reject</button>
-            </div>
+{% if latest_enquiry %}
 
-        </div>
+<div class="detail-row">
+<b>Name :</b>
+<span>{{ latest_enquiry.student_name }}</span>
+</div>
+
+<div class="detail-row">
+<b>Class :</b>
+<span>{{ latest_enquiry.student_class }}</span>
+</div>
+
+<div class="detail-row">
+<b>Enquiry Type :</b>
+<span>{{ latest_enquiry.enquiry_type }}</span>
+</div>
+
+<div class="detail-row">
+<b>Date :</b>
+<span>{{ latest_enquiry.created_at|date:"d M Y" }}</span>
+</div>
+
+<div class="detail-row">
+<b>Time :</b>
+<span>{{ latest_enquiry.created_at|time:"h:i A" }}</span>
+</div>
+
+<div class="message-box">
+{{ latest_enquiry.message }}
+</div>
+
+<br>
+
+<div class="action-buttons">
+
+<a href="{% url 'admin_panel:approve_enquiry' latest_enquiry.id 'student' %}" class="approve-btn">
+<i class="fa fa-check"></i> Approve
+</a>
+
+<a href="{% url 'admin_panel:reject_enquiry' latest_enquiry.id 'student' %}" class="reject-btn">
+<i class="fa fa-times"></i> Reject
+</a>
+</div>
+
+{% else %}
+
+<p>No Enquiry Available</p>
+
+{% endif %}
+
+</div>
 
         <!-- GUIDELINES -->
         <div class="guideline-card">
 
             <div class="guideline-header">
 
-<h3>Admin Enquiry Guidelines</h3>
+<h3>Admin Enquiry Guidelines ({{guidelines|length}})</h3>
 
 <div style="display:flex;gap:10px">
 
@@ -666,18 +896,22 @@ z-index:9999;
 
 {% for g in guidelines %}
 
-<div class="guideline-card">
+<div class="guideline-item">
 
-<p>{{g.message}}</p>
-<small>{{g.role}}</small>
+<div class="guideline-text">
+<p>{{ g.message }}</p>
+<span class="guideline-role">{{ g.role|title }}</span>
+</div>
 
 <div class="guideline-actions">
 
-<button onclick="editGuideline('{{g.id}}','{{g.role}}','{{g.message}}')">
+<button class="edit-btn"
+onclick="editGuideline('{{g.id}}','{{g.role}}','{{g.message}}')">
 <i class="fa fa-edit"></i>
 </button>
 
-<button onclick="deleteGuideline('{{g.id}}')">
+<button class="delete-btn"
+onclick="deleteGuideline('{{g.id}}')">
 <i class="fa fa-trash"></i>
 </button>
 
@@ -690,20 +924,6 @@ z-index:9999;
 </div>
 
             <textarea id="guidelineTextarea" style="display:none;"></textarea>
-
-            <button class="change-btn" onclick="saveGuidelines()">Change Guidelines</button>
-        <div class="guideline-controls">
-
-    <select id="sendToRole">
-        <option value="">Select Role</option>
-        <option value="student">Student</option>
-        <option value="parent">Parent</option>
-        <option value="faculty">Faculty</option>
-    </select>
-
-    <button onclick="sendGuidelines()">Send Guidelines</button>
-
-</div>
 
         </div>
 
@@ -1047,145 +1267,64 @@ Confirm Cancel
             <h3>Parent Previous Enquiries</h3>
 
             <table id="parentEnquiryTable" class="enquiry-table">
-              <tr>
-<td>PENQ-101</td>
-<td>Rajesh Sharma</td>
-<td>Aarav</td>
-<td>8th Std</td>
-<td>Fee Issue</td>
-<td data-date="2025-10-10">10 Oct 2025 11:25 AM</td>
-<td class="status-cell status-pending">Pending</td>
+              <thead>
+<tr>
+<th>Enquiry ID</th>
+<th>Parent Name</th>
+<th>Student Name</th>
+<th>Class</th>
+<th>Enquiry</th>
+<th>Date & Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for p in parent_enquiries %}
+
+<tr>
+
+<td>PENQ-{{p.id}}</td>
+<td>{{p.parent_name}}</td>
+<td>{{p.child_name}}</td>
+<td>{{p.child_class}}</td>
+<td>{{p.enquiry_type}}</td>
+
 <td>
-<select class="action-select" onchange="handleAction(this)">
+{{p.created_at|date:"d M Y"}} |
+{{p.created_at|time:"h:i A"}}
+</td>
+
+<td class="status-cell status-{{p.status}}">
+{{p.status|title}}
+</td>
+
+<td>
+
+<select class="action-select">
 <option>Select</option>
 <option>Approve</option>
 <option>Reject</option>
-<option>Reschedule</option>
 <option>View</option>
 </select>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="8" style="text-align:center;">
+No Parent Enquiries Found
 </td>
 </tr>
 
-<tr>
-<td>PENQ-102</td>
-<td>Sneha Patil</td>
-<td>Riya</td>
-<td>7th Std</td>
-<td>Admission</td>
-<td data-date="2025-10-11">11 Oct 2025 09:15 AM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
+{% endfor %}
 
-<tr>
-<td>PENQ-103</td>
-<td>Vikas Jadhav</td>
-<td>Arjun</td>
-<td>6th Std</td>
-<td>Transport</td>
-<td data-date="2025-10-12">12 Oct 2025 02:40 PM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-104</td>
-<td>Anita Kulkarni</td>
-<td>Vedant</td>
-<td>5th Std</td>
-<td>Scholarship</td>
-<td data-date="2025-10-13">13 Oct 2025 10:05 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-105</td>
-<td>Mahesh Deshmukh</td>
-<td>Tanvi</td>
-<td>9th Std</td>
-<td>Exam Query</td>
-<td data-date="2025-10-14">14 Oct 2025 01:10 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-106</td>
-<td>Prakash More</td>
-<td>Rohan</td>
-<td>10th Std</td>
-<td>TC Request</td>
-<td data-date="2025-10-15">15 Oct 2025 11:00 AM</td>
-<td class="status-cell status-cancelled">Cancelled</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-107</td>
-<td>Kavita Joshi</td>
-<td>Sakshi</td>
-<td>4th Std</td>
-<td>Uniform</td>
-<td data-date="2025-10-16">16 Oct 2025 09:45 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-108</td>
-<td>Sunil Pawar</td>
-<td>Aditya</td>
-<td>3rd Std</td>
-<td>Bus Route</td>
-<td data-date="2025-10-17">17 Oct 2025 03:20 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-109</td>
-<td>Meena Kale</td>
-<td>Ishaan</td>
-<td>2nd Std</td>
-<td>Fee Structure</td>
-<td data-date="2025-10-18">18 Oct 2025 12:00 PM</td>
-<td class="status-cell status-completed">Completed</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-110</td>
-<td>Ajay Thakur</td>
-<td>Yash</td>
-<td>1st Std</td>
-<td>Books</td>
-<td data-date="2025-10-19">19 Oct 2025 10:50 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-111</td>
-<td>Shilpa Patwardhan</td>
-<td>Om</td>
-<td>6th Std</td>
-<td>Sports</td>
-<td data-date="2025-10-20">20 Oct 2025 02:15 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
-
-<tr>
-<td>PENQ-112</td>
-<td>Nitin Gawande</td>
-<td>Parth</td>
-<td>7th Std</td>
-<td>Leave Application</td>
-<td data-date="2025-10-21">21 Oct 2025 09:30 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
+</tbody>
             </table>
 
             <!-- PARENT PAGINATION -->
@@ -1204,143 +1343,62 @@ Confirm Cancel
             <h3>Student Previous Enquiries</h3>
 
             <table id="studentEnquiryTable" class="enquiry-table">
-                <tr>
-<td>SENQ-201</td>
-<td>Amit Patil</td>
-<td>10th Std</td>
-<td>Revision Session</td>
-<td data-date="2025-10-10">10 Oct 2025 12:30 PM</td>
-<td class="status-cell status-approved">Approved</td>
+                <thead>
+<tr>
+<th>Enquiry ID</th>
+<th>Student Name</th>
+<th>Class</th>
+<th>Enquiry</th>
+<th>Date & Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in student_enquiries %}
+
+<tr>
+
+<td>SENQ-{{s.id}}</td>
+<td>{{s.student_name}}</td>
+<td>{{s.student_class}}</td>
+<td>{{s.enquiry_type}}</td>
+
 <td>
-<select class="action-select" onchange="handleAction(this)">
+{{s.created_at|date:"d M Y"}} |
+{{s.created_at|time:"h:i A"}}
+</td>
+
+<td class="status-cell status-{{s.status}}">
+{{s.status|title}}
+</td>
+
+<td>
+
+<select class="action-select">
 <option>Select</option>
 <option>Approve</option>
 <option>Reject</option>
-<option>Reschedule</option>
 <option>View</option>
 </select>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="7" style="text-align:center;">
+No Student Enquiries Found
 </td>
 </tr>
 
-<tr>
-<td>SENQ-202</td>
-<td>Riya Sharma</td>
-<td>9th Std</td>
-<td>Exam Doubt</td>
-<td data-date="2025-10-11">11 Oct 2025 10:00 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)"></select></td>
-</tr>
+{% endfor %}
 
-<tr>
-<td>SENQ-203</td>
-<td>Arjun Deshmukh</td>
-<td>8th Std</td>
-<td>Project Guidance</td>
-<td data-date="2025-10-12">12 Oct 2025 02:10 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-204</td>
-<td>Sneha Kulkarni</td>
-<td>7th Std</td>
-<td>Sports Practice</td>
-<td data-date="2025-10-13">13 Oct 2025 09:40 AM</td>
-<td class="status-cell status-rejected">Rejected</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-205</td>
-<td>Rohan Pawar</td>
-<td>6th Std</td>
-<td>Lab Access</td>
-<td data-date="2025-10-14">14 Oct 2025 01:25 PM</td>
-<td class="status-cell status-completed">Completed</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-206</td>
-<td>Tanvi Jadhav</td>
-<td>5th Std</td>
-<td>Homework Query</td>
-<td data-date="2025-10-15">15 Oct 2025 11:15 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-207</td>
-<td>Aditya More</td>
-<td>4th Std</td>
-<td>Leave Request</td>
-<td data-date="2025-10-16">16 Oct 2025 03:00 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-208</td>
-<td>Sakshi Joshi</td>
-<td>3rd Std</td>
-<td>Fee Clarification</td>
-<td data-date="2025-10-17">17 Oct 2025 12:45 PM</td>
-<td class="status-cell status-cancelled">Cancelled</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-209</td>
-<td>Vedant Kale</td>
-<td>2nd Std</td>
-<td>Uniform Issue</td>
-<td data-date="2025-10-18">18 Oct 2025 10:30 AM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-210</td>
-<td>Ishaan Thakur</td>
-<td>1st Std</td>
-<td>Transport Query</td>
-<td data-date="2025-10-19">19 Oct 2025 09:10 AM</td>
-<td class="status-cell status-pending">Pending</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-211</td>
-<td>Parth Gawande</td>
-<td>8th Std</td>
-<td>Extra Class</td>
-<td data-date="2025-10-20">20 Oct 2025 02:55 PM</td>
-<td class="status-cell status-approved">Approved</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
-
-<tr>
-<td>SENQ-212</td>
-<td>Om Patwardhan</td>
-<td>9th Std</td>
-<td>Scholarship Info</td>
-<td data-date="2025-10-21">21 Oct 2025 11:35 AM</td>
-<td class="status-cell status-completed">Completed</td>
-<td><select class="action-select" onchange="handleAction(this)">
-</select></td>
-</tr>
+</tbody>
 </table>
 
             <!-- STUDENT PAGINATION -->
@@ -1354,35 +1412,34 @@ Confirm Cancel
 
 </div>
 
+<!-- GUIDELINE POPUP -->
 <div class="popup-overlay" id="guidelinePopup">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h3 class="popup-title">➕ Add Guideline</h3>
+      <span class="close-btn" onclick="closePopup('guidelinePopup')">✖</span>
+    </div>
+    <div class="popup-body">
+      <form id="guidelineForm">
+        <input type="hidden" id="guidelineId" name="id">
+        {% csrf_token %}
+        <label>Select Role</label>
+        <select name="role" id="role" class="input-style">
+          <option value="">-- Select Role --</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+          <option value="faculty">Faculty</option>
+        </select>
 
-<div class="popup-box">
+        <label for="message" style="margin-top:10px;">Guideline Message</label>
+        <textarea name="message" id="message" class="textarea-style" placeholder="Type guideline here..."></textarea>
 
-<div class="popup-header">
-<h3>Add Guideline</h3>
-<span class="close-btn" onclick="closePopup('guidelinePopup')">✖</span>
+        <button type="submit" class="send-btn" style="margin-top:15px;width:100%;">Save Guideline</button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<div class="popup-body">
-
-<input type="hidden" id="guidelineId">
-
-<form id="guidelineForm">
-
-<select name="role" id="role">
-<option value="student">Student</option>
-<option value="parent">Parent</option>
-<option value="faculty">Faculty</option>
-</select>
-
-<textarea name="message" id="message"></textarea>
-
-<button type="submit">Save</button>
-
-</form>
-</div>
-</div>
-</div>
 
 <!-- ================= JS ================= -->
 
@@ -1535,6 +1592,36 @@ function saveGuidelines(){
         textarea.style.display = "none";
         content.style.display = "block";
     }
+}
+
+
+function deleteGuideline(id){
+
+if(!confirm("Are you sure you want to delete this guideline?")) return;
+
+fetch("/admin-panel/delete-guideline/"+id+"/",{
+method:"POST",
+headers:{
+"X-CSRFToken":getCookie("csrftoken")
+}
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.status==="deleted"){
+
+showToast("Guideline Deleted Successfully")
+
+setTimeout(()=>{
+location.reload()
+},800)
+
+}
+
+})
+
 }
 
 /* ================= UPDATE STATUS ================= */
@@ -1701,6 +1788,8 @@ document.getElementById("guidelineId").value=id;
 document.getElementById("role").value=role;
 document.getElementById("message").value=message;
 
+document.querySelector(".popup-title").innerText="✏️ Update Guideline";
+
 openPopup("guidelinePopup")
 }
 
@@ -1744,34 +1833,30 @@ location.reload();
 }
 
 
-
-function deleteGuideline(id){
-
-if(confirm("Delete this guideline?")){
-
-fetch("/delete-guideline/"+id+"/")
-.then(res=>res.json())
-.then(data=>{
-
-showToast("Guideline Deleted");
-
-location.reload();
-
-})
-
+function getCookie(name) {
+let cookieValue = null;
+if (document.cookie && document.cookie !== '') {
+const cookies = document.cookie.split(';');
+for (let i = 0; i < cookies.length; i++) {
+const cookie = cookies[i].trim();
+if (cookie.substring(0, name.length + 1) === (name + '=')) {
+cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+break;
+}
+}
+}
+return cookieValue;
 }
 
-}
+function showToast(message){
 
-function showToast(msg){
+let toast = document.getElementById("toastMessage");
 
-let toast=document.getElementById("toast")
-
-toast.innerText=msg
-toast.style.display="block"
+toast.innerText = message;
+toast.style.display = "block";
 
 setTimeout(()=>{
-toast.style.display="none"
+    toast.style.display = "none";
 },3000)
 
 }
@@ -1780,32 +1865,37 @@ document.getElementById("guidelineForm").addEventListener("submit",function(e){
 
 e.preventDefault();
 
+let id = document.getElementById("guidelineId").value
 let role = document.getElementById("role").value
 let message = document.getElementById("message").value
 
-fetch("/add-guideline/",{
+let url = "/admin-panel/add-guideline/"
 
+if(id){
+url = "/admin-panel/update-guideline/"+id+"/"
+}
+
+fetch(url,{
 method:"POST",
-
 headers:{
 "Content-Type":"application/x-www-form-urlencoded",
 },
-
 body:`role=${role}&message=${message}`
-
 })
 .then(response=>response.json())
 .then(data=>{
 
 if(data.status=="added"){
-
 showToast("Guideline Added Successfully")
+}
+
+if(data.status=="updated"){
+showToast("Guideline Updated Successfully")
+}
 
 setTimeout(()=>{
 location.reload()
 },1000)
-
-}
 
 })
 
@@ -1813,4 +1903,7 @@ location.reload()
 
 
 </script>
+<div id="toastMessage">
+</div>
 {% endblock %}
+

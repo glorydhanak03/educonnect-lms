@@ -41,6 +41,8 @@ urlpatterns = [
         name="delete_admin_announcement"
         ),
     path("enquiry/", views.enquiry, name="admin_enquiry"),
+    path("approve-enquiry/<int:id>/<str:type>/",views.approve_enquiry,name="approve_enquiry"),
+    path("reject-enquiry/<int:id>/<str:type>/",views.reject_enquiry,name="reject_enquiry"),
 
 path("add-guideline/", views.add_guideline, name="add_guideline"),
 path("delete-guideline/<int:id>/", views.delete_guideline, name="delete_guideline"),

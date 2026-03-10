@@ -756,11 +756,12 @@
             <span>Parent</span>
         </div>
         <ul>
-            <li>Clearly mention your child’s full name and class/grade.</li>
-            <li>Use your registered parent account while submitting enquiries.</li>
-            <li>Select the correct enquiry category before submission.</li>
-            <li>For fee-related issues, attach payment proof if applicable.</li>
-        </ul>
+{% for g in guidelines %}
+<li>{{ g.message }}</li>
+{% empty %}
+<li>No guidelines available</li>
+{% endfor %}
+</ul>
 
     </div>
 </div>

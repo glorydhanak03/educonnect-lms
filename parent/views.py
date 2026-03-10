@@ -9,7 +9,7 @@ from admin_panel.models import AdminAnnouncement
 from faculty.models import FacultyAnnouncement
 from django.utils import timezone
 from datetime import timedelta
-
+from admin_panel.models import AdminGuideline
 
 def _parent_name(request) -> str:
     name = (request.user.first_name or request.user.username or "Parent")
@@ -186,6 +186,8 @@ def enquiry(request):
     page_number = request.GET.get("page")
     enquiries = paginator.get_page(page_number)
 
+    guidelines = AdminGuideline.objects.filter(role="parent").order_by("-created_at")
+
     context = {
         "display_name": _parent_name(request),
         "enquiries": enquiries,
@@ -195,6 +197,7 @@ def enquiry(request):
         "resolved_count": resolved_count,
         "search_query": search_query,
         "status_filter": status_filter,
+        "guidelines": guidelines,
     }
 
     return render(request, "parent/enquiry.html", context)

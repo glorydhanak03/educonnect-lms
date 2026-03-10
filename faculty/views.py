@@ -12,6 +12,7 @@ from .models import FacultyAnnouncement
 from admin_panel.models import AdminAnnouncement
 from django.utils import timezone
 from datetime import timedelta
+from admin_panel.models import AdminGuideline
 
 def _faculty_name(request):
     name = (request.user.first_name or request.user.username or "Faculty")
@@ -204,7 +205,9 @@ def enquiry(request):
     parent_enquiries = parent_enquiries.order_by("-id")
     parent_paginator = Paginator(parent_enquiries, 10)
     parent_page = request.GET.get("parent_page")
-    parent_page_obj = parent_paginator.get_page(parent_page)  # ✅ define variable here
+    parent_page_obj = parent_paginator.get_page(parent_page)  
+
+    guidelines = AdminGuideline.objects.filter(role="faculty").order_by("-created_at")
 
     context = {
         "display_name": _faculty_name(request),
@@ -212,6 +215,7 @@ def enquiry(request):
         "parent_enquiries": parent_page_obj,
         "search": search,
         "date": date,
+        "guidelines": guidelines,
     }
 
     return render(request, "faculty/enquiry.html", context)

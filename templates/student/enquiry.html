@@ -742,12 +742,11 @@ View Details
     <span>Student</span>
 </div>
 <ul>
-<li>Submit enquiries related to administrative matters only.</li>
-<li>Use your registered student account while submitting enquiries.</li>
-<li>Be prepared with necessary study materials before joining.</li>
-<li>Use the “Raise Hand” or chat option for questions.</li>
-<li>Do not share meeting links or passwords with others.</li>
-<li>Maintain professional behavior during session.</li>
+{% for g in guidelines %}
+<li>{{ g.message }}</li>
+{% empty %}
+<li>No guidelines available</li>
+{% endfor %}
 </ul>
 
 </div>

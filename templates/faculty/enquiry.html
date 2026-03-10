@@ -820,12 +820,11 @@ placeholder="Write feedback..."></textarea>
 </div>
 
 <ul>
-<li>Begin the session on time and take attendance.</li>
-<li>Briefly recap the previous class before starting new content.</li>
-<li>Report any technical or behavioral issues to the admin immediately.</li>
-<li>Share study materials or references if necessary.</li>
-<li>Review the student’s enquiry details before the session begins.</li>
-<li>Ensure a stable internet connection and proper audio/video setup.</li>
+{% for g in guidelines %}
+<li>{{ g.message }}</li>
+{% empty %}
+<li>No guidelines available</li>
+{% endfor %}
 </ul>
 
 </div>
