@@ -10,8 +10,8 @@ from core.models import GradeClass
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
-
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 ROLE_MAP = {
@@ -46,13 +46,13 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
         return redirect("/")
 
     if request.method == "POST":
-        email = (request.POST.get("email") or "").strip()
+        username = (request.POST.get("email") or "").strip()
         password = request.POST.get("password") or ""
 
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is None:
             try:
-                user = authenticate(request, email=email, password=password)
+                user = authenticate(request, email=username, password=password)
             except TypeError:
                 user = None
 
@@ -139,7 +139,7 @@ def user_logout(request: HttpRequest) -> HttpResponse:
 
 
 def student_register(request):
-    grade_classes = GradeClass.objects.filter(is_active=True)  
+    grade_classes = GradeClass.objects.filter(is_active=True)
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -151,23 +151,29 @@ def student_register(request):
         if not (username and password and grade_class_id):
             messages.error(request, "All fields are required!")
         else:
+            # Create user
             user = User.objects.create_user(
-                username=username, 
-                password=password, 
-                email=email, 
-                contact_number=mobile, 
-                role="student"
+                username=username,
+                password=password,
+                email=email,
+                contact_number=mobile,
+                role="STUDENT"
             )
+
+            # Create profile
             StudentProfile.objects.create(
                 user=user,
                 grade_class_id=grade_class_id
             )
+
+            # Send email (important)
+            send_welcome_email(email, username)
+
             login(request, user)
 
-            send_welcome_email(email,username)
             messages.success(request, f"Welcome {username}, your account has been created!")
-            return redirect("role_login", role="student")
 
+            return redirect("role_login", role="student")
 
     return render(request, "auth/register.html", {
         "page_role": "student",
@@ -176,13 +182,29 @@ def student_register(request):
 
 
 def send_welcome_email(user_email, username):
+    print("EMAIL FUNCTION CALLED")
     subject = "Welcome to EduConnect"
     from_email = settings.EMAIL_HOST_USER
     to_email = [user_email]
 
-    html_content = render_to_string("email/welcome_email.html", {"username": username})
+    html_content = render_to_string(
+        "email/welcome_email.html",
+        {"username": username}
+    )
+
     text_content = f"Hello {username}, Welcome to EduConnect!"
 
-    email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+    email = EmailMultiAlternatives(
+        subject,
+        text_content,
+        from_email,
+        to_email
+    )
+
     email.attach_alternative(html_content, "text/html")
-    email.send()
+
+    try:
+        email.send()
+        print("✅ Email sent successfully")
+    except Exception as e:
+        print("❌ Email sending failed:", e)
