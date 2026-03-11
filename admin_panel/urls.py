@@ -20,7 +20,8 @@ urlpatterns = [
     path("payments/refund-requests/", views.refund_requests, name="admin_refund_request"),
 
     # OTHERS
-    path("courses/", views.manage_courses, name="admin_manage_courses"),
+    path("courses/", views.manage_courses, name="admin_manage_courses"),\
+    path("assign-batch/", views.assign_batch, name="assign_batch"),
     path("analytics/", views.analytics_report, name="admin_analytics_report"),
     path("announcement/", views.announcement, name="admin_announcement"),
     path(

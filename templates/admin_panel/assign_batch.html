@@ -1,0 +1,35 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block admin_title %}Admin | manage courses{% endblock %}
+
+{% block admin_content %}
+
+<h2>Assign Batch to Students</h2>
+<form method="POST">
+  {% csrf_token %}
+  <select name="student_id">
+    {% for s in students %}
+      <option value="{{ s.id }}">{{ s.user.username }} ({{ s.grade_class.name }})</option>
+    {% endfor %}
+  </select>
+
+  <select name="batch_id">
+    {% for b in batches %}
+      <option value="{{ b.id }}">{{ b.name }} ({{ b.grade_class.name }})</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Assign Batch</button>
+</form>
+
+
+
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% endblock %}

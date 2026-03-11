@@ -9,7 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from student.models import Enquiry
 from parent.models import ParentEnquiry
 from admin_panel.models import AdminGuideline
-
+from accounts.models import StudentProfile
+from core.models import Batch
 
 # -------------------------
 # HELPERS
@@ -331,3 +332,28 @@ def update_guideline(request,id):
 @login_required
 def settings(request):
     return render(request, "admin_panel/settings.html")
+
+@login_required
+def assign_batch(request):
+    students = StudentProfile.objects.all()
+    batches = Batch.objects.all()
+
+    if request.method == "POST":
+        student_id = request.POST.get("student_id")
+        batch_id = request.POST.get("batch_id")
+
+        try:
+            student = StudentProfile.objects.get(id=student_id)
+            batch = Batch.objects.get(id=batch_id)
+            student.batch = batch
+            student.save()
+            messages.success(request, f"{student.user.username} assigned to {batch.name} successfully!")
+        except Exception as e:
+            messages.error(request, "Something went wrong. Please try again!")
+
+        return redirect("admin_panel:assign_batch") 
+    context = {
+        "students": students,
+        "batches": batches,
+    }
+    return render(request, "admin_panel/assign_batch.html", context)

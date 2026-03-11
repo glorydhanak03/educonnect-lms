@@ -8,6 +8,7 @@ from faculty.models import FacultyAnnouncement
 from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
+from accounts.models import StudentProfile
 
 
 def _student_name(request):
@@ -262,3 +263,12 @@ def my_account(request):
     return render(request, "student/my_account.html", {
         "display_name": _student_name(request)
     })
+
+
+@login_required
+def student_announcements(request):
+    student_profile = StudentProfile.objects.get(user=request.user)
+    batch = student_profile.batch
+
+    announcements = FacultyAnnouncement.objects.filter(batch=batch).order_by('-created_at')
+    return render(request, "student/announcement.html", {"announcements": announcements})

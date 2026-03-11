@@ -3,41 +3,175 @@
 
 {% block extra_css %}
 <style>
-  body{background:#eaf0ff}
-  .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
-  .card{
-    width:min(520px,100%);
-    background:#fff;border:1px solid #e3e9ff;border-radius:20px;
-    box-shadow:0 18px 40px rgba(15,23,42,.10);
-    padding:22px;
-  }
-  .head{display:flex;align-items:center;gap:12px}
-  .logo{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#1b56d7,#ff7a18);
-    display:grid;place-items:center;color:#fff;font-weight:950}
-  h1{margin:0;font-size:22px;font-weight:950}
-  .sub{color:#64748b;font-size:13px;font-weight:800;margin-top:4px}
-
-  .msg{margin-top:12px}
-  .msg .e{
-    background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;
-    padding:10px 12px;border-radius:14px;font-weight:900;font-size:13px;
+  body {
+    background: #eaf0ff
   }
 
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  label{display:block;font-size:13px;font-weight:900;color:#0f172a;margin-bottom:6px}
-  input{
-    width:100%;padding:12px 14px;border-radius:14px;border:1px solid #e3e9ff;
-    outline:none;font-size:14px;background:#fbfdff;
+  .wrap {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px
   }
-  input:focus{border-color:#1b56d7;box-shadow:0 0 0 4px rgba(27,86,215,.12)}
-  .btn{
-    width:100%;margin-top:16px;padding:12px 14px;border-radius:14px;border:0;
-    background:#1b56d7;color:#fff;font-weight:950;font-size:14px;cursor:pointer;
-    box-shadow:0 14px 30px rgba(27,86,215,.20);
+
+  .card {
+    width: min(520px, 100%);
+    background: #fff;
+    border: 1px solid #e3e9ff;
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, .10);
+    padding: 22px;
   }
-  .links{margin-top:12px;display:flex;justify-content:space-between;font-weight:900;font-size:13px}
-  .links a{color:#1b56d7}
-  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 12px
+  }
+
+  .logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1b56d7, #ff7a18);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 950
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 950
+  }
+
+  .sub {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 800;
+    margin-top: 4px
+  }
+
+  .msg {
+    margin-top: 12px
+  }
+
+  .msg .e {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #9f1239;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 13px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 6px
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #e3e9ff;
+    outline: none;
+    font-size: 14px;
+    background: #fbfdff;
+  }
+
+  input:focus {
+    border-color: #1b56d7;
+    box-shadow: 0 0 0 4px rgba(27, 86, 215, .12)
+  }
+
+  .btn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 0;
+    background: #1b56d7;
+    color: #fff;
+    font-weight: 950;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 14px 30px rgba(27, 86, 215, .20);
+  }
+
+  .links {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 900;
+    font-size: 13px
+  }
+
+  .links a {
+    color: #1b56d7
+  }
+
+  @media(max-width:640px) {
+    .grid {
+      grid-template-columns: 1fr
+    }
+  }
+
+  /* Wrapper for form fields */
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  /* The select element itself */
+  .select-wrapper select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    appearance: none;
+    /* Remove default arrow in most browsers */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+
+  /* Focus effect */
+  .select-wrapper select:focus {
+    border-color: #1b56d7;
+    box-shadow: 0 0 0 3px rgba(27, 86, 215, 0.15);
+    outline: none;
+  }
+
+  /* Custom arrow */
+  .select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 12px;
+    color: #555;
+  }
 </style>
 {% endblock %}
 
@@ -53,11 +187,11 @@
     </div>
 
     {% if messages %}
-      <div class="msg">
-        {% for m in messages %}
-          <div class="e">{{ m }}</div>
-        {% endfor %}
-      </div>
+    <div class="msg">
+      {% for m in messages %}
+      <div class="e">{{ m }}</div>
+      {% endfor %}
+    </div>
     {% endif %}
 
     <form method="post">
@@ -78,6 +212,15 @@
         <div>
           <label>Password</label>
           <input type="password" name="password" required>
+        </div>
+        <div class="select-wrapper">
+          <label for="grade_class">Class</label>
+          <select name="grade_class" id="grade_class" required>
+            <option value="">Select Class</option>
+            {% for g in grade_classes %}
+            <option value="{{ g.id }}">{{ g.name }}</option>
+            {% endfor %}
+          </select>
         </div>
       </div>
       <button class="btn" type="submit">Register</button>
