@@ -8,8 +8,8 @@ class User(AbstractUser):
         ('parent','Parent'),
         ('admin','Admin'),
     )
-    contact_number = models.CharField(max_length=15, blank=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    contact_number = models.CharField(max_length=15)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
 
 class StudentProfile(models.Model):

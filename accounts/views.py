@@ -15,9 +15,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 ROLE_MAP = {
-    "student": "STUDENT",
-    "faculty": "FACULTY",
-    "parent": "PARENT",
+    "student": "student",
+    "faculty": "faculty",
+    "parent": "parent",
 }
 
 def _normalize_role(url_role: str) -> str | None:
@@ -61,12 +61,12 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
             return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 
         # ✅ ROLE LOCK: block wrong role login
-        user_role = str(getattr(user, "role", "")).upper()
+        user_role = str(getattr(user, "role", "")).lower()
         if user.is_staff or user.is_superuser or user_role == "ADMIN":
             messages.error(request, "Admin must login from Admin Panel only.")
             return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 
-        if user_role != expected_role:
+        if user_role.lower() != expected_role:
             # Example: student tried on faculty login
             nice = expected_role.title()
             actual = user_role.title() if user_role else "Unknown"
@@ -85,7 +85,7 @@ def role_register(request: HttpRequest, role: str) -> HttpResponse:
         return redirect("/")
 
     grade_classes = None
-    if expected_role == "STUDENT":
+    if expected_role == "student":
         grade_classes = GradeClass.objects.filter(is_active=True)
 
     if request.method == "POST":
@@ -114,17 +114,18 @@ def role_register(request: HttpRequest, role: str) -> HttpResponse:
             email=email,
             password=password,
         )
-        if hasattr(u, "mobile"):
-            setattr(u, "mobile", mobile)
+        setattr(u, "contact_number", mobile)
         if hasattr(u, "role"):
             setattr(u, "role", expected_role)
         u.save()
 
-        if expected_role == "STUDENT":
+        if expected_role == "student":
             StudentProfile.objects.create(user=u, grade_class_id=grade_class_id)
 
-        login(request, u)
-        return redirect(_redirect_after_login(u))
+        # login(request, u)
+        # return redirect(_redirect_after_login(u))
+        messages.success(request, "Account created successfully. Please login.")
+        return redirect("role_login", role=expected_role)
 
     return render(request, "auth/register.html", {
         "page_role": role,
@@ -152,24 +153,22 @@ def student_register(request):
             messages.error(request, "All fields are required!")
         else:
             # Create user
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                email=email,
-                contact_number=mobile,
-                role="STUDENT"
+            u = User.objects.create_user(
+               username=username,
+               email=email,
+               password=password,
+               contact_number=mobile,
+               role="student"
             )
 
             # Create profile
             StudentProfile.objects.create(
-                user=user,
+                user=u,
                 grade_class_id=grade_class_id
             )
 
             # Send email (important)
             send_welcome_email(email, username)
-
-            login(request, user)
 
             messages.success(request, f"Welcome {username}, your account has been created!")
 

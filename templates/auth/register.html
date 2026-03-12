@@ -213,15 +213,17 @@
           <label>Password</label>
           <input type="password" name="password" required>
         </div>
+        {% if page_role == "student" %}
         <div class="select-wrapper">
           <label for="grade_class">Class</label>
-          <select name="grade_class" id="grade_class" required>
+          <select name="grade_class" required>
             <option value="">Select Class</option>
             {% for g in grade_classes %}
             <option value="{{ g.id }}">{{ g.name }}</option>
             {% endfor %}
           </select>
         </div>
+        {% endif %}
       </div>
       <button class="btn" type="submit">Register</button>
     </form>
