@@ -182,16 +182,23 @@ def student_register(request):
 
 def send_welcome_email(user_email, username):
     print("EMAIL FUNCTION CALLED")
+
     subject = "Welcome to EduConnect"
     from_email = settings.EMAIL_HOST_USER
     to_email = [user_email]
 
+    # Login URL for email button
+    login_url = "http://127.0.0.1:8000" + reverse("role_login", args=["student"])
+
     html_content = render_to_string(
         "email/welcome_email.html",
-        {"username": username}
+        {
+            "username": username,
+            "login_url": login_url
+        }
     )
 
-    text_content = f"Hello {username}, Welcome to EduConnect!"
+    text_content = f"Hello {username}, Welcome to EduConnect! Login here: {login_url}"
 
     email = EmailMultiAlternatives(
         subject,
