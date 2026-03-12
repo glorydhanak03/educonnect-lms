@@ -22,6 +22,52 @@
     margin-bottom:25px;
 }
 
+/* NEW HEADER BANNER */
+
+.assign-header{
+    background:linear-gradient(135deg,#2563eb,#1e40af);
+    color:white;
+    padding:22px 25px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+.assign-header h2{
+    margin:0;
+    font-size:22px;
+}
+
+.assign-header p{
+    margin-top:6px;
+    font-size:14px;
+    opacity:0.9;
+}
+
+/* INFO BOX */
+
+.info-box{
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    padding:18px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+.info-box h4{
+    margin-bottom:8px;
+    font-size:15px;
+}
+
+.info-box ul{
+    padding-left:18px;
+    font-size:14px;
+    color:#555;
+}
+
+.info-box li{
+    margin-bottom:5px;
+}
+
 /* Card */
 .assign-card{
     background:#fff;
@@ -80,14 +126,48 @@ select{
     border-radius:5px;
 }
 
+/* TIPS BOX */
+
+.tip-box{
+    margin-top:25px;
+    background:#fff7ed;
+    border-left:4px solid #f97316;
+    padding:15px;
+    border-radius:6px;
+    font-size:14px;
+    color:#444;
+}
+
 </style>
 
 
 <div class="page-wrapper">
 
+
+<!-- NEW PROFESSIONAL HEADER -->
+
+<div class="assign-header">
+    <h2>Student Batch Assignment</h2>
+    <p>Manage and assign students to their respective batches for organized course delivery.</p>
+</div>
+
+
 <div class="page-title">Assign Batch to Students</div>
 <div class="page-subtitle">
 Select a student and assign them to the appropriate batch based on their class.
+</div>
+
+
+<!-- INFO BOX -->
+
+<div class="info-box">
+<h4>Assignment Guidelines</h4>
+<ul>
+<li>Ensure the selected batch belongs to the same class as the student.</li>
+<li>Each student should be assigned to only one batch.</li>
+<li>Batch assignment helps manage lectures, assignments, and attendance.</li>
+<li>You can update batch assignments anytime if required.</li>
+</ul>
 </div>
 
 
@@ -101,7 +181,7 @@ Select a student and assign them to the appropriate batch based on their class.
       <select name="student_id">
         {% for s in students %}
           <option value="{{ s.id }}">
-            {{ s.user.username }} ({{ s.grade_class.name }})
+            {{ s.user.username }} - {{ s.user.email }} ({{ s.grade_class.name }})
           </option>
         {% endfor %}
       </select>
@@ -124,6 +204,13 @@ Select a student and assign them to the appropriate batch based on their class.
 
 </form>
 
+</div>
+
+
+<!-- TIPS -->
+
+<div class="tip-box">
+<strong>Tip:</strong> Assigning students to batches allows faculty to manage course content, announcements, and activities more efficiently.
 </div>
 
 

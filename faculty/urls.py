@@ -25,6 +25,18 @@ urlpatterns = [
     path("students/", views.students, name="faculty_students"),
     path("enquiry/", views.enquiry, name="faculty_enquiry"),
 
+    path(
+    "accept-enquiry/<int:enquiry_id>/",
+    views.accept_enquiry,
+    name="accept_enquiry"
+),
+
+path(
+    "resolve-enquiry/<int:enquiry_id>/",
+    views.resolve_enquiry,
+    name="resolve_enquiry"
+),
+
 path(
 "student-enquiry-status/<int:enquiry_id>/",
 views.update_student_enquiry_status,

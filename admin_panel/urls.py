@@ -42,6 +42,7 @@ urlpatterns = [
         name="delete_admin_announcement"
         ),
     path("enquiry/", views.enquiry, name="admin_enquiry"),
+    path("update-enquiry-status/", views.update_enquiry_status, name="update_enquiry_status"),
     path("approve-enquiry/<int:id>/<str:type>/",views.approve_enquiry,name="approve_enquiry"),
     path("reject-enquiry/<int:id>/<str:type>/",views.reject_enquiry,name="reject_enquiry"),
 

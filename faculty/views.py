@@ -220,6 +220,27 @@ def enquiry(request):
 
     return render(request, "faculty/enquiry.html", context)
 
+@login_required
+def accept_enquiry(request, enquiry_id):
+
+    enquiry = get_object_or_404(Enquiry, id=enquiry_id)
+
+    enquiry.status = "in_progress"
+    enquiry.save()
+
+    return redirect("faculty_app:enquiry")
+
+
+@login_required
+def resolve_enquiry(request, enquiry_id):
+
+    enquiry = get_object_or_404(Enquiry, id=enquiry_id)
+
+    enquiry.status = "completed"
+    enquiry.save()
+
+    return redirect("faculty_app:enquiry")
+
 
 @login_required
 def update_student_enquiry_status(request, enquiry_id):

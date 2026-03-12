@@ -514,7 +514,7 @@ Clear
 </tr>
 
 {% for enquiry in student_enquiries %}
-<tr>
+<tr data-id="{{ enquiry.id }}" data-type="student"></tr>
 
 <td>SENQ-{{ enquiry.id }}</td>
 
@@ -545,7 +545,7 @@ action="{% url 'update_student_enquiry_status' enquiry.id %}">
 <option value="approved">Approve</option>
 <option value="rescheduled">Reschedule</option>
 <option value="rejected">Reject</option>
-<option value="complete">Complete</option>
+<option value="completed">Complete</option>
 <option value="cancelled">Cancel</option>
 
 </select>
@@ -601,7 +601,7 @@ class="page-btn">Next</a>
 
 {% for enquiry in parent_enquiries %}
 
-<tr>
+<tr data-id="{{ enquiry.id }}" data-type="parent"></tr>
 
 <td>PENQ-{{ enquiry.id }}</td>
 
@@ -1209,7 +1209,7 @@ function confirmComplete(){
 
         let statusCell = currentRow.querySelector(".status-cell");
 
-        statusCell.innerText = "Completed";
+        updateStatus("Completed");
         statusCell.className = "status-cell status-complete";
 
         let select = currentRow.querySelector("select");
@@ -1225,7 +1225,7 @@ function confirmApprove(){
 
         let statusCell = currentRow.querySelector(".status-cell");
 
-        statusCell.innerText = "Approved";
+        updateStatus("Approved");
         statusCell.className = "status-cell status-approved";
 
         let select = currentRow.querySelector("select");
@@ -1241,7 +1241,7 @@ function confirmReject(){
 
         let statusCell = currentRow.querySelector(".status-cell");
 
-        statusCell.innerText = "Rejected";
+        updateStatus("Rejected");
         statusCell.className = "status-cell status-rejected";
 
         let select = currentRow.querySelector("select");
@@ -1257,7 +1257,7 @@ function confirmCancel(){
 
         let statusCell = currentRow.querySelector(".status-cell");
 
-        statusCell.innerText = "Cancelled";
+        updateStatus("Cancelled");
         statusCell.className = "status-cell status-cancelled";
 
         let select = currentRow.querySelector("select");
@@ -1451,6 +1451,47 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDropdown(select, status);
     });
 });
+
+
+function updateStatus(newStatus){
+
+if(!currentRow) return;
+
+let enquiryId = currentRow.dataset.id
+let type = currentRow.dataset.type
+
+fetch("/admin-panel/update-enquiry-status/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"X-CSRFToken":getCookie("csrftoken")
+},
+
+body:`id=${enquiryId}&type=${type}&status=${newStatus.toLowerCase()}`
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="success"){
+
+let statusCell = currentRow.querySelector(".status-cell")
+
+statusCell.innerText = newStatus
+
+statusCell.className = "status-cell status-"+newStatus.toLowerCase()
+
+showToast("Status Updated Successfully")
+
+}
+
+})
+
+closeAllPopups()
+
+}
 </script>
 
 {% endblock %}

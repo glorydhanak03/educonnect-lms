@@ -10,11 +10,12 @@ class ParentEnquiry(models.Model):
         ('faculty', 'Faculty'),
     )
 
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('in_progress', 'In Progress'),
-        ('resolved', 'Resolved'),
-    )
+    STATUS_CHOICES = [
+        ("pending","Pending"),
+        ("in_progress","In Progress"),
+        ("completed","Completed"),
+        ("closed","Closed"),
+    ]
 
     ENQUIRY_TYPE_CHOICES = (
         ('technical', 'Technical Issue'),

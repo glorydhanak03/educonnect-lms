@@ -177,9 +177,8 @@ def enquiry(request):
 
     # ================= COUNTS (NO FILTER EFFECT) =================
     total_count = base_queryset.count()
-    pending_count = base_queryset.filter(status="pending").count()
-    in_progress_count = base_queryset.filter(status="in_progress").count()
-    resolved_count = base_queryset.filter(status="resolved").count()
+    pending_count = base_queryset.filter(status__in=["pending","in_progress"]).count()
+    resolved_count = base_queryset.filter(status__in=["completed","closed"]).count()
 
     # ================= PAGINATION =================
     paginator = Paginator(enquiry_list, 5)
@@ -193,7 +192,6 @@ def enquiry(request):
         "enquiries": enquiries,
         "total_count": total_count,
         "pending_count": pending_count,
-        "in_progress_count": in_progress_count,
         "resolved_count": resolved_count,
         "search_query": search_query,
         "status_filter": status_filter,

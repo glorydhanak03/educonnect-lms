@@ -51,9 +51,10 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
 
         user = authenticate(request, username=username, password=password)
         if user is None:
-            try:
-                user = authenticate(request, email=username, password=password)
-            except TypeError:
+            user_obj = User.objects.filter(email=username).first()
+            if user_obj:
+                user = authenticate(request, username=user_obj.username, password=password)
+            else:
                 user = None
 
         if user is None:
@@ -95,7 +96,7 @@ def role_register(request: HttpRequest, role: str) -> HttpResponse:
         password = request.POST.get("password") or ""
         grade_class_id = request.POST.get("grade_class")  # get selected class
 
-        if expected_role == "STUDENT" and not grade_class_id:
+        if expected_role == "student" and not grade_class_id:
             messages.error(request, "Please select a class!")
             return render(request, "auth/register.html", {
                 "page_role": role,
@@ -114,7 +115,7 @@ def role_register(request: HttpRequest, role: str) -> HttpResponse:
             email=email,
             password=password,
         )
-        setattr(u, "contact_number", mobile)
+        u.contact_number = mobile
         if hasattr(u, "role"):
             setattr(u, "role", expected_role)
         u.save()

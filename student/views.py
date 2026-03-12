@@ -74,7 +74,7 @@ def enquiry(request):
             student=request.user
         )
 
-        if enquiry.status not in ["resolved", "completed"]:
+        if enquiry_obj.status != "completed":
             return redirect("/student/enquiry/?error=not_allowed")
 
 
@@ -101,9 +101,9 @@ def enquiry(request):
 
     # ================= COUNTS =================
     total_count = base_queryset.count()
-    pending_count = base_queryset.filter(status="pending").count()
+    pending_count = base_queryset.filter(status__in=["pending","in_progress"]).count()
     resolved_count = base_queryset.filter(
-        status__in=["completed"]
+        status__in=["completed","closed"]
     ).count()
 
     # ================= FILTER =================

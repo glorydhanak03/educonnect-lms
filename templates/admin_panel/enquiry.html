@@ -1284,7 +1284,7 @@ Confirm Cancel
 
 {% for p in parent_enquiries %}
 
-<tr>
+<tr data-id="{{ p.id }}" data-type="parent">
 
 <td>PENQ-{{p.id}}</td>
 <td>{{p.parent_name}}</td>
@@ -1292,7 +1292,7 @@ Confirm Cancel
 <td>{{p.child_class}}</td>
 <td>{{p.enquiry_type}}</td>
 
-<td>
+<td data-date="{{p.created_at|date:'Y-m-d'}}">
 {{p.created_at|date:"d M Y"}} |
 {{p.created_at|time:"h:i A"}}
 </td>
@@ -1303,7 +1303,7 @@ Confirm Cancel
 
 <td>
 
-<select class="action-select">
+<select class="action-select" onchange="handleAction(this)">
 <option>Select</option>
 <option>Approve</option>
 <option>Reject</option>
@@ -1359,14 +1359,14 @@ No Parent Enquiries Found
 
 {% for s in student_enquiries %}
 
-<tr>
+<tr data-id="{{ s.id }}" data-type="student">
 
 <td>SENQ-{{s.id}}</td>
 <td>{{s.student_name}}</td>
 <td>{{s.student_class}}</td>
 <td>{{s.enquiry_type}}</td>
 
-<td>
+<td data-date="{{s.created_at|date:'Y-m-d'}}">
 {{s.created_at|date:"d M Y"}} |
 {{s.created_at|time:"h:i A"}}
 </td>
@@ -1377,7 +1377,7 @@ No Parent Enquiries Found
 
 <td>
 
-<select class="action-select">
+<select class="action-select" onchange="handleAction(this)">
 <option>Select</option>
 <option>Approve</option>
 <option>Reject</option>
@@ -1624,21 +1624,6 @@ location.reload()
 
 }
 
-/* ================= UPDATE STATUS ================= */
-
-function updateStatus(newStatus){
-
-    if(!currentRow) return;
-
-    let statusCell = currentRow.querySelector(".status-cell");
-
-    statusCell.innerText = newStatus;
-    statusCell.className = "status-cell status-" + newStatus.toLowerCase();
-
-    updateDropdownForRow(currentRow, newStatus);
-
-    closeAllPopups();
-}
 
 
 /* ================= UPDATE DROPDOWN BASED ON STATUS ================= */
@@ -1900,6 +1885,46 @@ location.reload()
 })
 
 })
+
+function updateStatus(newStatus){
+
+if(!currentRow) return;
+
+let enquiryId = currentRow.dataset.id
+let type = currentRow.dataset.type
+
+fetch("/admin-panel/update-enquiry-status/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"X-CSRFToken":getCookie("csrftoken")
+},
+
+body:`id=${enquiryId}&type=${type}&status=${newStatus.toLowerCase()}`
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="success"){
+
+let statusCell = currentRow.querySelector(".status-cell")
+
+statusCell.innerText = newStatus
+
+statusCell.className = "status-cell status-"+newStatus.toLowerCase()
+
+showToast("Status Updated Successfully")
+
+}
+
+})
+
+closeAllPopups()
+
+}
 
 
 </script>

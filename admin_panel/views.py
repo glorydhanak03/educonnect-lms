@@ -12,6 +12,7 @@ from admin_panel.models import AdminGuideline
 from accounts.models import StudentProfile
 from core.models import Batch
 
+
 # -------------------------
 # HELPERS
 # -------------------------
@@ -253,6 +254,27 @@ def enquiry(request):
         "latest_type":latest_type
 
     })
+
+
+@login_required
+def update_enquiry_status(request):
+
+    if request.method == "POST":
+
+        enquiry_id = request.POST.get("id")
+        enquiry_type = request.POST.get("type")
+        status = request.POST.get("status")
+
+        if enquiry_type == "student":
+            enquiry = Enquiry.objects.get(id=enquiry_id)
+
+        else:
+            enquiry = ParentEnquiry.objects.get(id=enquiry_id)
+
+        enquiry.status = status
+        enquiry.save()
+
+        return JsonResponse({"status":"success"})
 
 @login_required
 def approve_enquiry(request,id,type):
