@@ -357,25 +357,37 @@ def settings(request):
 
 @login_required
 def assign_batch(request):
-    students = StudentProfile.objects.all()
+
+    students = StudentProfile.objects.filter(batch__isnull=True)
+    # students = StudentProfile.objects.all()
     batches = Batch.objects.all()
 
     if request.method == "POST":
+
         student_id = request.POST.get("student_id")
         batch_id = request.POST.get("batch_id")
 
         try:
             student = StudentProfile.objects.get(id=student_id)
             batch = Batch.objects.get(id=batch_id)
+
             student.batch = batch
             student.save()
-            messages.success(request, f"{student.user.username} assigned to {batch.name} successfully!")
-        except Exception as e:
-            messages.error(request, "Something went wrong. Please try again!")
 
-        return redirect("admin_panel:assign_batch") 
+            return JsonResponse({
+                "status":"success",
+                "message":f"{student.user.username} assigned to {batch.name}"
+            })
+
+        except Exception:
+            return JsonResponse({
+                "status":"error",
+                "message":"Something went wrong"
+            })
+
     context = {
         "students": students,
         "batches": batches,
     }
-    return render(request, "admin_panel/assign_batch.html", context)
+
+    return render(request,"admin_panel/assign_batch.html",context)

@@ -138,6 +138,79 @@ select{
     color:#444;
 }
 
+
+/* TOAST MESSAGE */
+
+.toast-container{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+}
+
+.toast{
+    background:#22c55e;
+    color:white;
+    padding:14px 22px;
+    border-radius:8px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    font-size:14px;
+    animation:toastFade 0.4s ease;
+}
+
+@keyframes toastFade{
+    from{
+        opacity:0;
+        transform:translate(-50%,-20px);
+    }
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+}
+
+.message-box{
+    display:none;
+}
+
+.toast{
+    color:white;
+    padding:14px 22px;
+    border-radius:8px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    font-size:14px;
+    animation:toastFade 0.4s ease;
+}
+
+/* success */
+.toast.success{
+    background:#22c55e;
+}
+
+/* error */
+.toast.error{
+    background:#ef4444;
+}
+
+#toastBox{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+z-index:9999;
+}
+
+.toast{
+color:white;
+padding:14px 22px;
+border-radius:8px;
+margin-bottom:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+.toast.success{ background:#22c55e; }
+.toast.error{ background:#ef4444; }
 </style>
 
 
@@ -173,14 +246,14 @@ Select a student and assign them to the appropriate batch based on their class.
 
 <div class="assign-card">
 
-<form method="POST">
+<form method="POST" id="assignForm">
   {% csrf_token %}
 
   <div class="form-group">
       <label>Select Student</label>
-      <select name="student_id">
+      <select name="student_id" id="studentSelect">
         {% for s in students %}
-          <option value="{{ s.id }}">
+          <option value="{{ s.id }}" data-class="{{ s.grade_class.id }}">
             {{ s.user.username }} - {{ s.user.email }} ({{ s.grade_class.name }})
           </option>
         {% endfor %}
@@ -189,9 +262,9 @@ Select a student and assign them to the appropriate batch based on their class.
 
   <div class="form-group">
       <label>Select Batch</label>
-      <select name="batch_id">
+      <select name="batch_id" id="batchSelect">
         {% for b in batches %}
-          <option value="{{ b.id }}">
+          <option value="{{ b.id }}" data-class="{{ b.grade_class.id }}">
             {{ b.name }} ({{ b.grade_class.name }})
           </option>
         {% endfor %}
@@ -206,24 +279,102 @@ Select a student and assign them to the appropriate batch based on their class.
 
 </div>
 
-
+<div id="toastBox"></div>
 <!-- TIPS -->
 
 <div class="tip-box">
 <strong>Tip:</strong> Assigning students to batches allows faculty to manage course content, announcements, and activities more efficiently.
 </div>
 
-
 {% if messages %}
-<div class="message-box">
-  <ul>
+<div class="toast-container">
     {% for message in messages %}
-      <li>{{ message }}</li>
+        <div class="toast {{ message.tags }}">{{ message }}</div>
     {% endfor %}
-  </ul>
 </div>
 {% endif %}
-
 </div>
 
+<center>
+{% if not students %}
+<p style="color:#666;margin-top:10px;">
+All students are already assigned to batches.
+</p>
+{% endif %}
+</center>
+
+<script>
+
+const studentSelect = document.getElementById("studentSelect");
+const batchSelect = document.getElementById("batchSelect");
+const form = document.getElementById("assignForm");
+const toastBox = document.getElementById("toastBox");
+
+function filterBatches(){
+
+const selected = studentSelect.options[studentSelect.selectedIndex];
+const studentClass = selected.getAttribute("data-class");
+
+const batches = batchSelect.options;
+
+for(let i=0;i<batches.length;i++){
+
+let batchClass = batches[i].getAttribute("data-class");
+
+if(batchClass === studentClass){
+batches[i].style.display="block";
+}else{
+batches[i].style.display="none";
+}
+
+}
+
+}
+
+studentSelect.addEventListener("change",filterBatches);
+window.onload = filterBatches;
+
+
+function showToast(message,type){
+
+let toast = document.createElement("div");
+toast.className="toast "+type;
+toast.innerText=message;
+
+toastBox.appendChild(toast);
+
+setTimeout(()=>{
+toast.remove();
+},3000);
+
+}
+
+
+form.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let formData = new FormData(form);
+
+fetch("",{
+method:"POST",
+headers:{
+"X-CSRFToken":"{{ csrf_token }}"
+},
+body:formData
+})
+.then(res=>res.json())
+.then(data=>{
+
+showToast(data.message,data.status);
+
+if(data.status==="success"){
+form.reset();
+}
+
+});
+
+});
+
+</script>
 {% endblock %}
