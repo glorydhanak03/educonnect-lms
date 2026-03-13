@@ -28,6 +28,26 @@ class AdminAnnouncement(models.Model):
     def __str__(self):
         return self.title
 
+class EnquiryAction(models.Model):
+
+    STATUS_CHOICES = (
+        ("approved","Approved"),
+        ("rejected","Rejected"),
+        ("rescheduled","Rescheduled"),
+        ("completed","Completed"),
+        ("cancelled","Cancelled"),
+    )
+
+    enquiry_id = models.IntegerField()
+    enquiry_type = models.CharField(max_length=20)
+    action = models.CharField(max_length=20,choices=STATUS_CHOICES)
+
+    reason = models.TextField(blank=True,null=True)
+
+    session_date = models.DateField(blank=True,null=True)
+    session_time = models.TimeField(blank=True,null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class AdminGuideline(models.Model):

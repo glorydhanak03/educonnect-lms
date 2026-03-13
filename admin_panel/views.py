@@ -11,7 +11,9 @@ from parent.models import ParentEnquiry
 from admin_panel.models import AdminGuideline
 from accounts.models import StudentProfile
 from core.models import Batch
-
+from admin_panel.models import EnquiryAction
+from core.models import LiveSession
+import uuid
 
 # -------------------------
 # HELPERS
@@ -215,6 +217,7 @@ def delete_announcement(request, id):
 
 @login_required
 def enquiry(request):
+    resolved_count = EnquiryAction.objects.filter(action="completed").count()
 
     guidelines = AdminGuideline.objects.all().order_by("-id")
 
@@ -251,10 +254,10 @@ def enquiry(request):
         "student_enquiries":student_enquiries,
         "parent_enquiries":parent_enquiries,
         "latest_enquiry":latest_enquiry,
-        "latest_type":latest_type
+        "latest_type":latest_type,
+        "resolved_count":resolved_count
 
     })
-
 
 @login_required
 def update_enquiry_status(request):
@@ -264,15 +267,22 @@ def update_enquiry_status(request):
         enquiry_id = request.POST.get("id")
         enquiry_type = request.POST.get("type")
         status = request.POST.get("status")
+        reason = request.POST.get("reason")
 
         if enquiry_type == "student":
             enquiry = Enquiry.objects.get(id=enquiry_id)
-
         else:
             enquiry = ParentEnquiry.objects.get(id=enquiry_id)
 
         enquiry.status = status
         enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry_id,
+            enquiry_type=enquiry_type,
+            action=status,
+            reason=reason
+        )
 
         return JsonResponse({"status":"success"})
 
@@ -281,12 +291,20 @@ def approve_enquiry(request,id,type):
 
     if type=="student":
         enquiry = get_object_or_404(Enquiry,id=id)
-
     else:
         enquiry = get_object_or_404(ParentEnquiry,id=id)
 
     enquiry.status="approved"
     enquiry.save()
+
+    meeting_link = "https://meet.jit.si/" + str(uuid.uuid4())
+
+    LiveSession.objects.create(
+        enquiry_id=id,
+        meeting_link=meeting_link,
+        session_date=enquiry.created_at.date(),
+        session_time=enquiry.created_at.time()
+    )
 
     return redirect("admin_enquiry")
 

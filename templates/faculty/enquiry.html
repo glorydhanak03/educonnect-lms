@@ -510,6 +510,7 @@ Clear
 <th>Date</th>
 <th>Time</th>
 <th>Status</th>
+<th>Live Session</th>
 <th>Take Action</th>
 </tr>
 
@@ -530,6 +531,21 @@ Clear
 
 <td class="status-cell status-{{ enquiry.status }}">
     {{ enquiry.get_status_display }}
+</td>
+
+<td>
+
+{% if enquiry.status == "approved" %}
+
+<a href="{{ session.meeting_link }}" target="_blank" class="join-btn">
+Join Session
+</a>
+
+{% else %}
+-
+
+{% endif %}
+
 </td>
 
 <td>
@@ -596,6 +612,7 @@ class="page-btn">Next</a>
 <th>Date</th>
 <th>Time</th>
 <th>Status</th>
+<th>Live Session</th>
 <th>Take Action</th>
 </tr>
 
@@ -619,6 +636,21 @@ class="page-btn">Next</a>
 
 <td class="status-cell status-{{ enquiry.status }}">
 {{ enquiry.get_status_display }}
+</td>
+
+<td>
+
+{% if enquiry.status == "approved" %}
+
+<a href="{{ session.meeting_link }}" target="_blank" class="join-btn">
+Join Session
+</a>
+
+{% else %}
+-
+
+{% endif %}
+
 </td>
 
 <td>

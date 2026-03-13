@@ -23,3 +23,14 @@ class Batch(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.grade_class.name})"
+    
+class LiveSession(models.Model):
+
+    enquiry_id = models.IntegerField()
+
+    meeting_link = models.URLField()
+
+    session_date = models.DateField()
+    session_time = models.TimeField()
+
+    created_at = models.DateTimeField(auto_now_add=True)

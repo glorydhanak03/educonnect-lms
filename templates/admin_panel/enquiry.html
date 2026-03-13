@@ -945,15 +945,12 @@ onclick="deleteGuideline('{{g.id}}')">
 <div class="popup-body">
 
 <table>
-<tr><td>Enquiry ID</td><td>ENQ-101</td></tr>
-<tr><td>Student Name</td><td>Ram Jadhav</td></tr>
-<tr><td>Class</td><td>5th Std</td></tr>
-<tr><td>Send To</td><td>Admin</td></tr>
-<tr><td>Admin Name</td><td>Mr. Ajinkya Pachade</td></tr>
-<tr><td>Type</td><td>1 to 1 Session</td></tr>
-<tr><td>Date</td><td>10 Oct 2025</td></tr>
-<tr><td>Time Slot</td><td>11:25 AM</td></tr>
-<tr><td>Message</td><td>I need help in physics.</td></tr>
+<tr><td>Enquiry ID</td><td id="detailId"></td></tr>
+<tr><td>Student Name</td><td id="detailStudent"></td></tr>
+<tr><td>Class</td><td id="detailClass"></td></tr>
+<tr><td>Type</td><td id="detailType"></td></tr>
+<tr><td>Date</td><td id="detailDate"></td></tr>
+<tr><td>Message</td><td id="detailMessage"></td></tr>
 </table>
 
 <br>
@@ -1552,6 +1549,18 @@ function handleAction(select){
     }
 
     else if(value==="View"){
+        let id = row.children[0].innerText
+        let name = row.children[1].innerText
+        let cls = row.children[2].innerText
+        let type = row.children[3].innerText
+        let date = row.children[4].innerText
+
+        document.getElementById("detailId").innerText=id
+        document.getElementById("detailStudent").innerText=name
+        document.getElementById("detailClass").innerText=cls
+        document.getElementById("detailType").innerText=type
+        document.getElementById("detailDate").innerText=date
+
         openPopup("detailsPopup");
     }
 
@@ -1634,7 +1643,7 @@ function updateDropdownForRow(row, status){
 
     select.innerHTML = '<option>Select</option>';
 
-    if(status==="Pending"){
+    if(status.toLowerCase()==="pending"){
         select.innerHTML += `
             <option>Approve</option>
             <option>Reject</option>
@@ -1643,7 +1652,7 @@ function updateDropdownForRow(row, status){
         `;
     }
 
-    else if(status==="Approved" || status==="Rescheduled"){
+    else if(status.toLowerCase()==="approved" || status.toLowerCase()==="rescheduled"){
         select.innerHTML += `
             <option>Mark as Complete</option>
             <option>Cancel</option>

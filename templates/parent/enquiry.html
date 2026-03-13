@@ -6,6 +6,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <style>
+
+    .join-btn{
+background:#2563eb;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:500;
+display:inline-block;
+}
+
+.join-btn:hover{
+background:#1e40af;
+}
     /* ================= PAGE ================= */
     .enquiry-container {
         padding: 30px;
@@ -468,6 +483,7 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Status</th>
+                    <th>Session</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -486,6 +502,21 @@
                             {{ enquiry.get_status_display }}
                         </span>
                     </td>
+                    <td>
+
+{% if enquiry.status == "approved" and enquiry.session %}
+
+<a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
+Join Session
+</a>
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
 
                     <td>
 
