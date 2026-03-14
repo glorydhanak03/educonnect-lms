@@ -14,6 +14,7 @@ from core.models import Batch
 from admin_panel.models import EnquiryAction
 from core.models import LiveSession
 import uuid
+from core.utils import generate_meeting_link
 
 # -------------------------
 # HELPERS
@@ -286,27 +287,42 @@ def update_enquiry_status(request):
 
         return JsonResponse({"status":"success"})
 
-@login_required
-def approve_enquiry(request,id,type):
 
-    if type=="student":
-        enquiry = get_object_or_404(Enquiry,id=id)
+
+def approve_enquiry(request: HttpRequest, id: int, type: str):
+
+    meeting_link = generate_meeting_link()
+
+    if type == "student":
+        enquiry = get_object_or_404(Enquiry, id=id)
     else:
-        enquiry = get_object_or_404(ParentEnquiry,id=id)
+        enquiry = get_object_or_404(ParentEnquiry, id=id)
 
-    enquiry.status="approved"
+    enquiry.status = "approved"
     enquiry.save()
 
-    meeting_link = "https://meet.jit.si/" + str(uuid.uuid4())
-
-    LiveSession.objects.create(
+    # Save action WITH meeting link
+    EnquiryAction.objects.create(
         enquiry_id=id,
+        enquiry_type=type,
+        action="approved",
         meeting_link=meeting_link,
-        session_date=enquiry.created_at.date(),
-        session_time=enquiry.created_at.time()
+        session_date=enquiry.date,
+        session_time=enquiry.time_slot
     )
 
-    return redirect("admin_enquiry")
+    # Save LiveSession
+    LiveSession.objects.create(
+        enquiry_id=id,
+        enquiry_type=type,
+        meeting_link=meeting_link,
+        session_date=enquiry.date,
+        session_time=enquiry.time_slot
+    )
+
+    messages.success(request, "Session Approved and Meeting Link Generated")
+
+    return redirect("admin_panel:enquiry")
 
 
 @login_required

@@ -860,11 +860,11 @@ background:#fee2e2;
 
 <div class="action-buttons">
 
-<a href="{% url 'admin_panel:approve_enquiry' latest_enquiry.id 'student' %}" class="approve-btn">
+<a href="{% url 'admin_panel:approve_enquiry' latest_enquiry.id latest_type %}" class="approve-btn">
 <i class="fa fa-check"></i> Approve
 </a>
 
-<a href="{% url 'admin_panel:reject_enquiry' latest_enquiry.id 'student' %}" class="reject-btn">
+<a href="{% url 'admin_panel:reject_enquiry' latest_enquiry.id latest_type %}" class="reject-btn">
 <i class="fa fa-times"></i> Reject
 </a>
 </div>

@@ -13,6 +13,7 @@ from admin_panel.models import AdminAnnouncement
 from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
+from admin_panel.models import EnquiryAction
 
 def _faculty_name(request):
     name = (request.user.first_name or request.user.username or "Faculty")
@@ -207,6 +208,27 @@ def enquiry(request):
     parent_page = request.GET.get("parent_page")
     parent_page_obj = parent_paginator.get_page(parent_page)  
 
+    # ===== ATTACH SESSION FOR STUDENT ENQUIRIES =====
+    for enquiry in student_page_obj:
+        action = EnquiryAction.objects.filter(
+           enquiry_id=enquiry.id,
+           enquiry_type="student",
+           action="approved",
+        ).order_by("-created_at").first()
+
+        enquiry.session = action
+
+
+    # ===== ATTACH SESSION FOR PARENT ENQUIRIES =====
+    for enquiry in parent_page_obj:
+        action = EnquiryAction.objects.filter(
+          enquiry_id=enquiry.id,
+          enquiry_type="parent",
+          action="approved",
+        ).order_by("-created_at").first()
+
+        enquiry.session = action
+
     guidelines = AdminGuideline.objects.filter(role="faculty").order_by("-created_at")
 
     context = {
@@ -268,7 +290,24 @@ def update_parent_enquiry_status(request, enquiry_id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+@login_required
+def complete_session(request, id, type):
 
+    if type == "student":
+        enquiry = Enquiry.objects.get(id=id)
+    else:
+        enquiry = ParentEnquiry.objects.get(id=id)
+
+    enquiry.status = "completed"
+    enquiry.save()
+
+    EnquiryAction.objects.create(
+        enquiry_id=id,
+        enquiry_type=type,
+        action="completed"
+    )
+
+    return redirect("faculty_enquiry")
 
 
 @login_required

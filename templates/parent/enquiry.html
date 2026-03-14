@@ -503,36 +503,31 @@ background:#1e40af;
                         </span>
                     </td>
                     <td>
+{% if enquiry.status == "pending" %}
 
-{% if enquiry.status == "approved" and enquiry.session %}
+Pending
+
+{% elif enquiry.status == "approved" and enquiry.session %}
 
 <a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
 Join Session
 </a>
 
-{% else %}
+{% elif enquiry.status == "completed" %}
 
--
+Session Finished
 
 {% endif %}
-
 </td>
 
                     <td>
 
-                        {% if enquiry.status == "resolved" %}
+                        {% if enquiry.status == "completed" %}
 
-                        {% if not enquiry.parent_feedback %}
-                        <button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">
-                            Feedback
-                        </button>
-                        {% else %}
-                        <span style="color:green;font-weight:600;">
-                            Feedback Submitted
-                        </span>
-                        {% endif %}
+<button class="feedback-btn">
+Give Feedback
+</button>
 
-                        {% else %}
 
                         <button class="view-btn" onclick="openDetails(
     '{{ enquiry.id }}',
@@ -561,24 +556,24 @@ Join Session
     </div>
 </div>
 
-<div class="pagination-container" id="enquiryTableContainer">
+<div class="pagination-container">
 
-    {% if enquiries.has_previous %}
-    <a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-        class="page-number">Previous</a>
-    {% endif %}
+{% if enquiries.has_previous %}
+<a href="?page={{ enquiries.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}"
+class="page-number">Previous</a>
+{% endif %}
 
-    {% for num in enquiries.paginator.page_range %}
-    <a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-        class="page-number {% if enquiries.number == num %}active{% endif %}">
-        {{ num }}
-    </a>
-    {% endfor %}
+{% for num in enquiries.paginator.page_range %}
+<a href="?page={{ num }}&search={{ request.GET.search }}&status={{ request.GET.status }}"
+class="page-number {% if enquiries.number == num %}active{% endif %}">
+{{ num }}
+</a>
+{% endfor %}
 
-    {% if enquiries.has_next %}
-    <a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}#enquiryTableContainer"
-        class="page-number">Next</a>
-    {% endif %}
+{% if enquiries.has_next %}
+<a href="?page={{ enquiries.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}"
+class="page-number">Next</a>
+{% endif %}
 
 </div>
 <!-- ================= PARENT DETAILS POPUP ================= -->

@@ -515,7 +515,7 @@ Clear
 </tr>
 
 {% for enquiry in student_enquiries %}
-<tr data-id="{{ enquiry.id }}" data-type="student"></tr>
+<tr data-id="{{ enquiry.id }}" data-type="student">
 
 <td>SENQ-{{ enquiry.id }}</td>
 
@@ -535,14 +535,21 @@ Clear
 
 <td>
 
-{% if enquiry.status == "approved" %}
+{% if enquiry.status == "approved" and enquiry.session %}
 
-<a href="{{ session.meeting_link }}" target="_blank" class="join-btn">
-Join Session
+<a href="{{ enquiry.session.meeting_link }}"
+target="_blank"
+class="join-btn">
+Start Live Session
 </a>
 
+{% elif enquiry.status == "completed" %}
+
+<span>Session Completed</span>
+
 {% else %}
--
+
+<span>-</span>
 
 {% endif %}
 
@@ -640,13 +647,18 @@ class="page-btn">Next</a>
 
 <td>
 
-{% if enquiry.status == "approved" %}
+{% if enquiry.status == "approved" and enquiry.session %}
 
-<a href="{{ session.meeting_link }}" target="_blank" class="join-btn">
-Join Session
+<a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
+Start Live Session
 </a>
 
+{% elif enquiry.status == "completed" %}
+
+Session Completed
+
 {% else %}
+
 -
 
 {% endif %}

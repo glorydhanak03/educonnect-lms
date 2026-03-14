@@ -9,6 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
 from accounts.models import StudentProfile
+from admin_panel.models import EnquiryAction
 
 
 def _student_name(request):
@@ -74,9 +75,8 @@ def enquiry(request):
             student=request.user
         )
 
-        if enquiry_obj.status != "completed":
+        if enquiry_obj.status.lower() not in ["completed", "closed"]:
             return redirect("/student/enquiry/?error=not_allowed")
-
 
         if hasattr(enquiry_obj, "feedback"):
             return redirect("/student/enquiry/?feedback=already")
@@ -95,20 +95,22 @@ def enquiry(request):
 
 
     # ================= BASE QUERYSET =================
-    base_queryset = Enquiry.objects.filter(
+    enquiry_list = Enquiry.objects.filter(
         student=request.user
     ).order_by("-created_at")
 
-    # ================= COUNTS =================
-    total_count = base_queryset.count()
-    pending_count = base_queryset.filter(status__in=["pending","in_progress"]).count()
-    resolved_count = base_queryset.filter(
-        status__in=["completed","closed"]
+    total_count = enquiry_list.count()
+
+    pending_count = enquiry_list.filter(
+           status__in=["pending", "in_progress", "approved", "rescheduled"]
     ).count()
 
-    # ================= FILTER =================
-    enquiry_list = base_queryset
+    resolved_count = enquiry_list.filter(
+       status__in=["completed", "rejected", "cancelled"]
+    ).count()
 
+
+    # ================= FILTER =================
     search_query = request.GET.get("search", "")
     status_filter = request.GET.get("status", "")
 
@@ -122,12 +124,51 @@ def enquiry(request):
     if status_filter:
         enquiry_list = enquiry_list.filter(status=status_filter)
 
+
+    # ================= SESSION + FEEDBACK CHECK =================
+    feedback_ids = set(
+    Feedback.objects.filter(
+        enquiry__student=request.user
+    ).values_list("enquiry_id", flat=True)
+    )
+
+    for e in enquiry_list:
+        action = EnquiryAction.objects.filter(
+           enquiry_id=e.id,
+           enquiry_type="student",
+           action="approved",
+        ).order_by("-created_at").first()
+
+        if action:
+            e.session_date = action.session_date
+            e.session_time = action.session_time
+            e.action_status = action.action
+            e.meeting_link = action.meeting_link
+            e.session = action
+
+        else:
+            e.session_date = None
+            e.session_time = None
+            e.action_status = None
+            e.meeting_link = None
+            e.session = None
+
+        
     # ================= PAGINATION =================
     paginator = Paginator(enquiry_list, 5)
     page_number = request.GET.get("page")
     enquiries = paginator.get_page(page_number)
 
-    guidelines = AdminGuideline.objects.filter(role="student").order_by("-created_at")
+
+    for e in enquiries:
+        e.feedback_exists = e.id in feedback_ids
+
+
+    # ================= GUIDELINES =================
+    guidelines = AdminGuideline.objects.filter(
+        role="student"
+    ).order_by("-created_at")
+
 
     context = {
         "display_name": _student_name(request),
@@ -141,7 +182,6 @@ def enquiry(request):
     }
 
     return render(request, "student/enquiry.html", context)
-
 
 # ================= Other Pages =================
 

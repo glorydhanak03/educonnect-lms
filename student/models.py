@@ -13,6 +13,7 @@ class Enquiry(models.Model):
     STATUS_CHOICES = [
         ("pending","Pending"),
         ("in_progress","In Progress"),
+        ("approved","Approved"),
         ("completed","Completed"),
         ("closed","Closed"),
     ]

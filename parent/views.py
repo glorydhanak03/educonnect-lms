@@ -10,6 +10,8 @@ from faculty.models import FacultyAnnouncement
 from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
+from admin_panel.models import EnquiryAction
+
 
 def _parent_name(request) -> str:
     name = (request.user.first_name or request.user.username or "Parent")
@@ -181,11 +183,31 @@ def enquiry(request):
     resolved_count = base_queryset.filter(status__in=["completed","closed"]).count()
 
     # ================= PAGINATION =================
+    enquiry_list = ParentEnquiry.objects.filter(parent=request.user).order_by("-id")
+
     paginator = Paginator(enquiry_list, 5)
-    page_number = request.GET.get("page")
-    enquiries = paginator.get_page(page_number)
+    page = request.GET.get("page")
+    enquiries = paginator.get_page(page)
 
     guidelines = AdminGuideline.objects.filter(role="parent").order_by("-created_at")
+
+    for e in enquiries:
+
+        actions = EnquiryAction.objects.filter(
+            enquiry_id=e.id,
+            enquiry_type="parent"
+        ).order_by("-created_at")
+        
+        action = actions.first()
+
+
+        if action:
+            e.session = action
+        else:
+            e.session = None
+
+
+    
 
     context = {
         "display_name": _parent_name(request),
@@ -196,6 +218,7 @@ def enquiry(request):
         "search_query": search_query,
         "status_filter": status_filter,
         "guidelines": guidelines,
+        "enquiries": enquiries
     }
 
     return render(request, "parent/enquiry.html", context)

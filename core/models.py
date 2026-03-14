@@ -24,9 +24,11 @@ class Batch(models.Model):
     def __str__(self):
         return f"{self.name} ({self.grade_class.name})"
     
+    
 class LiveSession(models.Model):
 
     enquiry_id = models.IntegerField()
+    enquiry_type = models.CharField(max_length=20)  
 
     meeting_link = models.URLField()
 
@@ -34,3 +36,6 @@ class LiveSession(models.Model):
     session_time = models.TimeField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.enquiry_type} - {self.enquiry_id}"

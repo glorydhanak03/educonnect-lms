@@ -13,7 +13,7 @@ class AdminAnnouncement(models.Model):
     title = models.CharField(max_length=200)
     message = models.TextField()
 
-    categories = models.JSONField()   # multi select store
+    categories = models.JSONField()   
 
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -46,6 +46,7 @@ class EnquiryAction(models.Model):
 
     session_date = models.DateField(blank=True,null=True)
     session_time = models.TimeField(blank=True,null=True)
+    meeting_link = models.URLField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
