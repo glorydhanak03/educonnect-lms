@@ -524,7 +524,8 @@ Session Finished
 
                         {% if enquiry.status == "completed" %}
 
-<button class="feedback-btn">
+<button class="feedback-btn"
+data-id="{{ enquiry.id }}">
 Give Feedback
 </button>
 
@@ -912,6 +913,17 @@ class="page-number">Next</a>
         }
     });
 
+document.querySelectorAll(".feedback-btn").forEach(btn => {
+
+btn.addEventListener("click", function(){
+
+document.getElementById("feedbackEnquiryId").value = this.dataset.id;
+
+document.getElementById("feedbackModal").style.display="block";
+
+});
+
+});
 </script>
 
 {% endblock %}

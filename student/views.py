@@ -10,6 +10,7 @@ from datetime import timedelta
 from admin_panel.models import AdminGuideline
 from accounts.models import StudentProfile
 from admin_panel.models import EnquiryAction
+from student.models import Feedback
 
 
 def _student_name(request):
@@ -182,6 +183,25 @@ def enquiry(request):
     }
 
     return render(request, "student/enquiry.html", context)
+
+def submit_feedback(request):
+
+    if request.method == "POST":
+
+        enquiry_id = request.POST.get("enquiry_id")
+        rating = request.POST.get("rating")
+        comment = request.POST.get("comment")
+
+        enquiry = Enquiry.objects.get(id=enquiry_id)
+
+        Feedback.objects.create(
+            enquiry=enquiry,
+            rating=rating,
+            comment=comment,
+            student=request.user
+        )
+
+        return redirect("student_enquiry")
 
 # ================= Other Pages =================
 

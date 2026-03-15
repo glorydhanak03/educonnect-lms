@@ -515,7 +515,14 @@ Clear
 </tr>
 
 {% for enquiry in student_enquiries %}
-<tr data-id="{{ enquiry.id }}" data-type="student">
+<tr 
+data-id="{{ enquiry.id }}" 
+data-type="student"
+data-student="{{ enquiry.student_name }}"
+data-date="{{ enquiry.date }}"
+data-time="{{ enquiry.time_slot }}"
+data-enquirytype="{{ enquiry.enquiry_type }}"
+>
 
 <td>SENQ-{{ enquiry.id }}</td>
 
@@ -535,11 +542,11 @@ Clear
 
 <td>
 
-{% if enquiry.status == "approved" and enquiry.session %}
+{% if enquiry.status == "approved" %}
 
 <a href="{{ enquiry.session.meeting_link }}"
 target="_blank"
-class="join-btn">
+style="background:#2563eb;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;">
 Start Live Session
 </a>
 
@@ -561,6 +568,9 @@ Start Live Session
 action="{% url 'update_student_enquiry_status' enquiry.id %}">
 
 {% csrf_token %}
+
+<input type="hidden" name="meeting_link" class="meeting-link-input">
+
 
 <select name="status" class="action-select" onchange="handleFacultyAction(this)">
 
@@ -625,8 +635,14 @@ class="page-btn">Next</a>
 
 {% for enquiry in parent_enquiries %}
 
-<tr data-id="{{ enquiry.id }}" data-type="parent"></tr>
-
+<tr 
+data-id="{{ enquiry.id }}" 
+data-type="parent"
+data-student="{{ enquiry.parent_name }}"
+data-date="{{ enquiry.date }}"
+data-time="{{ enquiry.time_slot }}"
+data-enquirytype="{{ enquiry.enquiry_type }}"
+>
 <td>PENQ-{{ enquiry.id }}</td>
 
 <td>{{ enquiry.parent_name }}</td>
@@ -647,9 +663,11 @@ class="page-btn">Next</a>
 
 <td>
 
-{% if enquiry.status == "approved" and enquiry.session %}
+{% if enquiry.status == "approved" %}
 
-<a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
+<a href="{{ enquiry.session.meeting_link }}"
+target="_blank"
+style="background:#2563eb;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;">
 Start Live Session
 </a>
 
@@ -671,6 +689,8 @@ Session Completed
 action="{% url 'update_parent_enquiry_status' enquiry.id %}">
 
 {% csrf_token %}
+
+<input type="hidden" name="meeting_link" class="meeting-link-input">
 
 <select name="status" class="action-select" onchange="handleFacultyAction(this)">
 
@@ -892,8 +912,15 @@ placeholder="Write feedback..."></textarea>
 <strong>Are you sure want to approve this enquiry?</strong>
 <p><strong>Student:</strong> <span id="approveStudent"></span></p>
 <p><strong>Date:</strong> <span id="approveDate"></span></p>
-<p><strong>Enquiry Type:</strong> <span>Assignment Help</span></p>
-<p><strong>Time:</strong> <span>11:00 AM</span></p>
+<p><strong>Enquiry Type:</strong> <span id="approveType"></span></p>
+<p><strong>Time:</strong> <span id="approveTime"></span></p>
+<p><strong>Zoom Meeting Link:</strong></p>
+
+<input type="text"
+id="meetingLink"
+placeholder="Paste Zoom meeting link"
+class="input-style"
+style="width:100%; padding:8px; margin-top:5px;">
 
 <br>
 
@@ -1177,14 +1204,24 @@ function handleFacultyAction(select) {
 
     if (!action) return;
 
-    if (action === "approve") {
+    if (action === "approved") {
+        const student = row.dataset.student
+        const date = row.dataset.date
+        const time = row.dataset.time
+        const type = row.dataset.enquirytype
+
+         document.getElementById("approveStudent").innerText = student
+         document.getElementById("approveDate").innerText = date
+        document.getElementById("approveType").innerText = type
+        document.getElementById("approveTime").innerText = time
+
         openPopup("approvePopup");
     }
 
     else if(action === "reschedule"){
         openPopup("reschedulePopup");
     }
-    else if (action === "reject") {
+    else if (action === "rejected") {
         openPopup("rejectPopup");
     }
     else if (action === "complete") {
@@ -1210,7 +1247,7 @@ function updateDropdown(select, status) {
     switch(status) {
         case "Pending":
             options += `
-                <option value="approve">Approve</option>
+                <option value="approved">Approve</option>
                 <option value="reschedule">Reschedule</option>
                 <option value="reject">Reject</option>
                 <option value="view">View</option>
@@ -1265,19 +1302,61 @@ function confirmComplete(){
 
 function confirmApprove(){
 
+    let meetingLink = document.getElementById("meetingLink").value;
+
+    if(!meetingLink){
+        alert("Please paste Zoom meeting link first");
+        return;
+    }
+
     if(currentRow){
 
-        let statusCell = currentRow.querySelector(".status-cell");
-
-        updateStatus("Approved");
-        statusCell.className = "status-cell status-approved";
+        let form = currentRow.querySelector("form");
 
         let select = currentRow.querySelector("select");
-        updateDropdown(select, "Approved");
+        select.value = "approved";
 
-        closePopup("approvePopup");
+        // hidden input मध्ये meeting link set
+        let linkInput = currentRow.querySelector(".meeting-link-input");
+        linkInput.value = meetingLink;
+
+        form.submit();
     }
 }
+
+// function confirmApprove(){
+
+//     if(currentRow){
+
+//         let form = currentRow.querySelector("form");
+//         let select = currentRow.querySelector("select");
+
+//         select.value = "approved";
+
+//          // get meeting link
+//         let meetingLink = document.getElementById("meetingLink").value;
+
+//         // create hidden input
+//         let linkInput = document.createElement("input");
+//         linkInput.type = "hidden";
+//         linkInput.name = "meeting_link";
+//         linkInput.value = meetingLink;
+
+
+//         // create hidden input to ensure POST value
+//         let input = document.createElement("input");
+//         input.type = "hidden";
+//         input.name = "status";
+//         input.value = "approved";
+
+//         form.appendChild(linkInput);
+//         form.appendChild(input);
+
+//         form.submit();
+
+//     }
+
+// }
 
 function confirmReject(){
 

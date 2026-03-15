@@ -512,26 +512,16 @@
                         </span>
                     </td>
                     <td>
-{% if enquiry.status == "approved" and enquiry.session %}
+{% if enquiry.status == "completed" %}
+<span>Session Finished</span>
 
-<a href="{{ enquiry.session.meeting_link }}"
-target="_blank"
-class="join-btn">
+{% elif enquiry.status == "approved" and enquiry.session %}
+<a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
 Join Session
 </a>
 
-{% elif enquiry.status == "completed" %}
-
-<span>Session Finished</span>
-
-<!-- <a href="#" class="feedback-btn">
-Give Feedback
-</a> -->
-
 {% else %}
-
 <span>Pending</span>
-
 {% endif %}
 
 </td>
@@ -539,8 +529,7 @@ Give Feedback
 
 {% if enquiry.status == "completed" and not enquiry.feedback_exists %}
 
-<button class="feedback-btn"
-onclick="openFeedbackFromTable('{{ enquiry.id }}')">
+<button class="feedback-btn" data-id="{{ enquiry.id }}">
 Give Feedback
 </button>
 
@@ -862,6 +851,32 @@ View Details
             localStorage.removeItem("scrollPosition");
         }
     });
+
+    document.querySelectorAll(".feedback-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+
+        const enquiryId = this.dataset.id;
+
+        document.getElementById("feedbackEnquiryId").value = enquiryId;
+
+        document.getElementById("feedbackModal").style.display = "block";
+
+    });
+});
+
+document.querySelectorAll(".view-details-btn").forEach(btn => {
+
+btn.addEventListener("click", function(){
+
+document.getElementById("detailTopic").innerText = this.dataset.topic;
+document.getElementById("detailDate").innerText = this.dataset.date;
+document.getElementById("detailStatus").innerText = this.dataset.status;
+
+document.getElementById("detailsModal").style.display = "block";
+
+});
+
+});
 
 </script>
 

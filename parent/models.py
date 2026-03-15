@@ -12,6 +12,7 @@ class ParentEnquiry(models.Model):
 
     STATUS_CHOICES = [
         ("pending","Pending"),
+        ("approved", "Approved"),
         ("in_progress","In Progress"),
         ("completed","Completed"),
         ("closed","Closed"),

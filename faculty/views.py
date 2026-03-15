@@ -263,32 +263,52 @@ def resolve_enquiry(request, enquiry_id):
 
     return redirect("faculty_app:enquiry")
 
-
-@login_required
 def update_student_enquiry_status(request, enquiry_id):
 
     enquiry = get_object_or_404(Enquiry, id=enquiry_id)
 
     status = request.POST.get("status")
+    meeting_link = request.POST.get("meeting_link")
+
 
     if status:
         enquiry.status = status
         enquiry.save()
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        if status == "approved":
 
-@login_required
+            EnquiryAction.objects.create(
+                enquiry_id=enquiry.id,
+                enquiry_type="student",
+                action="approved",
+                meeting_link=meeting_link
+            )
+
+    return redirect("faculty_enquiry")
+
+
 def update_parent_enquiry_status(request, enquiry_id):
 
     enquiry = get_object_or_404(ParentEnquiry, id=enquiry_id)
 
     status = request.POST.get("status")
+    meeting_link = request.POST.get("meeting_link")
+
 
     if status:
         enquiry.status = status
         enquiry.save()
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        if status == "approved":
+
+            EnquiryAction.objects.create(
+                enquiry_id=enquiry.id,
+                enquiry_type="parent",  
+                action="approved",
+                meeting_link= meeting_link
+            )
+
+    return redirect("faculty_enquiry")
 
 @login_required
 def complete_session(request, id, type):
