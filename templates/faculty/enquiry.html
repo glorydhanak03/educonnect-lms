@@ -908,9 +908,6 @@ placeholder="Write feedback..."></textarea>
 <span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
 </div>
 
-<form method="POST" id="approveForm">
-
-{% csrf_token %}
 
 <div class="popup-body">
 
@@ -932,9 +929,10 @@ style="width:100%; padding:8px; margin-top:5px;">
 
 <br><br>
 
-<button type="submit" class="send-btn">
+<button type="button" class="send-btn" onclick="confirmApprove()">
 Confirm Approve
 </button>
+
 
 <button type="button" class="feedback-btn"
 onclick="closePopup('approvePopup')">
@@ -943,7 +941,6 @@ Cancel
 
 </div>
 
-</form>
 </div>
 </div>
 </div>
@@ -1320,26 +1317,32 @@ function confirmComplete(){
 
 function confirmApprove(){
 
-    let meetingLink = document.getElementById("meetingLink").value;
+let meetingLink = document.getElementById("meetingLink").value;
 
-    if(!meetingLink){
-        alert("Please paste Zoom meeting link first");
-        return;
-    }
+if(!meetingLink){
+alert("Please paste Zoom meeting link first");
+return;
+}
 
-    if(currentRow){
+if(currentRow){
 
-        let form = currentRow.querySelector("form");
+let form = currentRow.querySelector("form");
 
-        let select = currentRow.querySelector("select");
-        select.value = "approved";
+let linkInput = currentRow.querySelector(".meeting-link-input");
+linkInput.value = meetingLink;
 
-        // hidden input मध्ये meeting link set
-        let linkInput = currentRow.querySelector(".meeting-link-input");
-        linkInput.value = meetingLink;
+// 🔥 force status approved
+let statusInput = document.createElement("input");
+statusInput.type = "hidden";
+statusInput.name = "status";
+statusInput.value = "approved";
 
-        form.submit();
-    }
+form.appendChild(statusInput);
+
+form.submit();
+
+}
+
 }
 
 // function confirmApprove(){

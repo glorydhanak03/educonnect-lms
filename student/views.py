@@ -140,11 +140,11 @@ def enquiry(request):
            action="approved"  
         ).order_by("-created_at").first()
 
-    if action:
-        e.session = action
-        e.meeting_link = action.meeting_link
-    else:
-        e.session = None
+        if action:
+            e.session = action
+            e.meeting_link = action.meeting_link
+        else:
+            e.session = None
 
         
     # ================= PAGINATION =================
