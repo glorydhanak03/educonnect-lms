@@ -908,24 +908,42 @@ placeholder="Write feedback..."></textarea>
 <span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
 </div>
 
+<form method="POST" id="approveForm">
+
+{% csrf_token %}
+
 <div class="popup-body">
+
 <strong>Are you sure want to approve this enquiry?</strong>
+
 <p><strong>Student:</strong> <span id="approveStudent"></span></p>
 <p><strong>Date:</strong> <span id="approveDate"></span></p>
 <p><strong>Enquiry Type:</strong> <span id="approveType"></span></p>
 <p><strong>Time:</strong> <span id="approveTime"></span></p>
+
 <p><strong>Zoom Meeting Link:</strong></p>
 
 <input type="text"
 id="meetingLink"
+name="meeting_link"
 placeholder="Paste Zoom meeting link"
 class="input-style"
 style="width:100%; padding:8px; margin-top:5px;">
 
-<br>
+<br><br>
 
-<button class="send-btn" onclick="confirmApprove()">Confirm Approve</button>
-<button class="feedback-btn" onclick="closePopup('approvePopup')">Cancel</button>
+<button type="submit" class="send-btn">
+Confirm Approve
+</button>
+
+<button type="button" class="feedback-btn"
+onclick="closePopup('approvePopup')">
+Cancel
+</button>
+
+</div>
+
+</form>
 </div>
 </div>
 </div>
@@ -1614,6 +1632,15 @@ showToast("Status Updated Successfully")
 
 closeAllPopups()
 
+}
+
+function openApprovePopup(enquiryId){
+
+    let form = document.getElementById("approveForm");
+
+    form.action = "/faculty/update-student-enquiry-status/" + enquiryId + "/";
+
+    document.getElementById("approvePopup").style.display = "flex";
 }
 </script>
 

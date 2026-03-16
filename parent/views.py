@@ -11,7 +11,7 @@ from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
 from admin_panel.models import EnquiryAction
-
+from core.models import LiveSession
 
 def _parent_name(request) -> str:
     name = (request.user.first_name or request.user.username or "Parent")
@@ -192,26 +192,21 @@ def enquiry(request):
     guidelines = AdminGuideline.objects.filter(role="parent").order_by("-created_at")
 
     for e in enquiries:
-
-        actions = EnquiryAction.objects.filter(
+        action = EnquiryAction.objects.filter(
             enquiry_id=e.id,
-            enquiry_type="parent"
-        ).order_by("-created_at")
+            enquiry_type="parent",
+            action="approved"
+        ).order_by("-created_at").first()
         
-        action = actions.first()
-
-
         if action:
             e.session = action
+            e.meeting_link = action.meeting_link
         else:
             e.session = None
-
-
     
 
     context = {
         "display_name": _parent_name(request),
-        "enquiries": enquiries,
         "total_count": total_count,
         "pending_count": pending_count,
         "resolved_count": resolved_count,

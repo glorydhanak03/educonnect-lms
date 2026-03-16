@@ -275,7 +275,6 @@ background:#1e40af;
     }
 </style>
 
-
 {% if request.GET.feedback == "success" or request.GET.enquiry == "success" or request.GET.feedback == "already" %}
 
 <div id="toastMessage" style="
@@ -330,6 +329,7 @@ background:#1e40af;
         View Guidelines
     </button>
 </div>
+
 
 <!-- ================= FORM ================= -->
 <form method="POST">
@@ -488,71 +488,64 @@ background:#1e40af;
                 </tr>
             </thead>
 
-            <tbody>
-                {% for enquiry in enquiries %}
-                <tr>
-                    <td>PENQ-{{ enquiry.id }}</td>
-                    <td>{{ enquiry.get_send_to_display }}</td>
-                    <td>{{ enquiry.receiver_name }}</td>
-                    <td>{{ enquiry.get_enquiry_type_display }}</td>
-                    <td>{{ enquiry.date}}</td>
-                    <td>{{ enquiry.time_slot }}</td>
-                    <td>
-                        <span class="status-badge status-{{ enquiry.status }}">
-                            {{ enquiry.get_status_display }}
-                        </span>
-                    </td>
-                    <td>
+ <tbody>
+{% for enquiry in enquiries %}
+<tr>
+
+<td>PENQ-{{ enquiry.id }}</td>
+<td>{{ enquiry.get_send_to_display }}</td>
+<td>{{ enquiry.receiver_name }}</td>
+<td>{{ enquiry.get_enquiry_type_display }}</td>
+<td>{{ enquiry.date }}</td>
+<td>{{ enquiry.time_slot }}</td>
+
+<td>
+<span class="status-badge status-{{ enquiry.status }}">
+{{ enquiry.get_status_display }}
+</span>
+</td>
+
+<td>
 {% if enquiry.status == "pending" %}
-
 Pending
-
-{% elif enquiry.status == "approved" and enquiry.session %}
-
+{% elif enquiry.status == "approved" and enquiry.session and enquiry.session.meeting_link %}
 <a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
 Join Session
 </a>
-
-{% elif enquiry.status == "completed" %}
-
-Session Finished
-
+{% else %}
+No Session
 {% endif %}
 </td>
 
-                    <td>
+<td>
 
-                        {% if enquiry.status == "completed" %}
-
-<button class="feedback-btn"
-data-id="{{ enquiry.id }}">
-Give Feedback
+<button class="view-btn" onclick="openDetails(
+'{{ enquiry.id }}',
+'{{ enquiry.parent_name }}',
+'{{ enquiry.child_name }}',
+'{{ enquiry.child_class }}',
+'{{ enquiry.get_send_to_display }}',
+'{{ enquiry.receiver_name }}',
+'{{ enquiry.get_enquiry_type_display }}',
+'{{ enquiry.get_status_display }}',
+'{{ enquiry.date }}',
+'{{ enquiry.time_slot }}',
+'{{ enquiry.message|escapejs }}'
+)">
+View Details
 </button>
 
+{% if enquiry.status == "completed" %}
+<button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">
+Give Feedback
+</button>
+{% endif %}
 
-                        <button class="view-btn" onclick="openDetails(
-    '{{ enquiry.id }}',
-    '{{ enquiry.parent_name }}',
-    '{{ enquiry.child_name }}',
-    '{{ enquiry.child_class }}',
-    '{{ enquiry.get_send_to_display }}',
-    '{{ enquiry.receiver_name }}',
-    '{{ enquiry.get_enquiry_type_display }}',
-    '{{ enquiry.get_status_display }}',
-    '{{ enquiry.date }}',
-    '{{ enquiry.time_slot }}',
-    '{{ enquiry.message|escapejs }}'
-    )">
-                            View Details
-                        </button>
+</td>
 
-                        {% endif %}
-
-                    </td>
-
-                </tr>
-                {% endfor %}
-            </tbody>
+</tr>
+{% endfor %}
+</tbody>
         </table>
     </div>
 </div>

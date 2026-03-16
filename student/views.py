@@ -11,7 +11,7 @@ from admin_panel.models import AdminGuideline
 from accounts.models import StudentProfile
 from admin_panel.models import EnquiryAction
 from student.models import Feedback
-
+from core.models import LiveSession
 
 def _student_name(request):
     name = (request.user.first_name or request.user.username or "Student")
@@ -137,22 +137,14 @@ def enquiry(request):
         action = EnquiryAction.objects.filter(
            enquiry_id=e.id,
            enquiry_type="student",
-           action="approved",
+           action="approved"  
         ).order_by("-created_at").first()
 
-        if action:
-            e.session_date = action.session_date
-            e.session_time = action.session_time
-            e.action_status = action.action
-            e.meeting_link = action.meeting_link
-            e.session = action
-
-        else:
-            e.session_date = None
-            e.session_time = None
-            e.action_status = None
-            e.meeting_link = None
-            e.session = None
+    if action:
+        e.session = action
+        e.meeting_link = action.meeting_link
+    else:
+        e.session = None
 
         
     # ================= PAGINATION =================
@@ -163,6 +155,7 @@ def enquiry(request):
 
     for e in enquiries:
         e.feedback_exists = e.id in feedback_ids
+
 
 
     # ================= GUIDELINES =================

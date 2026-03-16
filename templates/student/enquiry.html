@@ -515,8 +515,8 @@
 {% if enquiry.status == "completed" %}
 <span>Session Finished</span>
 
-{% elif enquiry.status == "approved" and enquiry.session %}
-<a href="{{ enquiry.session.meeting_link }}" target="_blank" class="join-btn">
+{% elif enquiry.status == "approved" and enquiry.meeting_link %}
+<a href="{{ enquiry.meeting_link }}" target="_blank" class="join-btn">
 Join Session
 </a>
 
