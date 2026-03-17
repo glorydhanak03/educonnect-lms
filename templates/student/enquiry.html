@@ -465,11 +465,21 @@
         style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
 
     <select name="status" style="padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
-        <option value="">All Status</option>
-        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
-        <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>In Progress</option>
-        <option value="completed" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved</option>
-    </select>
+    <option value="">All Status</option>
+
+    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+
+    <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved</option>
+
+    <option value="rescheduled" {% if status_filter == 'rescheduled' %}selected{% endif %}>Rescheduled</option>
+
+    <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+
+    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+
+    <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+
+</select>
 
     <button type="submit" class="page-btn">Filter</button>
     <a href="{% url 'student_enquiry' %}" class="feedback-btn">Clear</a>
@@ -529,8 +539,8 @@ Join Session
 
 {% if enquiry.status == "completed" and not enquiry.feedback_exists %}
 
-<button class="feedback-btn" data-id="{{ enquiry.id }}">
-Give Feedback
+<button class="feedback-btn" onclick="openFeedbackFromTable('{{ enquiry.id }}')">
+    Give Feedback
 </button>
 
 {% endif %}

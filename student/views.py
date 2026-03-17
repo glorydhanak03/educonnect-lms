@@ -117,13 +117,15 @@ def enquiry(request):
 
     if search_query:
         enquiry_list = enquiry_list.filter(
+            Q(id__icontains=search_query.replace("SENQ-", "")) |  
+            Q(send_to__icontains=search_query) |                  
             Q(enquiry_type__icontains=search_query) |
             Q(receiver_name__icontains=search_query) |
             Q(course_name__icontains=search_query)
         )
 
     if status_filter:
-        enquiry_list = enquiry_list.filter(status=status_filter)
+        enquiry_list = enquiry_list.filter(status=status_filter.strip())
 
 
     # ================= SESSION + FEEDBACK CHECK =================

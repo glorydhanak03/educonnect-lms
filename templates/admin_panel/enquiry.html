@@ -808,7 +808,7 @@ background:#fee2e2;
 <div class="enquiry-wrapper">
 
     <!-- PAGE TITLE -->
-    <h2 class="page-heading">❓ Enquiry for 1-to-1 Session</h2>
+    <h2 class="page-heading">👥 Enquiry </h2>
 
  
 
@@ -1935,6 +1935,24 @@ closeAllPopups()
 
 }
 
+window.addEventListener("DOMContentLoaded", function(){
+
+    const params = new URLSearchParams(window.location.search);
+    const msg = params.get("msg");
+
+    if(msg === "approved"){
+        showToast("Enquiry Approved Successfully");
+    }
+
+    else if(msg === "rejected"){
+        showToast("Enquiry Rejected Successfully");
+    }
+    
+    if(msg){
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+});
 
 </script>
 <div id="toastMessage">

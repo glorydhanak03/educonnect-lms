@@ -164,13 +164,14 @@ def enquiry(request):
     search = request.GET.get("search", "")
     date = request.GET.get("date", "")
 
+    clean_search = search.replace("SENQ-", "").replace("PENQ-", "").strip()
     # ================= STUDENT ENQUIRIES =================
     student_enquiries = Enquiry.objects.filter(send_to="faculty")
-    if search:
-        if search.isdigit():
+    if clean_search:
+        if clean_search.isdigit():
             student_enquiries = student_enquiries.filter(
                 Q(student_name__icontains=search) |
-                Q(id=int(search))
+                Q(id=int(clean_search))
             )
         else:
             student_enquiries = student_enquiries.filter(
@@ -188,11 +189,11 @@ def enquiry(request):
     # ================= PARENT ENQUIRIES =================
     parent_enquiries = ParentEnquiry.objects.filter(send_to="faculty")
     if search:
-        if search.isdigit():
+        if clean_search.isdigit():
             parent_enquiries = parent_enquiries.filter(
                 Q(parent_name__icontains=search) |
                 Q(child_name__icontains=search) |
-                Q(id=int(search))
+                Q(id=int(clean_search))
             )
         else:
             parent_enquiries = parent_enquiries.filter(
@@ -272,6 +273,31 @@ def update_student_enquiry_status(request, enquiry_id):
 
 
     if status:
+        # enquiry.status = status
+        # enquiry.save()
+
+        if status == "rescheduled":
+            new_date = request.POST.get("new_date")
+            new_time = request.POST.get("new_time")
+            reason = request.POST.get("reason")
+
+        if new_date:
+            enquiry.date = new_date
+
+        if new_time:
+            enquiry.time_slot = new_time
+
+        enquiry.status = "rescheduled"
+        enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry.id,
+            enquiry_type="student",   
+            action="rescheduled",
+            note=reason
+        )
+
+    else:
         enquiry.status = status
         enquiry.save()
 
@@ -296,8 +322,31 @@ def update_parent_enquiry_status(request, enquiry_id):
 
 
     if status:
+        if status == "rescheduled":
+            new_date = request.POST.get("new_date")
+            new_time = request.POST.get("new_time")
+            reason = request.POST.get("reason")
+
+        if new_date:
+            enquiry.date = new_date
+
+        if new_time:
+            enquiry.time_slot = new_time
+
+        enquiry.status = "rescheduled"
+        enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry.id,
+            enquiry_type="parent",   
+            action="rescheduled",
+            note=reason
+        )
+
+    else:
         enquiry.status = status
         enquiry.save()
+
 
         if status == "approved":
 

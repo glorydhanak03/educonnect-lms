@@ -52,7 +52,7 @@ th{ background:#f9fafb; font-weight:600; }
 /* STATUS COLORS */
 .status-pending{color:#eab308;font-weight:600;}
 .status-approved{color:#16a34a;font-weight:600;}
-.status-complete{color:#2563eb;font-weight:600;}
+.status-completed{color:#2563eb;font-weight:600;}
 .status-rejected{color:#dc2626;font-weight:600;}
 .status-cancelled{color:#6b7280;font-weight:600;}
 .status-rescheduled{ color:#f97316; font-weight:600;}
@@ -448,13 +448,13 @@ th{ background:#f9fafb; font-weight:600; }
 <!-- TABS -->
 <div class="enquiry-tabs">
 
-    <div id="studentTab" class="tab-item active" onclick="switchTab('student')">
+    <div id="studentTab" class="tab-item active" onclick="switchTab('student');saveTab('student')" >
         Academic / Students Enquiries
     </div>
 
     <div class="vertical-divider"></div>
 
-    <div id="parentTab" class="tab-item" onclick="switchTab('parent')">
+    <div id="parentTab" class="tab-item" onclick="switchTab('parent');saveTab('parent')">
         Parent Enquiries
     </div>
 
@@ -522,6 +522,8 @@ data-student="{{ enquiry.student_name }}"
 data-date="{{ enquiry.date }}"
 data-time="{{ enquiry.time_slot }}"
 data-enquirytype="{{ enquiry.enquiry_type }}"
+data-message="{{ enquiry.message }}"
+data-class="{{ enquiry.student_class }}"
 >
 
 <td>SENQ-{{ enquiry.id }}</td>
@@ -636,12 +638,14 @@ class="page-btn">Next</a>
 {% for enquiry in parent_enquiries %}
 
 <tr 
-data-id="{{ enquiry.id }}" 
+data-id="PENQ-{{ enquiry.id }}" 
 data-type="parent"
 data-student="{{ enquiry.parent_name }}"
 data-date="{{ enquiry.date }}"
 data-time="{{ enquiry.time_slot }}"
 data-enquirytype="{{ enquiry.enquiry_type }}"
+data-message="{{ enquiry.message }}"
+data-class="{{ enquiry.child_class }}"
 >
 <td>PENQ-{{ enquiry.id }}</td>
 
@@ -779,15 +783,13 @@ class="page-btn">Next</a>
 <div class="popup-body">
 
 <table>
-<tr><td>Enquiry ID</td><td>ENQ-101</td></tr>
-<tr><td>Student Name</td><td>Ram Jadhav</td></tr>
-<tr><td>Class</td><td>5th Std</td></tr>
-<tr><td>Send To</td><td>Admin</td></tr>
-<tr><td>Admin Name</td><td>Mr. Ajinkya Pachade</td></tr>
-<tr><td>Type</td><td>1 to 1 Session</td></tr>
-<tr><td>Date</td><td>10 Oct 2025</td></tr>
-<tr><td>Time Slot</td><td>11:25 AM</td></tr>
-<tr><td>Message</td><td>I need help in physics.</td></tr>
+<tr><td>Enquiry ID</td><td id="d_id"></td></tr>
+<tr><td>Student Name</td><td id="d_name"></td></tr>
+<tr><td>Class</td><td id="d_class"></td></tr>
+<tr><td>Type</td><td id="d_type"></td></tr>
+<tr><td>Date</td><td id="d_date"></td></tr>
+<tr><td>Time Slot</td><td id="d_time"></td></tr>
+<tr><td>Message</td><td id="d_message"></td></tr>
 </table>
 
 <br>
@@ -1039,19 +1041,18 @@ placeholder="Type reason here..."></textarea>
 
 <div>
 <label>Select New Date</label>
-<input type="date" class="input-style">
+<input type="date" name="new_date" id="newDate" class="input-style">
 </div>
 
 <div>
 <label>Reason for Reschedule</label>
-<textarea class="textarea-style"
+<textarea name="reason" id="reason" class="textarea-style"
 placeholder="Type something reason ...."></textarea>
 </div>
 
 <div>
 <label>Select New Time Slot</label>
-<input type="time" class="input-style">
-</div>
+<input type="time" name="new_time" id="newTime" class="input-style"></div>
 
 </div>
 
@@ -1234,26 +1235,59 @@ function handleFacultyAction(select) {
     }
 
     else if(action === "reschedule"){
-        openPopup("reschedulePopup");
+
+    const student = row.dataset.student
+    const date = row.dataset.date
+    const time = row.dataset.time
+    const type = row.dataset.enquirytype
+    const studentClass = row.dataset.class
+    const status = row.querySelector(".status-cell").innerText
+
+    document.getElementById("resStudentName").innerText = student
+    document.getElementById("resCurrentDate").innerText = date
+    document.getElementById("resTime").innerText = time
+    document.getElementById("resType").innerText = type
+    document.getElementById("resClass").innerText = studentClass
+    document.getElementById("resStatus").innerText = status
+
+    openPopup("reschedulePopup");
     }
+
     else if (action === "rejected") {
         openPopup("rejectPopup");
     }
-    else if (action === "complete") {
+    else if (action === "completed") {
         openPopup("completePopup");
     }
-    else if (action === "cancel") {
+    else if (action === "cancelled") {
         openPopup("cancelPopup");
     }
     else if (action === "view") {
-        openPopup("detailsPopup");
+         const id = row.dataset.id;
+         const name = row.dataset.student;
+         const date = row.dataset.date;
+         const time = row.dataset.time;
+         const type = row.dataset.enquirytype;
+         const message = row.dataset.message;
+         const studentClass = row.dataset.class;
+
+         document.getElementById("d_id").innerText = "ENQ-" + id;
+         document.getElementById("d_name").innerText = name;
+         document.getElementById("d_class").innerText = studentClass;
+         document.getElementById("d_type").innerText = type;
+         document.getElementById("d_date").innerText = date;
+         document.getElementById("d_time").innerText = time;
+         document.getElementById("d_message").innerText = message;
+
+         openPopup("detailsPopup");
     }
     else if (action === "feedback") {
     openPopup("feedbackPopup");
     }
 
-    // Reset dropdown back to default
+    setTimeout(() => {
     select.value = "";
+    }, 200);
 }
 
 function updateDropdown(select, status) {
@@ -1270,8 +1304,8 @@ function updateDropdown(select, status) {
             break;
         case "Approved":
             options += `
-                <option value="complete">Mark as Complete</option>
-                <option value="cancel">Cancel</option>
+                <option value="completed">Mark as Complete</option>
+                <option value="cancelled">Cancel</option>
                 <option value="view">View</option>
             `;
             break;
@@ -1285,7 +1319,6 @@ function updateDropdown(select, status) {
         case "Completed":
             options += `
                 <option value="view">View</option>
-                <option value="feedback">Feedback</option>
             `;
             break;
         case "Rejected":
@@ -1303,15 +1336,17 @@ function confirmComplete(){
 
     if(currentRow){
 
-        let statusCell = currentRow.querySelector(".status-cell");
+        let form = currentRow.querySelector("form");
 
-        updateStatus("Completed");
-        statusCell.className = "status-cell status-complete";
+        let statusInput = document.createElement("input");
+        statusInput.type = "hidden";
+        statusInput.name = "status";
+        statusInput.value = "completed";
 
-        let select = currentRow.querySelector("select");
-        updateDropdown(select, "Completed");
+        form.appendChild(statusInput);
 
-        closePopup("completePopup");
+        form.submit(); 
+
     }
 }
 
@@ -1345,39 +1380,6 @@ form.submit();
 
 }
 
-// function confirmApprove(){
-
-//     if(currentRow){
-
-//         let form = currentRow.querySelector("form");
-//         let select = currentRow.querySelector("select");
-
-//         select.value = "approved";
-
-//          // get meeting link
-//         let meetingLink = document.getElementById("meetingLink").value;
-
-//         // create hidden input
-//         let linkInput = document.createElement("input");
-//         linkInput.type = "hidden";
-//         linkInput.name = "meeting_link";
-//         linkInput.value = meetingLink;
-
-
-//         // create hidden input to ensure POST value
-//         let input = document.createElement("input");
-//         input.type = "hidden";
-//         input.name = "status";
-//         input.value = "approved";
-
-//         form.appendChild(linkInput);
-//         form.appendChild(input);
-
-//         form.submit();
-
-//     }
-
-// }
 
 function confirmReject(){
 
@@ -1425,15 +1427,47 @@ function confirmReschedule(){
 
     if(currentRow){
 
-        let statusCell = currentRow.querySelector(".status-cell");
+        let form = currentRow.querySelector("form");
 
-        statusCell.innerText = "Rescheduled";
-        statusCell.className = "status-cell status-rescheduled"; 
+        let newDate = document.getElementById("newDate").value;
+        let newTime = document.getElementById("newTime").value;
+        let reason = document.getElementById("reason").value;
 
-        let select = currentRow.querySelector("select");
-        updateDropdown(select, "Rescheduled");
+        if(!newDate || !newTime){
+            alert("Please select new date and time");
+            return;
+        }
 
-        closePopup("reschedulePopup");
+        // status
+        let statusInput = document.createElement("input");
+        statusInput.type = "hidden";
+        statusInput.name = "status";
+        statusInput.value = "rescheduled";
+
+        // new date
+        let dateInput = document.createElement("input");
+        dateInput.type = "hidden";
+        dateInput.name = "new_date";
+        dateInput.value = newDate;
+
+        // new time
+        let timeInput = document.createElement("input");
+        timeInput.type = "hidden";
+        timeInput.name = "new_time";
+        timeInput.value = newTime;
+
+        // reason
+        let reasonInput = document.createElement("input");
+        reasonInput.type = "hidden";
+        reasonInput.name = "reason";
+        reasonInput.value = reason;
+
+        form.appendChild(statusInput);
+        form.appendChild(dateInput);
+        form.appendChild(timeInput);
+        form.appendChild(reasonInput);
+
+        form.submit();
     }
 }
 
@@ -1644,6 +1678,11 @@ function openApprovePopup(enquiryId){
     form.action = "/faculty/update-student-enquiry-status/" + enquiryId + "/";
 
     document.getElementById("approvePopup").style.display = "flex";
+}
+
+// ================= SAVE TAB =================
+function saveTab(tabName){
+    localStorage.setItem("activeTab", tabName);
 }
 </script>
 

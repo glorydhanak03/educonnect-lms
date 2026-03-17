@@ -273,6 +273,31 @@ background:#1e40af;
         display: inline-block;
         margin: 10px 0;
     }
+
+    .status-approved {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-cancelled {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.status-rescheduled {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+}
 </style>
 
 {% if request.GET.feedback == "success" or request.GET.enquiry == "success" or request.GET.feedback == "already" %}
@@ -443,17 +468,21 @@ background:#1e40af;
 
     <!-- 📌 Status Filter -->
     <select name="status" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
+
         <option value="">All Status</option>
-        <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>
-            Pending
-        </option>
-        <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>
-            In Progress
-        </option>
-        <option value="resolved" {% if request.GET.status == "resolved" %}selected{% endif %}>
-            Resolved
-        </option>
-    </select>
+
+    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+
+    <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved</option>
+
+    <option value="rescheduled" {% if status_filter == 'rescheduled' %}selected{% endif %}>Rescheduled</option>
+
+    <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+
+    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+
+    <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+</select>
 
     <!-- 🔘 Submit -->
     <button type="submit" style="padding:6px 14px;border-radius:6px;border:none;background:#2563eb;color:white;">

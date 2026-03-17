@@ -41,6 +41,7 @@ class EnquiryAction(models.Model):
     enquiry_id = models.IntegerField()
     enquiry_type = models.CharField(max_length=20)
     action = models.CharField(max_length=20,choices=STATUS_CHOICES)
+    note = models.TextField(null=True, blank=True) 
 
     reason = models.TextField(blank=True,null=True)
 

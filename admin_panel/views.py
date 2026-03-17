@@ -15,6 +15,8 @@ from admin_panel.models import EnquiryAction
 from core.models import LiveSession
 import uuid
 from core.utils import generate_meeting_link
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # -------------------------
 # HELPERS
@@ -301,7 +303,6 @@ def approve_enquiry(request: HttpRequest, id: int, type: str):
     enquiry.status = "approved"
     enquiry.save()
 
-    # Save action WITH meeting link
     EnquiryAction.objects.create(
         enquiry_id=id,
         enquiry_type=type,
@@ -320,9 +321,8 @@ def approve_enquiry(request: HttpRequest, id: int, type: str):
         session_time=enquiry.time_slot
     )
 
-    messages.success(request, "Session Approved and Meeting Link Generated")
-
-    return redirect("admin_panel:enquiry")
+    url = reverse("admin_panel:admin_enquiry") + "?msg=approved"
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -332,13 +332,13 @@ def reject_enquiry(request,id,type):
         enquiry = get_object_or_404(Enquiry,id=id)
 
     else:
-        enquiry = ParentEnquiry.objects.get(id=id)
+        enquiry = get_object_or_404(ParentEnquiry, id=id)
 
     enquiry.status="rejected"
     enquiry.save()
 
-    return redirect("admin_enquiry")
-
+    url = reverse("admin_panel:admin_enquiry") + "?msg=rejected"
+    return HttpResponseRedirect(url)
 
 # ADD GUIDELINE
 @csrf_exempt

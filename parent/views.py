@@ -167,6 +167,8 @@ def enquiry(request):
     search_query = request.GET.get("search")
     if search_query:
         enquiry_list = enquiry_list.filter(
+            Q(id__icontains=search_query.replace("PENQ-", "")) |   
+            Q(send_to__icontains=search_query) |                  
             Q(child_name__icontains=search_query) |
             Q(receiver_name__icontains=search_query) |
             Q(enquiry_type__icontains=search_query)
@@ -183,7 +185,6 @@ def enquiry(request):
     resolved_count = base_queryset.filter(status__in=["completed","closed"]).count()
 
     # ================= PAGINATION =================
-    enquiry_list = ParentEnquiry.objects.filter(parent=request.user).order_by("-id")
 
     paginator = Paginator(enquiry_list, 5)
     page = request.GET.get("page")
