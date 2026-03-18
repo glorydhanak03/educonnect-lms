@@ -271,15 +271,11 @@ def update_student_enquiry_status(request, enquiry_id):
     status = request.POST.get("status")
     meeting_link = request.POST.get("meeting_link")
 
+    if status == "rescheduled":
 
-    if status:
-        # enquiry.status = status
-        # enquiry.save()
-
-        if status == "rescheduled":
-            new_date = request.POST.get("new_date")
-            new_time = request.POST.get("new_time")
-            reason = request.POST.get("reason")
+        new_date = request.POST.get("new_date")
+        new_time = request.POST.get("new_time")
+        reason = request.POST.get("reason")
 
         if new_date:
             enquiry.date = new_date
@@ -292,23 +288,26 @@ def update_student_enquiry_status(request, enquiry_id):
 
         EnquiryAction.objects.create(
             enquiry_id=enquiry.id,
-            enquiry_type="student",   
+            enquiry_type="student",
             action="rescheduled",
             note=reason
+        )
+
+    elif status == "approved":
+
+        enquiry.status = "approved"
+        enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry.id,
+            enquiry_type="student",
+            action="approved",
+            meeting_link=meeting_link
         )
 
     else:
         enquiry.status = status
         enquiry.save()
-
-        if status == "approved":
-
-            EnquiryAction.objects.create(
-                enquiry_id=enquiry.id,
-                enquiry_type="student",
-                action="approved",
-                meeting_link=meeting_link
-            )
 
     return redirect("faculty_enquiry")
 
@@ -320,12 +319,12 @@ def update_parent_enquiry_status(request, enquiry_id):
     status = request.POST.get("status")
     meeting_link = request.POST.get("meeting_link")
 
+    # ✅ RESCHEDULE
+    if status == "rescheduled":
 
-    if status:
-        if status == "rescheduled":
-            new_date = request.POST.get("new_date")
-            new_time = request.POST.get("new_time")
-            reason = request.POST.get("reason")
+        new_date = request.POST.get("new_date")
+        new_time = request.POST.get("new_time")
+        reason = request.POST.get("reason")
 
         if new_date:
             enquiry.date = new_date
@@ -338,26 +337,31 @@ def update_parent_enquiry_status(request, enquiry_id):
 
         EnquiryAction.objects.create(
             enquiry_id=enquiry.id,
-            enquiry_type="parent",   
+            enquiry_type="parent",
             action="rescheduled",
             note=reason
         )
 
+    # ✅ APPROVE
+    elif status == "approved":
+
+        enquiry.status = "approved"
+        enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry.id,
+            enquiry_type="parent",
+            action="approved",
+            meeting_link=meeting_link
+        )
+
+    # ✅ OTHER STATUS (reject / etc.)
     else:
         enquiry.status = status
         enquiry.save()
 
-
-        if status == "approved":
-
-            EnquiryAction.objects.create(
-                enquiry_id=enquiry.id,
-                enquiry_type="parent",  
-                action="approved",
-                meeting_link= meeting_link
-            )
-
     return redirect("faculty_enquiry")
+
 
 @login_required
 def complete_session(request, id, type):

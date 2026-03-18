@@ -392,8 +392,8 @@ def settings(request):
 @login_required
 def assign_batch(request):
 
-    students = StudentProfile.objects.filter(batch__isnull=True)
-    # students = StudentProfile.objects.all()
+    # students = StudentProfile.objects.filter(batch__isnull=True)
+    students = StudentProfile.objects.all()
     batches = Batch.objects.all()
 
     if request.method == "POST":

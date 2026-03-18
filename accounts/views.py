@@ -61,7 +61,6 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
             messages.error(request, "Invalid email or password")
             return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 
-        # ✅ ROLE LOCK: block wrong role login
         user_role = str(getattr(user, "role", "")).lower()
         if user.is_staff or user.is_superuser or user_role == "ADMIN":
             messages.error(request, "Admin must login from Admin Panel only.")
@@ -182,7 +181,6 @@ def student_register(request):
 
 
 def send_welcome_email(user_email, username):
-    print("EMAIL FUNCTION CALLED")
 
     subject = "Welcome to EduConnect"
     from_email = settings.EMAIL_HOST_USER
