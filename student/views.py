@@ -12,6 +12,9 @@ from accounts.models import StudentProfile
 from admin_panel.models import EnquiryAction
 from student.models import Feedback
 from core.models import LiveSession
+from django.utils import timezone
+
+
 
 def _student_name(request):
     name = (request.user.first_name or request.user.username or "Student")
@@ -39,8 +42,9 @@ def enquiry(request):
         receiver_name = request.POST.get("receiver_name")
         course_name = request.POST.get("course_name") or "Not Specified"
         enquiry_type = request.POST.get("enquiry_type")
-        date = request.POST.get("date")
-        time_slot = request.POST.get("time_slot")
+        current_datetime = timezone.localtime()
+        date = current_datetime.date()
+        time_slot = current_datetime.time()
         message = request.POST.get("message")
 
         if not date or not time_slot:

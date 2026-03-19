@@ -425,12 +425,12 @@ background:#1e40af;
 
         <div class="form-group">
             <label>Date</label>
-            <input type="text" class="form-control" name="date" placeholder="Select Date" required>
+            <input type="date" class="form-control" name="date" id="dateField" readonly>
         </div>
 
         <div class="form-group">
             <label>Time Slot</label>
-            <input type="text" class="form-control" name="time_slot" required placeholder="Select time" required>
+                <input type="time" class="form-control" name="time_slot" id="timeField" readonly>
         </div>
 
         <div class="form-group">
@@ -815,26 +815,8 @@ class="page-number">Next</a>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-
-    // Date Picker
-    flatpickr("input[name='date']", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d/m/Y",
-    });
-
-    // Time Picker
-    flatpickr("input[name='time_slot']", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-        altInput: true,
-        altFormat: "h:i K",
-        time_24hr: false,
-    });
 
     function openDetails(id, parent, child, child_class, send_to, receiver, type, status, date, time, message) {
         document.getElementById("d_id").innerText = "PENQ-" + id;
@@ -944,6 +926,18 @@ document.getElementById("feedbackEnquiryId").value = this.dataset.id;
 document.getElementById("feedbackModal").style.display="block";
 
 });
+
+});
+
+window.addEventListener("load", function () {
+
+    const now = new Date();
+
+    const date = now.toISOString().split("T")[0];
+    const time = now.toTimeString().slice(0,5);
+
+    document.getElementById("dateField").value = date;
+    document.getElementById("timeField").value = time;
 
 });
 </script>

@@ -424,12 +424,12 @@
         </div>
         <div class="form-group">
             <label>Date</label>
-            <input type="date" class="form-control" name="date" required>
+            <input type="date" class="form-control" name="date" id="dateField" readonly>
         </div>
 
         <div class="form-group">
             <label>Time Slot</label>
-            <input type="time" class="form-control" name="time_slot" required>
+            <input type="time" class="form-control" name="time_slot" id="timeField" readonly>
         </div>
 
         <div class="form-group">
@@ -515,8 +515,8 @@
                     <td>{{ enquiry.receiver_name }}</td>
                     <td>{{ enquiry.course_name }}</td>
                     <td>{{ enquiry.enquiry_type }}</td>
-                    <td>{{ enquiry.date }}</td>
-                    <td>{{ enquiry.time_slot }}</td>
+                    <td>{{ enquiry.date|date:"d M Y" }}</td>
+                    <td>{{ enquiry.time_slot|time:"h:i A" }}</td>
                     <td>
                         <span class="status-badge status-{{ enquiry.status }}">
                             {{ enquiry.get_status_display }}
@@ -886,6 +886,18 @@ document.getElementById("detailStatus").innerText = this.dataset.status;
 document.getElementById("detailsModal").style.display = "block";
 
 });
+
+});
+
+window.addEventListener("load", function () {
+
+    const now = new Date();
+
+    const date = now.toISOString().split("T")[0];
+    const time = now.toTimeString().slice(0,5);
+
+    document.getElementById("dateField").value = date;
+    document.getElementById("timeField").value = time;
 
 });
 

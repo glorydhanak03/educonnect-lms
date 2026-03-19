@@ -12,6 +12,7 @@ from datetime import timedelta
 from admin_panel.models import AdminGuideline
 from admin_panel.models import EnquiryAction
 from core.models import LiveSession
+from django.utils import timezone
 
 def _parent_name(request) -> str:
     name = (request.user.first_name or request.user.username or "Parent")
@@ -115,6 +116,11 @@ def enquiry(request):
     # ================= SAVE ENQUIRY =================
     if request.method == "POST" and "submit_enquiry" in request.POST:
 
+        current_datetime = timezone.localtime()
+        date = current_datetime.date()
+        time_slot = current_datetime.time().replace(second=0, microsecond=0)
+
+
         ParentEnquiry.objects.create(
             parent=request.user,
             parent_name=request.POST.get("parent_name"),
@@ -123,13 +129,12 @@ def enquiry(request):
             send_to=request.POST.get("send_to"),
             receiver_name=request.POST.get("receiver_name"),
             enquiry_type=request.POST.get("enquiry_type"),
-            date=request.POST.get("date"),
-            time_slot=request.POST.get("time_slot"),
+            date=date,
+            time_slot=time_slot,
             message=request.POST.get("message"),
         )
 
         return redirect("/parent/enquiry/?enquiry=success")
-        return redirect("parent_app:enquiry")
 
 
     # ================= SAVE FEEDBACK =================
