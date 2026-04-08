@@ -36,39 +36,54 @@ def _redirect_after_login(user) -> str:
 
 def role_login(request: HttpRequest, role: str) -> HttpResponse:
     expected_role = _normalize_role(role)
+
     if expected_role is None:
         return redirect("/")
 
-    if request.method == "POST":
-        email = (request.POST.get("email") or "").strip()
-        password = request.POST.get("password") or ""
+    # 👉 GET request
+    if request.method != "POST":
+        return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 
-        user = authenticate(request, username=email, password=password)
-        if user is None:
-            try:
-                user = authenticate(request, email=email, password=password)
-            except TypeError:
-                user = None
+    # 👉 POST request
+    email = (request.POST.get("email") or "").strip()
+    password = request.POST.get("password") or ""
 
-        if user is None:
-            messages.error(request, "Invalid email or password")
-            return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
+    user_obj = User.objects.filter(email=email).first()
 
-        # ✅ ROLE LOCK: block wrong role login
-        user_role = str(getattr(user, "role", "")).upper()
-        if user.is_staff or user.is_superuser or user_role == "ADMIN":
-            messages.error(request, "Admin must login from Admin Panel only.")
-            return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
+    if user_obj:
+        user = authenticate(request, username=user_obj.username, password=password)
+    else:
+        user = None
 
-        if user_role != expected_role:
-            # Example: student tried on faculty login
-            nice = expected_role.title()
-            actual = user_role.title() if user_role else "Unknown"
-            messages.error(request, f"This account is {actual}. Please use {actual.lower()} login page.")
-            return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
+    if user is None:
+        messages.error(request, "Invalid email or password")
+        return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 
-        login(request, user)
-        return redirect(_redirect_after_login(user))
+    # ✅ ROLE CHECK
+    user_role = str(getattr(user, "role", "")).upper()
+
+    if user.is_staff or user.is_superuser or user_role == "ADMIN":
+        messages.error(request, "Admin must login from Admin Panel only.")
+        return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
+
+    if user_role != expected_role:
+        actual = user_role.title() if user_role else "Unknown"
+        messages.error(request, f"This account is {actual}. Please use correct login page.")
+        return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
+
+    # ✅ SESSION FIX (IMPORTANT)
+    if request.user.is_authenticated:
+        logout(request)
+
+    request.session.flush()
+
+    login(request, user)
+
+    request.session.cycle_key()
+
+    return redirect(_redirect_after_login(user))
+           
+        
 
     return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
 

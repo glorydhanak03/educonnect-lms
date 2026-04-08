@@ -1,0 +1,107 @@
+{% extends "faculty/base_faculty.html" %}
+
+{% block faculty_content %}
+
+<h2>{{ assignment.title }}</h2>
+
+<table border="1" width="100%" cellpadding="10">
+
+<tr>
+<th>Student</th>
+<th>Questions & Answers</th>   <!-- ✅ ADD THIS -->
+<th>Submitted File</th>
+<th>Submitted At</th>
+<th>Marks</th>
+<th>Feedback</th>
+<th>Action</th>
+</tr>
+
+{% for sub in submissions %}
+
+<tr>
+
+<td>{{ sub.student }}</td>
+<td>
+
+<!-- QUESTIONS -->
+{% for q in assignment.questions.all %}
+    <p><b>Q{{ forloop.counter }}: {{ q.question_text }}</b></p>
+{% endfor %}
+
+<hr>
+
+<!-- ANSWERS -->
+{% if sub.answers %}
+    {% for ans in sub.answers.splitlines %}
+        <p><b>Answer {{ forloop.counter }}:</b> {{ ans }}</p>
+    {% endfor %}
+{% else %}
+    <span style="color:gray;">No Answer</span>
+{% endif %}
+
+</td>
+
+<td>
+{% if sub.file and sub.file.name %}
+<a href="{{ sub.file.url }}" download style="color:blue;">Download File</a>
+{% else %}
+<span style="color:gray;">No File Uploaded</span>
+{% endif %}
+</td>
+
+<td>{{ sub.submitted_at }}</td>
+
+<td>
+{% if sub.grade %}
+{{ sub.grade }}
+{% else %}
+-
+{% endif %}
+</td>
+
+<td>
+{% if sub.feedback %}
+{{ sub.feedback }}
+{% else %}
+-
+{% endif %}
+</td>
+
+<td>
+
+{% if sub.grade %}
+<p style="color:green;">✔ Already Graded</p>
+{% else %}
+
+<form method="POST" action="{% url 'grade_submission' sub.id %}">
+{% csrf_token %}
+
+<input type="number" name="grade" placeholder="Marks" required min="0" style="width:80px;">
+
+<br><br>
+
+<input type="text" name="feedback" placeholder="Feedback (optional)" style="width:120px;">
+
+<br><br>
+
+<button type="submit">Save</button>
+
+</form>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="6" style="text-align:center;">No submissions yet</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

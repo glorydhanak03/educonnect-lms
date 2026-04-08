@@ -1,0 +1,57 @@
+{% extends "faculty/base_faculty.html" %}
+
+{% block faculty_content %}
+
+<h2>{{ assignment.title }}</h2>
+
+<table border="1" width="100%">
+
+<tr>
+<th>Student</th>
+<th>Submitted File</th>
+<th>Submitted At</th>
+<th>Marks</th>
+<th>Feedback</th>
+<th>Action</th>
+</tr>
+
+{% for sub in submissions %}
+
+<tr>
+
+<td>{{ sub.student }}</td>
+
+<td>
+<a href="{{ sub.file.url }}" download>
+Download
+</a>
+</td>
+
+<td>{{ sub.submitted_at }}</td>
+
+<td>{{ sub.grade }}</td>
+
+<td>{{ sub.feedback }}</td>
+
+<td>
+
+<form method="POST" action="{% url 'grade_assignment' sub.id %}">
+{% csrf_token %}
+
+<input type="number" name="grade" placeholder="Marks">
+
+<input type="text" name="feedback" placeholder="Feedback">
+
+<button type="submit">Save</button>
+
+</form>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

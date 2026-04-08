@@ -1,0 +1,122 @@
+{% extends "faculty/base_faculty.html" %}
+
+{% block faculty_title %}Create Assignment{% endblock %}
+
+{% block faculty_content %}
+
+<style>
+
+.form-box{
+background:white;
+padding:25px;
+border-radius:10px;
+width:600px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input,textarea,select{
+width:100%;
+padding:10px;
+margin-top:6px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
+button{
+background:#2563EB;
+color:white;
+border:none;
+padding:8px 18px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.secondary-btn{
+background:#ccc;
+color:black;
+}
+
+</style>
+
+<h2>Create Assignment</h2>
+
+<div class="form-box">
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<!-- STEP 1 -->
+
+<div id="step1">
+
+<label>Title</label>
+<input type="text" name="title" placeholder="Assignment title">
+
+<label>Description</label>
+<textarea name="description" placeholder="Description"></textarea>
+
+<label>Course</label>
+<input type="text" name="course" placeholder="Course name">
+
+<label>Start Date</label>
+<input type="date" name="start_date">
+
+<label>Due Date</label>
+<input type="date" name="due_date">
+
+<button type="button" onclick="goToStep2()">Next</button>
+
+<p>Step 1 of 2</p>
+
+</div>
+
+
+<!-- STEP 2 -->
+
+<div id="step2" style="display:none;">
+
+<label>Question Type</label>
+
+<select name="question_type">
+<option value="short">Short Notes</option>
+<option value="long">Long Answer</option>
+<option value="mcq">MCQ</option>
+</select>
+<label>Total Marks</label>
+<input type="number" name="total_marks" placeholder="Enter marks (e.g. 50)" required>
+
+<div id="questions-container">
+
+<label>Question 1</label>
+<input type="text" name="questions[]" placeholder="Enter question">
+
+</div>
+
+
+<a href="#" onclick="addQuestion(event)">+ Add next type</a>
+
+<br><br>
+
+<label>Attach File (optional)</label>
+<input type="file" name="attachment">
+
+<br>
+
+<button type="button" class="secondary-btn" onclick="goBack()">Back</button>
+
+<button type="submit">Save Assignment</button>
+
+<p>Step 2 of 2</p>
+
+</div>
+
+</form>
+
+</div>
+
+
+
+
+{% endblock %}

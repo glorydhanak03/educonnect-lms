@@ -1,0 +1,362 @@
+{% extends "student/base_student.html" %}
+
+{% block student_content %}
+
+<style>
+
+.assignment-container{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+.assignment-card{
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
+border:1px solid #e5e7eb;
+}
+
+.assignment-header{
+display:grid;
+grid-template-columns:48px 1fr;  /* icon + title */
+column-gap:12px;
+align-items:center;
+}
+
+.assignment-desc{
+grid-column:1 / 3;   /* full width */
+margin-left:0;
+padding-left:0;
+margin-top:4px;
+margin-left: 2px;
+font-size:14px;
+color:#0f172a;
+}
+
+
+.assignment-icon{
+width:48px;
+height:48px;
+border-radius:14px;
+background:#e0edff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+color:#1d4ed8;
+font-size:16px;
+flex-shrink:0;
+}
+
+.assignment-title{
+font-size:18px;
+font-weight:700;
+color:#0f172a;
+margin-bottom: 6px;
+}
+
+
+.assignment-meta{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:6px 20px;
+margin-top:12px;
+font-size:14px;
+}
+
+.assignment-meta p{
+margin:0;
+color:#64748b;
+}
+
+.assignment-footer{
+margin-top:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.assignment-text{
+display:flex;
+flex-direction:column;
+}
+
+.status{
+padding:6px 12px;
+border-radius:10px;
+font-size:13px;
+font-weight:600;
+
+}
+
+.assignment-footer button{
+background:#2563eb;
+color:white;
+border:none;
+padding:8px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+backdrop-filter: blur(4px);
+z-index:999;
+}
+
+.modal-box{
+    background:#ffffff;
+    width:480px;
+    max-height:80vh;        /* ✅ IMPORTANT */
+    overflow-y:auto;        /* ✅ SCROLL ENABLE */
+    padding:30px;
+    border-radius:18px;
+    margin:60px auto;       /* reduced */
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.modal-title{
+font-size:22px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.modal-desc{
+color:#64748b;
+margin-bottom:15px;
+}
+
+.modal-due{
+font-size:14px;
+margin-bottom:20px;
+}
+
+.upload-box{
+border:2px dashed #cbd5e1;
+padding:20px;
+border-radius:12px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.modal-actions{
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding-top:10px;
+}
+
+.modal-actions button{
+padding:8px 18px;
+border-radius:8px;
+border:none;
+cursor:pointer;
+}
+
+.submit-btn{
+background:#2563eb;
+color:white;
+}
+
+.close-btn{
+background:#e5e7eb;
+}
+
+.status.pending { background:#fde68a; }
+.status.submitted { background:#93c5fd; }
+.status.graded { background:#86efac; }
+
+.filter-btn{
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    background:#e5e7eb;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.filter-btn:hover{
+    background:#2563eb;
+    color:white;
+}
+
+</style>
+
+
+<h2 style="margin-bottom:20px;">Assignments</h2>
+
+<div style="display:flex; gap:10px; margin-bottom:20px;">
+
+<button onclick="filterStatus('all')" class="filter-btn">All</button>
+
+<button onclick="filterStatus('pending')" class="filter-btn">Active</button>
+
+<button onclick="filterStatus('graded')" class="filter-btn">Completed</button>
+
+</div>
+
+<div class="assignment-container">
+
+{% for item in assignments_data %}
+{% with assignment=item.assignment %}
+
+<div class="assignment-card" data-status="{{ item.status }}">
+
+<div class="assignment-header">
+    <div class="assignment-icon">
+        {{ assignment.subject|slice:":1" }}
+    </div>
+
+    <div class="assignment-title">
+        {{ assignment.title }}
+    </div>
+</div>
+
+<div class="assignment-desc">
+    {{ assignment.description }}
+</div>
+
+<div class="assignment-meta">
+
+<p><b>Subject:</b> {{ assignment.subject }}</p>
+<p><b>Faculty:</b> {{ assignment.faculty }}</p>
+<p><b>Due:</b> {{ assignment.due_date }}</p>
+<p><b>Total Marks:</b> {{ assignment.total_marks }}</p>
+
+</div>
+
+<div class="assignment-footer">
+
+<!-- STATUS -->
+{% if item.status == "pending" %}
+<span class="status pending">Pending</span>
+
+<button onclick="viewAssignment(this)"
+data-id="{{ assignment.id }}"
+data-title="{{ assignment.title }}"
+data-description="{{ assignment.description }}"
+data-due="{{ assignment.due_date }}"
+data-status="pending"
+data-questions="{% for q in assignment.questions.all %}Q{{ forloop.counter }}: {{ q.question_text }}||{% endfor %}"
+data-pdf="{% if assignment.question_file %}{{ assignment.question_file.url }}{% endif %}">
+View Details
+</button>
+
+{% elif item.status == "submitted" %}
+<span class="status submitted">Submitted</span>
+
+<button onclick="viewAssignment(this)"
+data-id="{{ assignment.id }}"
+data-title="{{ assignment.title }}"
+data-description="{{ assignment.description }}"
+data-due="{{ assignment.due_date }}"
+data-status="{{ item.status }}"
+data-submitted="{{ item.submitted_at }}"
+data-questions="{% for q in assignment.questions.all %}
+Q{{ forloop.counter }}: {{ q.question_text }}||{% endfor %}"
+data-pdf="{% if assignment.question_file %}{{ assignment.question_file.url }}{% endif %}">
+Review 
+</button>
+
+{% elif item.status == "graded" %}
+<span class="status graded">Graded</span>
+
+<div style="display:flex; gap:10px; align-items:center;">
+<span style="background:#e5e7eb;padding:6px 12px;border-radius:8px;">
+{{ item.marks }}/{{ assignment.total_marks }}
+</span>
+
+<button onclick="viewAssignment(this)"
+data-id="{{ assignment.id }}"
+data-title="{{ assignment.title }}"
+data-description="{{ assignment.description }}"
+data-due="{{ assignment.due_date }}"
+data-status="graded"
+data-marks="{{ item.marks }}"
+data-total="{{ assignment.total_marks }}"
+data-feedback="{{ item.feedback }}"
+data-questions="{% for q in assignment.questions.all %}Q{{ forloop.counter }}: {{ q.question_text }}||{% endfor %}"
+data-pdf="{% if assignment.question_file %}{{ assignment.question_file.url }}{% endif %}">
+View Feedback
+</button>
+
+
+</div>
+{% endif %}
+</div>
+
+</div>
+
+{% endwith %}
+{% endfor %}
+
+</div>
+
+
+<!-- MODAL -->
+
+<div id="assignmentModal" class="modal-overlay">
+
+<div class="modal-box">
+
+    <!-- 👇 ये नया add किया -->
+    <div style="display:flex; justify-content:flex-end;">
+        <span onclick="closeModal()" 
+        style="cursor:pointer; font-size:22px; font-weight:bold;">
+            ✖
+        </span>
+    </div>
+
+<div class="modal-title" id="modalTitle"></div>
+
+<div class="modal-desc" id="modalDescription"></div>
+
+
+
+<div id="modalQuestions"></div>
+<div id="feedbackTitle"></div>
+<div id="feedbackCard" style="margin-top:20px;"></div>
+
+
+<div class="modal-due">
+<b>Due Date:</b> <span id="modalDue"></span>
+</div>
+
+<form id="submitForm" method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+<input type="hidden" name="answers_present" value="yes">
+
+<div id="modalAnswers"></div>
+<div class="upload-box">
+<input type="file" name="file">
+</div>
+
+<div class="modal-actions">
+
+<button type="submit" class="submit-btn">
+Submit Assignment
+</button>
+
+<button type="button" class="close-btn" onclick="closeModal()">
+Close
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+
+{% endblock %}
