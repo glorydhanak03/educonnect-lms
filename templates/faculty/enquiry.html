@@ -3,8 +3,1687 @@
 {% block faculty_title %}Faculty | enquiry{% endblock %}
 
 {% block faculty_content %}
-<div class="card pad">
-  <h2>enquiry</h2>
-  <p>Faculty enquiry page</p>
+
+{% if request.GET.status == "updated" %}
+
+<div id="toastMessage" style="
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#16a34a;
+color:white;
+padding:12px 20px;
+border-radius:8px;
+z-index:999;
+">
+
+Status Updated Successfully
+
 </div>
+
+<script>
+
+setTimeout(function(){
+document.getElementById("toastMessage").style.display="none";
+},3000)
+
+</script>
+
+{% endif %}
+
+<style>
+
+/* PAGE */
+.enquiry-container{ padding:30px; }
+.enquiry-card{
+    background:#ffffff;
+    padding:20px;
+    border-radius:8px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* TABLE */
+table{ width:100%; border-collapse:collapse; font-size:14px; }
+th,td{ border:1px solid #e5e7eb; padding:10px; text-align:center; }
+th{ background:#f9fafb; font-weight:600; }
+
+/* STATUS COLORS */
+.status-pending{color:#eab308;font-weight:600;}
+.status-approved{color:#16a34a;font-weight:600;}
+.status-completed{color:#2563eb;font-weight:600;}
+.status-rejected{color:#dc2626;font-weight:600;}
+.status-cancelled{color:#6b7280;font-weight:600;}
+.status-rescheduled{ color:#f97316; font-weight:600;}
+
+/* DROPDOWN */
+.action-select{ padding:6px 10px; border-radius:6px; }
+
+/* ================= POPUP OVERLAY ================= */
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(6px);
+
+    display:flex;                /* Always flex */
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+/* When active */
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ================= POPUP BOX ================= */
+.popup-box{
+    width:750px;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+/* ================= HEADER ================= */
+.popup-header{
+    background:#FBF9F9;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+}
+
+.popup-title{
+    font-size:22px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.close-btn{
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* ================= BODY ================= */
+.popup-body{
+    padding:25px;
+}
+
+.popup-body table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.popup-body table tr{
+    border-bottom:1px solid #eee;
+}
+
+.popup-body table td{
+    padding:10px;
+}
+
+.popup-body table td:first-child{
+    font-weight:600;
+    width:35%;
+    background:#f9fafb;
+}
+
+/* ================= BUTTONS ================= */
+.send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.feedback-btn{
+    background:#e5e7eb;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+/* ================= STAR RATING ================= */
+.star-rating{
+    font-size:28px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.star-rating .active{
+    color:gold;
+}
+
+/* ================= GUIDELINE BADGE ================= */
+.guideline-badge{
+    background:#e8f0ff;
+    padding:8px 14px;
+    border-radius:8px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin:10px 0;
+}
+
+/* ================= PAGINATION ================= */
+.pagination-container{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+}
+
+.page-btn,
+.page-number{
+    padding:6px 14px;
+    border:1px solid #e5e7eb;
+    background:#ffffff;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s ease;
+}
+
+.page-number.active{
+    background:#2563eb;
+    color:#fff;
+    border:1px solid #2563eb;
+    box-shadow:0 4px 10px rgba(37,99,235,0.3);
+}
+
+.page-btn:hover,
+.page-number:hover{
+    background:#f3f4f6;
+}
+
+/* Animation */
+.popup-overlay{
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.popup-box{
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+
+/* ================= RESCHEDULE SPECIAL ================= */
+
+.reschedule-box{
+    width:900px;
+}
+
+.reschedule-header{
+    background:#f3f4f6;
+}
+
+.reschedule-body{
+    background:#ffffff;
+    padding:30px;
+}
+
+.reschedule-card{
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:25px;
+}
+
+.section-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px 60px;
+    margin-bottom:20px;
+}
+
+.details-grid label{
+    font-weight:600;
+    font-size:14px;
+    color:#444;
+}
+
+.detail-value{
+    border-bottom:1px solid #ddd;
+    padding:6px 0;
+    margin-top:4px;
+}
+
+.new-session-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px 60px;
+    margin-bottom:20px;
+}
+
+.input-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.textarea-style{
+    width:100%;
+    height:100px;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.confirm-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.note-text{
+    font-size:14px;
+    color:#555;
+    margin-top:8px;
+}
+
+.reschedule-footer{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-top:30px;
+}
+
+.confirm-btn{
+    background:#f59e0b;
+    color:#fff;
+    padding:12px 40px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    padding:12px 60px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+
+/* ================= TABS ================= */
+
+.enquiry-tabs{
+    display:flex;
+    margin-bottom:10px;   /* gap between tabs & card */
+}
+
+.tab-item{
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    background:#ffffff;
+    color:#555;
+    border:1px solid #e5e7eb;
+    border-radius:8px 8px 0 0;
+    margin-right:6px;   /* spacing between tabs */
+    transition:0.3s ease;
+}
+
+/* ACTIVE TAB */
+.tab-item.active{
+    background:#ffffff;
+    color:#2563eb;
+    position:relative;
+}
+
+/* BLUE LINE KHAAALI */
+.tab-item.active::after{
+    content:"";
+    position:absolute;
+    bottom:-4px;   /* adjust if needed */
+    left:0;
+    width:100%;
+    height:3px;
+    background:#2563eb;
+    border-radius:4px;
+    margin-bottom:4px;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    background: #f9fafc;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.filter-input {
+    padding: 9px 14px;
+    width: 240px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s ease;
+    outline: none;
+}
+
+.filter-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+}
+
+.filter-clear-btn {
+    padding: 9px 16px;
+    border: none;
+    background: #f44336;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.filter-clear-btn:hover {
+    background: #d32f2f;
+}
+</style>
+
+
+<div class="enquiry-container">
+
+<h1>👥 Enquiries</h1>
+
+<!-- TABS -->
+<div class="enquiry-tabs">
+
+    <div id="studentTab" class="tab-item active" onclick="switchTab('student');saveTab('student')" >
+        Academic / Students Enquiries
+    </div>
+
+    <div class="vertical-divider"></div>
+
+    <div id="parentTab" class="tab-item" onclick="switchTab('parent');saveTab('parent')">
+        Parent Enquiries
+    </div>
+
+</div>
+
+<div style="text-align:right;margin-top:-50px;font-size:20px;color:#01579B">
+        <a href="#" onclick="openPopup('guidelinesPopup')">View Admin Enquiry Guidelines</a>
+ </div>
+
+<br>
+
+<form method="GET">
+
+<div class="filter-bar">
+
+<input
+type="text"
+name="search"
+placeholder="🔍 Search by ID or Name"
+class="filter-input"
+value="{{ search }}"
+>
+
+<input
+type="date"
+name="date"
+class="filter-input"
+value="{{ date }}"
+>
+
+<button type="submit" class="page-btn">
+Search
+</button>
+
+<a href="{% url 'faculty_enquiry' %}" class="filter-clear-btn">
+Clear
+</a>
+
+</div>
+
+</form>
+
+<div class="enquiry-card">
+
+<div id="studentTable">
+<table id="enquiryTable">
+
+<tr>
+<th>ID</th>
+<th>Student Name</th>
+<th>Class</th>
+<th>Enquiry Type</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status</th>
+<th>Live Session</th>
+<th>Take Action</th>
+</tr>
+
+{% for enquiry in student_enquiries %}
+<tr 
+data-id="{{ enquiry.id }}" 
+data-type="student"
+data-student="{{ enquiry.student_name }}"
+data-date="{{ enquiry.date }}"
+data-time="{{ enquiry.time_slot }}"
+data-enquirytype="{{ enquiry.enquiry_type }}"
+data-message="{{ enquiry.message }}"
+data-class="{{ enquiry.student_class }}"
+>
+
+<td>SENQ-{{ enquiry.id }}</td>
+
+<td>{{ enquiry.student_name }}</td>
+
+<td>{{ enquiry.student_class }}</td>
+
+<td>{{ enquiry.enquiry_type }}</td>
+
+<td>{{ enquiry.date }}</td>
+
+<td>{{ enquiry.time_slot }}</td>
+
+<td class="status-cell status-{{ enquiry.status }}">
+    {{ enquiry.get_status_display }}
+</td>
+
+<td>
+
+{% if enquiry.status == "approved" %}
+
+<a href="{{ enquiry.session.meeting_link }}"
+target="_blank"
+style="background:#2563eb;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;">
+Start Live Session
+</a>
+
+{% elif enquiry.status == "completed" %}
+
+<span>Session Completed</span>
+
+{% else %}
+
+<span>-</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<form method="POST"
+action="{% url 'update_student_enquiry_status' enquiry.id %}">
+
+{% csrf_token %}
+
+<input type="hidden" name="meeting_link" class="meeting-link-input">
+
+
+<select name="status" class="action-select" onchange="handleFacultyAction(this)">
+
+<option value="">Select</option>
+<option value="approved">Approve</option>
+<option value="rescheduled">Reschedule</option>
+<option value="rejected">Reject</option>
+<option value="completed">Complete</option>
+<option value="cancelled">Cancel</option>
+
+</select>
+
+</form>
+
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+<div class="pagination-container" id="studentPagination">
+
+{% if student_enquiries.has_previous %}
+<a href="?student_page={{ student_enquiries.previous_page_number }}&student_search={{ student_search }}&student_status={{ student_status }}"
+class="page-btn">Previous</a>
+{% endif %}
+
+{% for num in student_enquiries.paginator.page_range %}
+
+<a href="?student_page={{ num }}&student_search={{ student_search }}&student_status={{ student_status }}"
+    class="page-number {% if student_enquiries.number == num %}active{% endif %}">
+{{ num }}
+</a>
+
+{% endfor %}
+
+{% if student_enquiries.has_next %}
+<a href="?student_page={{ student_enquiries.next_page_number }}&student_search={{ student_search }}&student_status={{ student_status }}"
+class="page-btn">Next</a>
+{% endif %}
+
+</div>
+</div>
+
+
+<div id="parentTable" style="display:none;">
+
+<table id="parentEnquiryTable" class="enquiry-table">
+<tr>
+<th>ID</th>
+<th>Parent Name</th>
+<th>Child Name</th>
+<th>Class</th>
+<th>Enquiry Type</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status</th>
+<th>Live Session</th>
+<th>Take Action</th>
+</tr>
+
+{% for enquiry in parent_enquiries %}
+
+<tr 
+data-id="PENQ-{{ enquiry.id }}" 
+data-type="parent"
+data-student="{{ enquiry.parent_name }}"
+data-date="{{ enquiry.date }}"
+data-time="{{ enquiry.time_slot }}"
+data-enquirytype="{{ enquiry.enquiry_type }}"
+data-message="{{ enquiry.message }}"
+data-class="{{ enquiry.child_class }}"
+>
+<td>PENQ-{{ enquiry.id }}</td>
+
+<td>{{ enquiry.parent_name }}</td>
+
+<td>{{ enquiry.child_name }}</td>
+
+<td>{{ enquiry.child_class }}</td>
+
+<td>{{ enquiry.enquiry_type }}</td>
+
+<td>{{ enquiry.date }}</td>
+
+<td>{{ enquiry.time_slot }}</td>
+
+<td class="status-cell status-{{ enquiry.status }}">
+{{ enquiry.get_status_display }}
+</td>
+
+<td>
+
+{% if enquiry.status == "approved" %}
+
+<a href="{{ enquiry.session.meeting_link }}"
+target="_blank"
+style="background:#2563eb;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;">
+Start Live Session
+</a>
+
+{% elif enquiry.status == "completed" %}
+
+Session Completed
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+<td>
+
+<form method="POST"
+action="{% url 'update_parent_enquiry_status' enquiry.id %}">
+
+{% csrf_token %}
+
+<input type="hidden" name="meeting_link" class="meeting-link-input">
+
+<select name="status" class="action-select" onchange="handleFacultyAction(this)">
+
+{% if enquiry.status == "pending" %}
+
+<option value="">Select</option>
+<option value="approved">Approve</option>
+<option value="rescheduled">Reschedule</option>
+<option value="rejected">Reject</option>
+
+{% elif enquiry.status == "approved" or enquiry.status == "rescheduled" %}
+
+<option value="">Select</option>
+<option value="completed">Mark Complete</option>
+<option value="cancelled">Cancel</option>
+
+{% elif enquiry.status == "completed" %}
+
+<option value="">Completed</option>
+
+{% elif enquiry.status == "rejected" %}
+
+<option value="">Rejected</option>
+
+{% elif enquiry.status == "cancelled" %}
+
+<option value="">Cancelled</option>
+
+{% endif %}
+
+</select>
+
+</form>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="pagination-container" id="parentPagination">
+
+{% if parent_enquiries.has_previous %}
+<a href="?parent_page={{ parent_enquiries.previous_page_number }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-btn">Previous</a>
+{% endif %}
+
+{% for num in parent_enquiries.paginator.page_range %}
+
+<a href="?parent_page={{ num }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-number {% if parent_enquiries.number == num %}active{% endif %}">
+{{ num }}
+</a>
+
+{% endfor %}
+
+{% if parent_enquiries.has_next %}
+<a href="?parent_page={{ parent_enquiries.next_page_number }}&parent_search={{ parent_search }}&parent_status={{ parent_status }}"
+class="page-btn">Next</a>
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!--Enqury Details Popup-->
+<div class="popup-overlay" id="detailsPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+</svg>
+<span>Enquiry Details</span>
+</div>
+<span class="close-btn" onclick="closePopup('detailsPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<table>
+<tr><td>Enquiry ID</td><td id="d_id"></td></tr>
+<tr><td>Student Name</td><td id="d_name"></td></tr>
+<tr><td>Class</td><td id="d_class"></td></tr>
+<tr><td>Type</td><td id="d_type"></td></tr>
+<tr><td>Date</td><td id="d_date"></td></tr>
+<tr><td>Time Slot</td><td id="d_time"></td></tr>
+<tr><td>Message</td><td id="d_message"></td></tr>
+</table>
+
+<br>
+
+<button class="send-btn" onclick="openPopup('feedbackPopup')">Provide Feedback</button>
+<button class="feedback-btn" onclick="closePopup('detailsPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="feedbackPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"/>
+</svg>
+<span>Provide Feedback</span>
+</div>
+<span class="close-btn" onclick="closePopup('feedbackPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<textarea style="width:100%;height:100px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Write feedback..."></textarea>
+
+<br><br>
+
+<p>Rate your experience</p>
+<div class="star-rating" id="stars">
+<span onclick="rate(1)">★</span>
+<span onclick="rate(2)">★</span>
+<span onclick="rate(3)">★</span>
+<span onclick="rate(4)">★</span>
+<span onclick="rate(5)">★</span>
+</div>
+
+<br>
+
+<input type="file">
+
+<br><br>
+
+<button class="send-btn" onclick="submitFeedback()">Submit</button>
+<button class="feedback-btn" onclick="closePopup('feedbackPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="guidelinesPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+<path d="M12 2 2 7v6c0 5 3.8 9.7 10 11 6.2-1.3 10-6 10-11V7l-10-5z"/>
+</svg>
+<span>Enquiry Guidelines</span>
+</div>
+<span class="close-btn" onclick="closePopup('guidelinesPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+    
+    <svg width="20" height="20" fill="#2563eb" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <text x="12" y="16" text-anchor="middle" font-size="14" fill="white">!</text>
+    </svg>
+
+    <span>General Rule</span>
+</div>
+
+<ul>
+<li>Avoid cancelling approved sessions without valid reason.</li>
+<li>Keep your availability schedule updated in the system.</li>
+<li>Do not share student data or confidential information externally.</li>
+<li>Report inappropriate behavior immediately to the admin.</li>
+</ul>
+
+<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+
+    <svg width="20" height="20" fill="#16a34a" viewBox="0 0 24 24">
+        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+        <path d="M11 12.98L3.21 9 11 5.02 18.79 9 11 12.98z"/>
+    </svg>
+
+    <span>Faculty Guidelines</span>
+</div>
+
+<ul>
+{% for g in guidelines %}
+<li>{{ g.message }}</li>
+{% empty %}
+<li>No guidelines available</li>
+{% endfor %}
+</ul>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="approvePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Approve Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
+</div>
+
+
+<div class="popup-body">
+
+<strong>Are you sure want to approve this enquiry?</strong>
+
+<p><strong>Student:</strong> <span id="approveStudent"></span></p>
+<p><strong>Date:</strong> <span id="approveDate"></span></p>
+<p><strong>Enquiry Type:</strong> <span id="approveType"></span></p>
+<p><strong>Time:</strong> <span id="approveTime"></span></p>
+
+<p><strong>Zoom Meeting Link:</strong></p>
+
+<input type="text"
+id="meetingLink"
+name="meeting_link"
+placeholder="Paste Zoom meeting link"
+class="input-style"
+style="width:100%; padding:8px; margin-top:5px;">
+
+<br><br>
+
+<button type="button" class="send-btn" onclick="confirmApprove()">
+Confirm Approve
+</button>
+
+
+<button type="button" class="feedback-btn"
+onclick="closePopup('approvePopup')">
+Cancel
+</button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="rejectPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+ <svg width="26" height="26" fill="#ef4444" viewBox="0 0 24 24">
+    <path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L12 13.4l-6.3 6.3-1.4-1.4L10.6 12 4.3 5.7l1.4-1.4L12 10.6l6.3-6.3z"/>
+  </svg>
+<span>Reject Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('rejectPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Rejection</strong>
+<p><strong>Student:</strong> <span id="rejectStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn" onclick="confirmReject()" style="background:#dc2626;">Confirm Reject</button>
+<button class="feedback-btn" onclick="closePopup('rejectPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- RESCHEDULE POPUP -->
+<div class="popup-overlay" id="reschedulePopup">
+<div class="popup-box reschedule-box">
+
+<div class="popup-header reschedule-header">
+<div class="popup-title">
+<span style="font-size:26px;">📅</span>
+<span>Reschedule Session</span>
+</div>
+<span class="close-btn" onclick="closePopup('reschedulePopup')">✖</span>
+</div>
+
+<div class="popup-body reschedule-body">
+
+<div class="reschedule-card">
+
+<!-- CURRENT SESSION DETAILS -->
+<h3 class="section-title">Current Session Details</h3>
+
+<div class="details-grid">
+
+<div>
+<label>Student Name</label>
+<div class="detail-value" id="resStudentName">-</div>
+</div>
+
+<div>
+<label>Current Date</label>
+<div class="detail-value" id="resCurrentDate">-</div>
+</div>
+
+<div>
+<label>Class</label>
+<div class="detail-value" id="resClass">-</div>
+</div>
+
+<div>
+<label>Current Time Slot</label>
+<div class="detail-value" id="resTime">-</div>
+</div>
+
+<div>
+<label>Enquiry Type</label>
+<div class="detail-value" id="resType">-</div>
+</div>
+
+<div>
+<label>Status</label>
+<div class="detail-value" id="resStatus">-</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- NEW SESSION SELECTION -->
+<h3 class="section-title">New Session Selection</h3>
+
+<div class="new-session-grid">
+
+<div>
+<label>Select New Date</label>
+<input type="date" name="new_date" id="newDate" class="input-style">
+</div>
+
+<div>
+<label>Reason for Reschedule</label>
+<textarea name="reason" id="reason" class="textarea-style"
+placeholder="Type something reason ...."></textarea>
+</div>
+
+<div>
+<label>Select New Time Slot</label>
+<input type="time" name="new_time" id="newTime" class="input-style"></div>
+
+</div>
+
+<div class="confirm-line">
+<input type="checkbox" checked>
+<span><strong>I confirm to reschedule this session</strong></span>
+</div>
+
+<p class="note-text">
+Once rescheduled, your faculty and student will receive a notification.
+</p>
+
+</div>
+
+<!-- BUTTONS -->
+<div class="reschedule-footer">
+<button class="confirm-btn" onclick="confirmReschedule()">Confirm Reschedule</button>
+<button class="cancel-btn" onclick="closePopup('reschedulePopup')">Cancel</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="completePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Mark as Complete</span>
+</div>
+<span class="close-btn" onclick="closePopup('completePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<strong>Are you sure you want to mark this enquiry as completed?</strong> 
+<p><strong>Student:</strong> <span id="completeStudent"></span></p>
+<span>Add completion notes<span>
+<br>
+<textarea class="textarea-style"
+placeholder="Type something here ..."></textarea>
+<br><br>
+<button class="send-btn" onclick="confirmComplete()">Confirm Complete</button>
+<button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="cancelPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13l-2 2-3-3-3 3-2-2 3-3-3-3 2-2 3 3 3-3 2 2-3 3 3 3z"/>
+  </svg>
+<span>Cancel Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('cancelPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Cancellation</strong>
+<p><strong>Student:</strong> <span id="cancelStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn" style="background:#6b7280;" onclick="confirmCancel()">Confirm Cancel</button>
+<button class="feedback-btn" onclick="closePopup('cancelPopup')">Close</button>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+/* ================= POPUP CONTROL ================= */
+
+function openPopup(id){
+    document.getElementById(id).classList.add("active");
+}
+
+function closePopup(id){
+    document.getElementById(id).classList.remove("active");
+}
+
+/* ================= STAR RATING ================= */
+
+function rate(star){
+    let stars=document.querySelectorAll("#stars span");
+    stars.forEach((s,i)=>{
+        if(i<star){ s.classList.add("active"); }
+        else{ s.classList.remove("active"); }
+    });
+}
+
+/* ================= Student and Parent enquiry filter ================= */
+function smartFilter(){
+
+let search = document.getElementById("commonSearch").value.toLowerCase();
+let date = document.getElementById("commonDate").value;
+
+let tables = ["enquiryTable","parentEnquiryTable"];
+
+tables.forEach(function(tableId){
+
+let rows = document.querySelectorAll("#"+tableId+" tr");
+
+rows.forEach(function(row,index){
+
+if(index==0) return;
+
+let text = row.innerText.toLowerCase();
+let rowDate = row.cells[4].innerText;
+
+let show = true;
+
+if(search && !text.includes(search)){
+show=false;
+}
+
+if(date && rowDate!=date){
+show=false;
+}
+
+row.style.display = show ? "" : "none";
+
+});
+
+});
+
+}
+
+function clearSmartFilter(){
+
+document.getElementById("commonSearch").value="";
+document.getElementById("commonDate").value="";
+
+smartFilter();
+
+}
+
+
+/* ================= HANDLE DROPDOWN ACTION ================= */
+
+let currentRow = null; // store active row
+
+function handleFacultyAction(select) {
+
+    const row = select.closest("tr");
+    currentRow = row;   // store active row
+
+    const action = select.value;
+
+    if (!action) return;
+
+    if (action === "approved") {
+        const student = row.dataset.student
+        const date = row.dataset.date
+        const time = row.dataset.time
+        const type = row.dataset.enquirytype
+
+         document.getElementById("approveStudent").innerText = student
+         document.getElementById("approveDate").innerText = date
+        document.getElementById("approveType").innerText = type
+        document.getElementById("approveTime").innerText = time
+
+        openPopup("approvePopup");
+    }
+
+    else if(action === "reschedule"){
+
+    const student = row.dataset.student
+    const date = row.dataset.date
+    const time = row.dataset.time
+    const type = row.dataset.enquirytype
+    const studentClass = row.dataset.class
+    const status = row.querySelector(".status-cell").innerText
+
+    document.getElementById("resStudentName").innerText = student
+    document.getElementById("resCurrentDate").innerText = date
+    document.getElementById("resTime").innerText = time
+    document.getElementById("resType").innerText = type
+    document.getElementById("resClass").innerText = studentClass
+    document.getElementById("resStatus").innerText = status
+
+    openPopup("reschedulePopup");
+    }
+
+    else if (action === "rejected") {
+        openPopup("rejectPopup");
+    }
+    else if (action === "completed") {
+        openPopup("completePopup");
+    }
+    else if (action === "cancelled") {
+        openPopup("cancelPopup");
+    }
+    else if (action === "view") {
+         const id = row.dataset.id;
+         const name = row.dataset.student;
+         const date = row.dataset.date;
+         const time = row.dataset.time;
+         const type = row.dataset.enquirytype;
+         const message = row.dataset.message;
+         const studentClass = row.dataset.class;
+
+         document.getElementById("d_id").innerText = "ENQ-" + id;
+         document.getElementById("d_name").innerText = name;
+         document.getElementById("d_class").innerText = studentClass;
+         document.getElementById("d_type").innerText = type;
+         document.getElementById("d_date").innerText = date;
+         document.getElementById("d_time").innerText = time;
+         document.getElementById("d_message").innerText = message;
+
+         openPopup("detailsPopup");
+    }
+    else if (action === "feedback") {
+    openPopup("feedbackPopup");
+    }
+
+    setTimeout(() => {
+    select.value = "";
+    }, 200);
+}
+
+function updateDropdown(select, status) {
+    let options = '<option value="">Select Action</option>';
+
+    switch(status) {
+        case "Pending":
+            options += `
+                <option value="approved">Approve</option>
+                <option value="reschedule">Reschedule</option>
+                <option value="reject">Reject</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Approved":
+            options += `
+                <option value="completed">Mark as Complete</option>
+                <option value="cancelled">Cancel</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Rescheduled":
+            options += `
+                <option value="complete">Mark as Complete</option>
+                <option value="cancel">Cancel</option>
+                <option value="view">View</option>
+            `;
+            break;
+        case "Completed":
+            options += `
+                <option value="view">View</option>
+            `;
+            break;
+        case "Rejected":
+        case "Cancelled":
+            options += `<option value="view">View</option>`;
+            break;
+        default:
+            options += `<option value="view">View</option>`;
+    }
+
+    select.innerHTML = options; 
+}
+
+function confirmComplete(){
+
+    if(currentRow){
+
+        let form = currentRow.querySelector("form");
+
+        let statusInput = document.createElement("input");
+        statusInput.type = "hidden";
+        statusInput.name = "status";
+        statusInput.value = "completed";
+
+        form.appendChild(statusInput);
+
+        form.submit(); 
+
+    }
+}
+
+function confirmApprove(){
+
+let meetingLink = document.getElementById("meetingLink").value;
+
+if(!meetingLink){
+alert("Please paste Zoom meeting link first");
+return;
+}
+
+if(currentRow){
+
+let form = currentRow.querySelector("form");
+
+let linkInput = currentRow.querySelector(".meeting-link-input");
+linkInput.value = meetingLink;
+
+// 🔥 force status approved
+let statusInput = document.createElement("input");
+statusInput.type = "hidden";
+statusInput.name = "status";
+statusInput.value = "approved";
+
+form.appendChild(statusInput);
+
+form.submit();
+
+}
+
+}
+
+
+function confirmReject(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        updateStatus("Rejected");
+        statusCell.className = "status-cell status-rejected";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Rejected");
+
+        closePopup("rejectPopup");
+    }
+}
+
+function confirmCancel(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.querySelector(".status-cell");
+
+        updateStatus("Cancelled");
+        statusCell.className = "status-cell status-cancelled";
+
+        let select = currentRow.querySelector("select");
+        updateDropdown(select, "Cancelled");
+
+        closePopup("cancelPopup");
+    }
+}
+
+function submitFeedback(){
+
+    if(currentRow){
+
+        alert("Feedback Submitted Successfully!");
+
+        closePopup("feedbackPopup");
+    }
+}
+
+function confirmReschedule(){
+
+    if(currentRow){
+
+        let form = currentRow.querySelector("form");
+
+        let newDate = document.getElementById("newDate").value;
+        let newTime = document.getElementById("newTime").value;
+        let reason = document.getElementById("reason").value;
+
+        if(!newDate || !newTime){
+            alert("Please select new date and time");
+            return;
+        }
+
+        // status
+        let statusInput = document.createElement("input");
+        statusInput.type = "hidden";
+        statusInput.name = "status";
+        statusInput.value = "rescheduled";
+
+        // new date
+        let dateInput = document.createElement("input");
+        dateInput.type = "hidden";
+        dateInput.name = "new_date";
+        dateInput.value = newDate;
+
+        // new time
+        let timeInput = document.createElement("input");
+        timeInput.type = "hidden";
+        timeInput.name = "new_time";
+        timeInput.value = newTime;
+
+        // reason
+        let reasonInput = document.createElement("input");
+        reasonInput.type = "hidden";
+        reasonInput.name = "reason";
+        reasonInput.value = reason;
+
+        form.appendChild(statusInput);
+        form.appendChild(dateInput);
+        form.appendChild(timeInput);
+        form.appendChild(reasonInput);
+
+        form.submit();
+    }
+}
+
+let currentPage = 1;
+let rowsPerPage = 8;
+
+function showPage(page){
+
+    let table = document.getElementById("enquiryTable");
+    let rows = table.querySelectorAll("tr");
+
+    let start = (page - 1) * rowsPerPage + 1;
+    let end = start + rowsPerPage - 1;
+
+    rows.forEach((row, index) => {
+
+        if(index === 0){
+            row.style.display = ""; // header
+        }
+        else if(index >= start && index <= end){
+            row.style.display = "";
+        }
+        else{
+            row.style.display = "none";
+        }
+
+    });
+
+    updateActiveButton(page);
+}
+
+
+
+function updateActiveButton(page){
+    document.querySelectorAll(".page-number").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(".page-number")[page-1].classList.add("active");
+
+    currentPage = page;
+}
+
+function goToPage(page){
+    showPage(page);
+}
+
+function nextPage(){
+    let totalPages = document.querySelectorAll(".page-number").length;
+    if(currentPage < totalPages){
+        showPage(currentPage + 1);
+    }
+}
+
+function prevPage(){
+    if(currentPage > 1){
+        showPage(currentPage - 1);
+    }
+}
+
+
+let parentCurrentPage = 1;
+let parentRowsPerPage = 8;
+
+function showParentPage(page){
+
+    let table = document.getElementById("parentEnquiryTable");
+    let rows = table.querySelectorAll("tr");
+
+    let start = (page - 1) * parentRowsPerPage + 1;
+    let end = start + parentRowsPerPage - 1;
+
+    rows.forEach((row, index) => {
+
+        if(index === 0){
+            row.style.display = "";
+        }
+        else if(index >= start && index <= end){
+            row.style.display = "";
+        }
+        else{
+            row.style.display = "none";
+        }
+
+    });
+
+    updateParentActiveButton(page);  
+}
+
+
+function updateParentActiveButton(page){
+
+    document.querySelectorAll(".parent-page").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(".parent-page")[page-1].classList.add("active");
+
+    parentCurrentPage = page;
+}
+
+function nextParentPage(){
+    let totalPages = document.querySelectorAll(".parent-page").length;
+    if(parentCurrentPage < totalPages){
+        showParentPage(parentCurrentPage + 1);
+    }
+}
+
+function prevParentPage(){
+    if(parentCurrentPage > 1){
+        showParentPage(parentCurrentPage - 1);
+    }
+}
+
+
+
+/* Load first page on start */
+document.addEventListener("DOMContentLoaded", function(){
+    showPage(1);
+});
+
+
+function switchTab(type){
+
+const tabs = document.querySelectorAll(".tab-item");
+tabs.forEach(tab => tab.classList.remove("active"));
+
+if(type === "student"){
+
+tabs[0].classList.add("active");
+
+document.getElementById("studentTable").style.display="block";
+document.getElementById("parentTable").style.display="none";
+
+document.getElementById("studentPagination").style.display="flex";
+document.getElementById("parentPagination").style.display="none";
+
+}
+
+else{
+
+tabs[1].classList.add("active");
+
+document.getElementById("studentTable").style.display="none";
+document.getElementById("parentTable").style.display="block";
+
+document.getElementById("studentPagination").style.display="none";
+document.getElementById("parentPagination").style.display="flex";
+
+}
+
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("select").forEach(select => {
+        const row = select.closest("tr");
+        const status = row.querySelector(".status-cell").innerText.trim();
+        updateDropdown(select, status);
+    });
+});
+
+
+function updateStatus(newStatus){
+
+if(!currentRow) return;
+
+let enquiryId = currentRow.dataset.id
+let type = currentRow.dataset.type
+
+fetch("/admin-panel/update-enquiry-status/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"X-CSRFToken":getCookie("csrftoken")
+},
+
+body:`id=${enquiryId}&type=${type}&status=${newStatus.toLowerCase()}`
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="success"){
+
+let statusCell = currentRow.querySelector(".status-cell")
+
+statusCell.innerText = newStatus
+
+statusCell.className = "status-cell status-"+newStatus.toLowerCase()
+
+showToast("Status Updated Successfully")
+
+}
+
+})
+
+closeAllPopups()
+
+}
+
+function openApprovePopup(enquiryId){
+
+    let form = document.getElementById("approveForm");
+
+    form.action = "/faculty/update-student-enquiry-status/" + enquiryId + "/";
+
+    document.getElementById("approvePopup").style.display = "flex";
+}
+
+// ================= SAVE TAB =================
+function saveTab(tabName){
+    localStorage.setItem("activeTab", tabName);
+}
+</script>
+
 {% endblock %}

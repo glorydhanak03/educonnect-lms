@@ -24,15 +24,57 @@ urlpatterns = [
     path("study-material/", views.study_material, name="faculty_study_material"),
 
     path("announcement/", views.announcement, name="faculty_announcement"),
+<<<<<<< HEAD
 
+=======
+    path(
+        "announcement/edit/<int:ann_id>/",
+        views.edit_announcement,
+        name="edit_announcement"
+    ),
+
+    path(
+        "announcement/delete/<int:ann_id>/",
+        views.delete_announcement,
+        name="delete_announcement"
+    ),
+>>>>>>> main
     path("students/", views.students, name="faculty_students"),
 
     path("enquiry/", views.enquiry, name="faculty_enquiry"),
+<<<<<<< HEAD
     
     path("submission/<int:id>/grade/", views.grade_submission, name="grade_submission"),
 
+=======
+
+    path(
+    "accept-enquiry/<int:enquiry_id>/",
+    views.accept_enquiry,
+    name="accept_enquiry"
+),
+
+path(
+    "resolve-enquiry/<int:enquiry_id>/",
+    views.resolve_enquiry,
+    name="resolve_enquiry"
+),
+
+path(
+"student-enquiry-status/<int:enquiry_id>/",
+views.update_student_enquiry_status,
+name="update_student_enquiry_status"
+),
+
+path(
+"parent-enquiry-status/<int:enquiry_id>/",
+views.update_parent_enquiry_status,
+name="update_parent_enquiry_status"
+),
+>>>>>>> main
     path("profile/", views.profile, name="faculty_profile"),
     
 
 
 ]
+

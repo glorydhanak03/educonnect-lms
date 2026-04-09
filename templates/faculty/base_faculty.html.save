@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block title %}{% block faculty_title %}Faculty | EduConnect{% endblock %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root{
+    --bg:#eaf0ff;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:#e3e9ff;
+    --shadow:0 18px 40px rgba(15,23,42,.10);
+    --shadow2:0 10px 25px rgba(15,23,42,.08);
+    --r18:18px;
+    --r22:22px;
+  }
+  body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text)}
+  a{text-decoration:none;color:inherit}
+  *{box-sizing:border-box}
+
+  .layout{display:flex;min-height:100vh;gap:22px;padding:22px}
+
+  /* sidebar */
+  .sidebar{
+    width:280px;flex:0 0 280px;background:rgba(255,255,255,.9);
+    border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow2);
+    padding:18px 16px;position:sticky;top:18px;height:calc(100vh - 44px);overflow:auto;
+  }
+  .brand{display:flex;align-items:center;gap:12px;padding:10px 10px 16px}
+  .logo{
+    width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#1b56d7,#ff7a18);
+    display:grid;place-items:center;color:#fff;font-weight:950;box-shadow:0 10px 22px rgba(27,86,215,.22)
+  }
+  .brand h2{margin:0;font-size:30px;font-weight:900}
+  .nav{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .nav a{
+    display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;
+    color:#0f172a;font-weight:850;border:1px solid transparent;
+  }
+  .nav a .ico{
+    width:38px;height:38px;border-radius:14px;display:grid;place-items:center;
+    background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px rgba(15,23,42,.05);
+    font-size:18px;
+  }
+  .nav a.active{background:#eef4ff;border-color:#dbe7ff}
+  .nav a.active span{color:#0b3ea8}
+  .nav a:hover{background:#f6f9ff}
+
+  /* main */
+  .main{flex:1}
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:6px 0 10px;
+  }
+  .search{
+    flex:1;max-width:700px;background:#fff;border:1px solid var(--line);
+    border-radius:999px;box-shadow:var(--shadow2);display:flex;align-items:center;gap:12px;
+    padding:10px 14px;
+  }
+  .search input{border:0;outline:none;width:100%;font-size:14px;background:transparent}
+  .sico{width:32px;height:32px;border-radius:999px;background:#eef4ff;display:grid;place-items:center}
+  .topRight{display:flex;align-items:center;gap:12px}
+  .bell{
+    width:42px;height:42px;border-radius:16px;border:1px solid var(--line);
+    background:#fff;box-shadow:0 8px 18px rgba(15,23,42,.06);
+    display:grid;place-items:center;font-size:18px;cursor:pointer;
+  }
+  .profilePic{
+    width:44px;height:44px;border-radius:999px;border:2px solid #fff;
+    box-shadow:0 10px 22px rgba(15,23,42,.10);
+    background:linear-gradient(135deg,#cfe0ff,#ffffff);
+    display:grid;place-items:center;font-size:20px;
+    overflow:hidden;
+  }
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow2)}
+  .pad{padding:18px}
+
+  @media(max-width:1100px){
+    .layout{flex-direction:column}
+    .sidebar{width:100%;position:relative;height:auto}
+  }
+</style>
+{% block faculty_extra_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">E</div>
+      <h2>EduConnect</h2>
+    </div>
+
+<nav class="nav">
+  <a href="{% url 'faculty_dashboard' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_dashboard' %}active{% endif %}">
+    <div class="ico">▦</div> <span>Dashboard</span>
+  </a>
+
+  <a href="{% url 'faculty_my_courses' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_my_courses' %}active{% endif %}">
+    <div class="ico">📗</div> <span>My Courses</span>
+  </a>
+
+  <a href="{% url 'faculty_live_class' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_live_class' %}active{% endif %}">
+    <div class="ico">📡</div> <span>Live Class</span>
+  </a>
+
+  <a href="{% url 'faculty_my_notes' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_my_notes' %}active{% endif %}">
+    <div class="ico">🗒️</div> <span>My Notes</span>
+  </a>
+
+  <a href="{% url 'faculty_quiz_exams' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_quiz_exams' %}active{% endif %}">
+    <div class="ico">🧾</div> <span>Quiz/Exams</span>
+  </a>
+
+  <a href="{% url 'faculty_assignments' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_assignments' %}active{% endif %}">
+    <div class="ico">📝</div> <span>Assignments</span>
+  </a>
+
+  <a href="{% url 'faculty_study_material' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_study_material' %}active{% endif %}">
+    <div class="ico">📚</div> <span>Study Material</span>
+  </a>
+
+  <a href="{% url 'faculty_announcement' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_announcement' %}active{% endif %}">
+    <div class="ico">📣</div> <span>Announcement</span>
+  </a>
+
+  <a href="{% url 'faculty_students' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_students' %}active{% endif %}">
+    <div class="ico">🎓</div> <span>Students</span>
+  </a>
+
+  <a href="{% url 'faculty_enquiry' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_enquiry' %}active{% endif %}">
+    <div class="ico">👥</div> <span>Enquiry</span>
+  </a>
+
+  <a href="{% url 'faculty_profile' %}"
+     class="{% if request.resolver_match.url_name == 'faculty_profile' %}active{% endif %}">
+    <div class="ico">👤</div> <span>Profile</span>
+  </a>
+
+  <a href="{% url 'logout' %}">
+    <div class="ico">🚪</div> <span>Logout</span>
+  </a>
+</nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-size:38px;font-weight:950;line-height:1.1;">
+          Good Afternoon, {{ display_name }}
+        </div>
+        <div style="color:#64748b;font-size:13px;margin-top:4px">
+          September 22, Monday
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;flex:1;justify-content:flex-end">
+        <div class="search">
+          <input type="text" placeholder="Search" />
+          <div class="sico">🔍</div>
+        </div>
+        <div class="topRight">
+          <button class="bell" type="button" title="Notifications">🔔</button>
+          <div class="profilePic" title="Profile">👩</div>
+        </div>
+      </div>
+    </div>
+  
+   
+    {% block faculty_content %}{% endblock %}
+  </main>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const profileIcon = document.getElementById("profileIcon");
+  const profilePopup = document.getElementById("profilePopup");
+  const profileDetailPopup = document.getElementById("profileDetailPopup");
+  const openProfileDetail = document.getElementById("openProfileDetail");
+  const closeProfilePopup = document.getElementById("closeProfilePopup");
+  const closeProfileDetailPopup = document.getElementById("closeProfileDetailPopup");
+
+  // Toggle small popup
+  profileIcon.addEventListener("click", function(e){
+    e.stopPropagation();
+    profilePopup.style.display =
+      profilePopup.style.display === "block" ? "none" : "block";
+    profileDetailPopup.style.display = "none";
+  });
+
+  // Open detail popup
+  openProfileDetail.addEventListener("click", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    profilePopup.style.display = "none";
+    profileDetailPopup.style.display = "block";
+  });
+
+  // Close small popup
+  closeProfilePopup.addEventListener("click", function(e){
+    e.stopPropagation();
+    profilePopup.style.display = "none";
+  });
+
+  // Close detail popup
+  closeProfileDetailPopup.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDetailPopup.style.display = "none";
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(){
+    profilePopup.style.display = "none";
+    profileDetailPopup.style.display = "none";
+  });
+
+});
+</script>
+
+{% endblock %}

@@ -3,8 +3,430 @@
 {% block student_title %}Student | my courses{% endblock %}
 
 {% block student_content %}
-<div class="card pad">
-  <h2>my courses</h2>
-  <p>Student my courses page</p>
+{% load static %}
+
+<style>
+:root{
+    --bg:#eef2ff;
+    --card:#ffffff;
+    --primary:#4f46e5;
+    --secondary:#22c55e;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+}
+
+*{
+    box-sizing:border-box;
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.page-wrapper{
+    background:var(--bg);
+    padding:24px;
+}
+
+/* TOP SEARCH */
+.top-search{
+    display:flex;
+    justify-content:center;
+    margin-bottom:24px;
+}
+.top-search input{
+    width:65%;
+    padding:12px 18px;
+    border-radius:30px;
+    border:1px solid #c7d2fe;
+    font-size:14px;
+    outline:none;
+    background:#fff;
+}
+
+/* TITLE */
+.page-title{
+    font-size:22px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:14px;
+}
+
+/* FILTERS */
+.filters{
+    display:flex;
+    gap:12px;
+    margin-bottom:24px;
+}
+.filters select,
+.filters input{
+    padding:10px 14px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    font-size:14px;
+    background:#fff;
+}
+
+/* MAIN GRID */
+.main-grid{
+    display:grid;
+    grid-template-columns: 2.7fr 1fr;
+    gap:24px;
+}
+
+/* COURSES */
+.courses-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.course-card{
+    background:var(--card);
+    border-radius:18px;
+    padding:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.06);
+    display:flex;
+    flex-direction:column;
+}
+
+.course-head{
+    display:flex;
+    gap:12px;
+    margin-bottom:8px;
+}
+
+
+.course-head img{
+    width:64px;
+    height:64px;
+    border-radius:12px;
+    object-fit:cover;
+    background:#e5e7eb;
+}
+
+.course-title{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+}
+
+.course-teacher{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.course-fee{
+    font-size:14px;
+    font-weight:600;
+    margin:8px 0;
+}
+
+.course-meta{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:12px;
+}
+
+.course-actions{
+    display:flex;
+    gap:10px;
+    margin-top:auto;
+}
+
+.btn{
+    flex:1;
+    padding:8px 0;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:500;
+    text-align:center;
+    cursor:default;
+}
+
+.btn-view{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-enroll{
+    background:var(--secondary);
+    color:#fff;
+}
+
+/* PAGINATION */
+.pagination{
+    display:flex;
+    justify-content:start;
+    gap:10px;
+    margin-top:26px;
+}
+.pagination span{
+    padding:8px 14px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid var(--border);
+    font-size:14px;
+    color:#374151;
+}
+
+/* REQUEST LIST */
+.request-list{
+    margin-top:24px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.06);
+    padding:14px;
+}
+
+.request-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px;
+    border-bottom:1px solid var(--border);
+}
+
+.request-item:last-child{
+    border-bottom:none;
+}
+
+.req-left{
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.req-left img{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#e5e7eb;
+}
+
+.req-name{
+    font-weight:600;
+    font-size:14px;
+    color:var(--text);
+}
+
+.req-course{
+    font-size:13px;
+    color:var(--primary);
+}
+
+.req-status{
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:500;
+    color:#fff;
+}
+
+.approve{
+    background:#22c55e;
+}
+
+.pending{
+    background:#d946ef;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.06);
+}
+
+.panel-title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:12px;
+}
+
+.panel-course{
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:4px;
+}
+
+.panel-teacher{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:10px;
+}
+
+.panel-desc{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:14px;
+}
+
+.status-box{
+    background:#e0e7ff;
+    color:#3730a3;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:500;
+    margin-bottom:16px;
+}
+
+.flow{
+    text-align:center;
+    font-size:14px;
+    color:#9ca3af;
+    line-height:1.8;
+}
+
+.done-btn{
+    margin-top:18px;
+    background:#22c55e;
+    color:#fff;
+    text-align:center;
+    padding:12px;
+    border-radius:12px;
+    font-weight:600;
+}
+</style>
+
+<div class="page-wrapper">
+
+    <div class="page-title">Explore Courses</div>
+
+    <div class="filters">
+        <select><option>Select Category</option></select>
+        <select><option>All Levels</option></select>
+        <input type="text" placeholder="Search for Courses">
+    </div>
+
+    <div class="main-grid">
+
+        <!-- LEFT -->
+        <div>
+
+            <div class="courses-grid">
+
+                <div class="course-card">
+                    <div class="course-head">
+                        <img src="{% static 'images/python.png' %}" alt="Python Course">
+                        <div>
+                            <div class="course-title">Python Programming for Beginners</div>
+                            <div class="course-teacher">Prof. Arjun Patel</div>
+                        </div>
+                    </div>
+                    <div class="course-fee">Course Fees ₹ 3,500</div>
+                    <div class="course-meta">👥 450 Students · ⭐⭐⭐⭐☆ (150 Reviews)</div>
+                    <div class="course-actions">
+                        <div class="btn btn-view">View Details</div>
+                        <div class="btn btn-enroll">Enroll Now</div>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-head">
+                        <img src="{% static 'images/Maths.png' %}" alt="Advanced math">
+                        <div>
+                            <div class="course-title">Advanced Math Calculus & Integration</div>
+                            <div class="course-teacher">Prof. Sumit Roy</div>
+                        </div>
+                    </div>
+                    <div class="course-fee">Course Fees ₹ 4,500</div>
+                    <div class="course-meta">👥 270 Students · ⭐⭐⭐⭐☆ (95 Reviews)</div>
+                    <div class="course-actions">
+                        <div class="btn btn-view">View Details</div>
+                        <div class="btn btn-enroll">Enroll Now</div>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-head">
+                        <img src="{% static 'images/mechanical.png' %}" alt="mechanical">
+                        <div>
+                            <div class="course-title">Mechanical Engineering: Thermodynamics</div>
+                            <div class="course-teacher">Dr. Sarah Lee</div>
+                        </div>
+                    </div>
+                    <div class="course-fee">Course Fees ₹ 3,000</div>
+                    <div class="course-meta">👥 400 Students · ⭐⭐⭐⭐☆ (200 Reviews)</div>
+                    <div class="course-actions">
+                        <div class="btn btn-view">View Details</div>
+                        <div class="btn btn-enroll">Enroll Now</div>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-head">
+                        <img src="{% static 'images/chemistry.png' %}" alt="chemistry Course">
+                        <div>
+                            <div class="course-title">Chemistry: Molecular Structure</div>
+                            <div class="course-teacher">Shamal Sharma</div>
+                        </div>
+                    </div>
+                    <div class="course-fee">Course Fees ₹ 2,000</div>
+                    <div class="course-meta">👥 450 Students · ⭐⭐⭐⭐☆ (150 Reviews)</div>
+                    <div class="course-actions">
+                        <div class="btn btn-view">View Details</div>
+                        <div class="btn btn-enroll">Enroll Now</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pagination">
+                <span>Previous</span><span>1</span><span>2</span><span>3</span><span>Next</span>
+            </div>
+
+            <!-- REQUEST LIST (names added) -->
+            <div class="request-list">
+                <div class="request-item">
+                    <div class="req-left">
+                        <img>
+                        <div>
+                            <div class="req-name">Aryan Desai</div>
+                            <div class="req-course">Chemistry: Molecular Structure</div>
+                        </div>
+                    </div>
+                    <div class="req-status approve">Approve</div>
+                </div>
+
+                <div class="request-item">
+                    <div class="req-left">
+                        <img>
+                        <div>
+                            <div class="req-name">Aryan Desai</div>
+                            <div class="req-course">Python Programming</div>
+                        </div>
+                    </div>
+                    <div class="req-status pending">Pending</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right-panel">
+            <div class="panel-title">⭐ Request Enrollment</div>
+<img src="{% static 'images/python.png' %}" alt="Python Course">
+            <div class="panel-course">CS Python – Programming for Beginners</div>
+            <div class="panel-teacher">Prof. Arjun Patel</div>
+            <div class="panel-desc">
+                Your request for enrollment has been submitted.  
+                The faculty may contact you to schedule a demo session.
+            </div>
+
+            <div class="status-box">Requested</div>
+
+            <div class="flow">
+                Demo Schedule<br>
+                ↓<br>
+                Evaluation Pending<br>
+                ↓<br>
+                Approved / Rejected
+            </div>
+
+            <div class="done-btn">Done</div>
+        </div>
+
+    </div>
 </div>
 {% endblock %}

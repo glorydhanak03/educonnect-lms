@@ -1,10 +1,47 @@
 {% extends "admin_panel/base_admin.html" %}
+{% block content %}
 
-{% block admin_title %}Admin | announcement{% endblock %}
+<style>
+.page-title{
+    font-size:24px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+.announcement-card{
+    background:#ffffff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom:15px;
+}
+.badge{
+    background:#007bff;
+    color:white;
+    padding:4px 10px;
+    font-size:12px;
+    border-radius:20px;
+}
+.add-btn{
+    background:#28a745;
+    color:white;
+    padding:8px 15px;
+    border-radius:5px;
+    text-decoration:none;
+}
+</style>
 
-{% block admin_content %}
-<div class="card pad">
-  <h2 style="margin:0 0 6px">announcement</h2>
-  <p style="margin:0;color:#64748b">Admin announcement page</p>
+<div class="page-title">
+    Announcements
+    <a href="{% url 'add_announcement' %}" class="add-btn">+ Add Announcement</a>
 </div>
+
+{% for announcement in announcements %}
+<div class="announcement-card">
+    <h4>{{ announcement.title }}</h4>
+    <p>{{ announcement.message|truncatechars:120 }}</p>
+    <span class="badge">{{ announcement.audience }}</span>
+</div>
+{% endfor %}
+
 {% endblock %}
+

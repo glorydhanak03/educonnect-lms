@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f2f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: #1b56d7;
+      margin-bottom: 5px;
+      font-size: 28px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .welcome-text {
+      font-size: 16px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .username {
+      color: #1b56d7;
+      font-weight: bold;
+    }
+
+    .features {
+      margin-top: 25px;
+      background: #f7f9ff;
+      padding: 18px;
+      border-radius: 8px;
+      border: 1px solid #e6ecff;
+    }
+
+    .features h3 {
+      margin-top: 0;
+      color: #1b56d7;
+      font-size: 18px;
+    }
+
+    .features ul {
+      padding-left: 20px;
+      color: #444;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .cta {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .cta a {
+      background: #1b56d7;
+      color: #ffffff;
+      padding: 12px 28px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .cta a:hover {
+      background: #1545a8;
+    }
+
+    .info {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 35px;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Welcome to EduConnect</h1>
+      <p>Your Smart Learning Portal</p>
+    </div>
+    <p class="welcome-text"> Hello <span class="username">{{ username }}</span>, </p>
+    <p class="welcome-text"> Your account has been successfully created on <strong>EduConnect</strong>. We are excited
+      to have you join our learning community. </p>
+    <p class="welcome-text"> EduConnect is designed to provide a seamless digital learning experience by connecting
+      students, teachers, and administrators on a single platform. </p>
+    <div class="features">
+      <h3>What you can do with EduConnect:</h3>
+      <ul>
+        <li>📚 Access courses, study materials, and academic resources</li>
+        <li>👨‍🏫 Connect and communicate with experienced faculty members</li>
+        <li>📊 Track academic progress and performance reports</li>
+        <li>💬 Send enquiries and receive academic guidance</li>
+        <li>📝 Stay updated with announcements and guidelines</li>
+      </ul>
+    </div>
+    <div class="cta"> <a href="{{ login_url }}">Login to EduConnect</a> </div>
+    <p class="info"> Start exploring your dashboard and make the most out of your learning journey with EduConnect. Our
+      platform is built to support your academic growth and simplify communication within the education system. </p>
+    <div class="footer"> &copy; 2026 EduConnect Learning Portal<br> Empowering Students Through Smart Education </div>
+  </div>
+</body>
+
+</html>
