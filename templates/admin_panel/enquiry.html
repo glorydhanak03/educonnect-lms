@@ -1,10 +1,1961 @@
 {% extends "admin_panel/base_admin.html" %}
 
-{% block admin_title %}Admin | enquiry{% endblock %}
+{% block admin_title %}Admin | Enquiry{% endblock %}
 
 {% block admin_content %}
-<div class="card pad">
-  <h2 style="margin:0 0 6px">enquiry</h2>
-  <p style="margin:0;color:#64748b">Admin enquiry page</p>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+#toastMessage{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#16a34a;
+color:white;
+padding:12px 25px;
+border-radius:8px;
+z-index:999;
+font-weight:600;
+display:none;
+}
+/* ================= WRAPPER ================= */
+
+.enquiry-wrapper{
+    padding:20px;
+}
+
+/* ================= PAGE HEADING ================= */
+
+.page-heading{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+/* ================= TABS ================= */
+
+.enquiry-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.tab-item{
+    padding:10px 18px;
+    background:#f3f4f6;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.tab-item.active{
+    background:#2563eb;
+    color:white;
+}
+
+.tab-item:hover{
+    background:#e5e7eb;
+}
+
+/* ================= TOP SECTION ================= */
+
+.top-section{
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+/* ================= DETAILS CARD ================= */
+
+.details-card{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.details-card h3{
+    margin-bottom:15px;
+}
+
+.detail-row{
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.message-box{
+    background:#f9fafb;
+    padding:10px;
+    border-radius:6px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+/* ================= ACTION BUTTONS ================= */
+
+.action-buttons{
+    margin-top:15px;
+}
+
+.approve-btn{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:8px;
+}
+
+.reject-btn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.approve-btn:hover{
+    background:#1e40af;
+}
+
+.reject-btn:hover{
+    background:#b91c1c;
+}
+
+/* ================= GUIDELINE CARD ================= */
+
+.guideline-card{
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.guideline-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.edit-icon{
+    cursor:pointer;
+    font-size:16px;
+}
+
+#guidelineTextarea{
+    width:100%;
+    height:120px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #e5e7eb;
+}
+
+.change-btn{
+    margin-top:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.change-btn:hover{
+    background:#1e40af;
+}
+
+.guideline-controls{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+
+.guideline-controls select{
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid #d1d5db;
+}
+
+.guideline-controls button{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.guideline-controls button:hover{
+    background:#15803d;
+}
+
+.guideline-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.edit-icon{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+    transition:all 0.3s ease;
+    user-select:none;
+}
+
+/* Hover Effect */
+.edit-icon:hover{
+    background:#2563eb;
+    transform:scale(1.05);
+}
+
+#guidelineContent{
+    max-height:180px;   
+    overflow-y:auto;    
+    padding:5px;
+    margin-top:5px;        
+}
+
+/* ================= FILTER ================= */
+
+.filter-section{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.filter-section input{
+    padding:8px 12px;
+    border:1px solid #d1d5db;
+    border-radius:6px;
+}
+
+.filter-section button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.filter-section button:hover{
+    background:#1e40af;
+}
+
+/* ================= TABLE CARD ================= */
+
+.table-card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ================= TABLE ================= */
+
+.enquiry-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.enquiry-table th{
+    background:#f3f4f6;
+    padding:10px;
+    font-size:14px;
+    text-align:left;
+}
+
+.enquiry-table td{
+    padding:10px;
+    font-size:14px;
+    border-top:1px solid #e5e7eb;
+}
+
+.enquiry-table tr:hover{
+    background:#f9fafb;
+}
+
+
+/* ================= POPUP OVERLAY ================= */
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(6px);
+
+    display:flex;                /* Always flex */
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+/* When active */
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ================= POPUP BOX ================= */
+.popup-box{
+    width:750px;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+/* ================= HEADER ================= */
+.popup-header{
+    background:#FBF9F9;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+}
+
+.popup-title{
+    font-size:22px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.close-btn{
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* ================= BODY ================= */
+.popup-body{
+    padding:25px;
+}
+
+.popup-body table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.popup-body table tr{
+    border-bottom:1px solid #eee;
+}
+
+.popup-body table td{
+    padding:10px;
+}
+
+.popup-body table td:first-child{
+    font-weight:600;
+    width:35%;
+    background:#f9fafb;
+}
+
+/* ================= BUTTONS ================= */
+.send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.feedback-btn{
+    background:#e5e7eb;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+/* ================= STAR RATING ================= */
+.star-rating{
+    font-size:28px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.star-rating .active{
+    color:gold;
+}
+
+
+/* ================= STATUS COLORS ================= */
+
+.status-approved{
+    color:#16a34a;
+    font-weight:600;
+}
+
+.status-rejected{
+    color:#dc2626;
+    font-weight:600;
+}
+
+.status-pending{
+    color:#f59e0b;
+    font-weight:600;
+}
+
+.status-completed{
+    color:#2563eb;
+    font-weight:600;
+}
+
+.status-cancelled{
+    color:#6b7280;
+    font-weight:600;
+}
+
+/* ================= RESCHEDULE SPECIAL ================= */
+
+.reschedule-box{
+    width:900px;
+}
+
+.reschedule-header{
+    background:#f3f4f6;
+}
+
+.reschedule-body{
+    background:#ffffff;
+    padding:30px;
+}
+
+.reschedule-card{
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:25px;
+}
+
+.section-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px 60px;
+    margin-bottom:20px;
+}
+
+.details-grid label{
+    font-weight:600;
+    font-size:14px;
+    color:#444;
+}
+
+.detail-value{
+    border-bottom:1px solid #ddd;
+    padding:6px 0;
+    margin-top:4px;
+}
+
+.new-session-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px 60px;
+    margin-bottom:20px;
+}
+
+.input-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.textarea-style{
+    width:100%;
+    height:100px;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.confirm-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.note-text{
+    font-size:14px;
+    color:#555;
+    margin-top:8px;
+}
+
+.reschedule-footer{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-top:30px;
+}
+
+.confirm-btn{
+    background:#f59e0b;
+    color:#fff;
+    padding:12px 40px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    padding:12px 60px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+
+
+/* ================= ACTION SELECT ================= */
+
+.action-select{
+    padding:6px;
+    border-radius:6px;
+    border:1px solid #d1d5db;
+    cursor:pointer;
+}
+
+/* ================= PAGINATION ================= */
+
+.pagination{
+    margin-top:15px;
+    display:flex;
+    gap:6px;
+    align-items:center;
+}
+
+.pagination button{
+    padding:6px 12px;
+    border:none;
+    background:#e5e7eb;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.pagination button.active{
+    background:#2563eb;
+    color:white;
+}
+
+.pagination button:hover{
+    background:#d1d5db;
+}
+
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+    .top-section{
+        flex-direction:column;
+    }
+}
+
+.guideline-card{
+background:#ffffff;
+padding:15px;
+border-radius:8px;
+margin-bottom:1px;
+}
+
+.guideline-actions button{
+border:none;
+background:none;
+cursor:pointer;
+font-size:16px;
+margin-right:10px;
+}
+
+/* ================= ADD GUIDELINE POPUP ================= */
+#guidelinePopup .popup-box{
+    width:500px;
+    max-width:90%;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+#guidelinePopup.active .popup-box{
+    transform:scale(1);
+}
+
+#guidelinePopup .popup-header{
+    background:#f3f4f6;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #e5e7eb;
+}
+
+#guidelinePopup .popup-title{
+    font-size:20px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+#guidelinePopup .popup-body{
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+#guidelinePopup .popup-body label{
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+#guidelinePopup .input-style,
+#guidelinePopup .textarea-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    font-size:14px;
+    font-family:inherit;
+    resize:none;
+}
+
+#guidelinePopup .textarea-style{
+    height:100px;
+}
+
+#guidelinePopup .send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+#guidelinePopup .send-btn:hover{
+    background:#1e40af;
+}
+
+/* ===== GUIDELINE LIST ===== */
+
+#guidelineContent{
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:250px;
+overflow-y:auto;
+padding-right:5px;
+}
+
+/* SINGLE GUIDELINE CARD */
+
+.guideline-item{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+
+background:#f9fafb;
+padding:12px 14px;
+border-radius:8px;
+
+border:1px solid #e5e7eb;
+
+transition:0.3s;
+}
+
+.guideline-item:hover{
+background:#f3f4f6;
+}
+
+/* TEXT */
+
+.guideline-text p{
+font-size:14px;
+margin:0 0 5px 0;
+color:#111827;
+}
+
+.guideline-role{
+font-size:12px;
+background:#e0e7ff;
+color:#3730a3;
+padding:3px 8px;
+border-radius:6px;
+}
+
+/* ACTION BUTTONS */
+
+.guideline-actions{
+display:flex;
+gap:6px;
+}
+
+.guideline-actions button{
+border:none;
+background:#f1f5f9;
+width:32px;
+height:32px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:0.2s;
+}
+
+.guideline-actions button:hover{
+transform:scale(1.05);
+}
+
+/* EDIT */
+
+.edit-btn{
+color:#2563eb;
+}
+
+.edit-btn:hover{
+background:#dbeafe;
+}
+
+/* DELETE */
+
+.delete-btn{
+color:#dc2626;
+}
+
+.delete-btn:hover{
+background:#fee2e2;
+}
+
+.action-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.approve-btn{
+    background:#16a34a;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+.reject-btn{
+    background:#dc2626;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+</style>
+
+
+<div class="enquiry-wrapper">
+
+    <!-- PAGE TITLE -->
+    <h2 class="page-heading">👥 Enquiry </h2>
+
+ 
+
+    <!-- =================== DETAILS + GUIDELINES SECTION =================== -->
+
+    <div class="top-section">
+
+        <!-- ENQUIRY DETAILS (VIEW ONLY) -->
+        <div class="details-card">
+
+<div class="guideline-header">
+<h3>Enquiry Details</h3>
+</div>
+
+<br>
+
+{% if latest_enquiry %}
+
+<div class="detail-row">
+<b>Name :</b>
+<span>{{ latest_enquiry.child_name }}</span>
+</div>
+
+<div class="detail-row">
+<b>Class :</b>
+<span>{{ latest_enquiry.child_class }}</span>
+</div>
+
+<div class="detail-row">
+<b>Enquiry Type :</b>
+<span>{{ latest_enquiry.enquiry_type }}</span>
+</div>
+
+<div class="detail-row">
+<b>Date :</b>
+<span>{{ latest_enquiry.created_at|date:"d M Y" }}</span>
+</div>
+
+<div class="detail-row">
+<b>Time :</b>
+<span>{{ latest_enquiry.created_at|time:"h:i A" }}</span>
+</div>
+
+<div class="message-box">
+{{ latest_enquiry.message }}
+</div>
+
+<br>
+
+<div class="action-buttons">
+
+<a href="{% url 'admin_panel:approve_enquiry' latest_enquiry.id latest_type %}" class="approve-btn">
+<i class="fa fa-check"></i> Approve
+</a>
+
+<a href="{% url 'admin_panel:reject_enquiry' latest_enquiry.id latest_type %}" class="reject-btn">
+<i class="fa fa-times"></i> Reject
+</a>
+</div>
+
+{% else %}
+
+<p>No Enquiry Available</p>
+
+{% endif %}
+
+</div>
+
+        <!-- GUIDELINES -->
+        <div class="guideline-card">
+
+            <div class="guideline-header">
+
+<h3>Admin Enquiry Guidelines ({{guidelines|length}})</h3>
+
+<div style="display:flex;gap:10px">
+
+<span class="edit-icon" onclick="openAddPopup()">➕</span>
+
+</div>
+
+</div>
+
+            <div id="guidelineContent">
+
+{% for g in guidelines %}
+
+<div class="guideline-item">
+
+<div class="guideline-text">
+<p>{{ g.message }}</p>
+<span class="guideline-role">{{ g.role|title }}</span>
+</div>
+
+<div class="guideline-actions">
+
+<button class="edit-btn"
+onclick="editGuideline('{{g.id}}','{{g.role}}','{{g.message}}')">
+<i class="fa fa-edit"></i>
+</button>
+
+<button class="delete-btn"
+onclick="deleteGuideline('{{g.id}}')">
+<i class="fa fa-trash"></i>
+</button>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+            <textarea id="guidelineTextarea" style="display:none;"></textarea>
+
+        </div>
+
+    </div>
+    <!--Enqury Details Popup-->
+<div class="popup-overlay" id="detailsPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+</svg>
+<span>Enquiry Details</span>
+</div>
+<span class="close-btn" onclick="closePopup('detailsPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<table>
+<tr><td>Enquiry ID</td><td id="detailId"></td></tr>
+<tr><td>Student Name</td><td id="detailStudent"></td></tr>
+<tr><td>Class</td><td id="detailClass"></td></tr>
+<tr><td>Type</td><td id="detailType"></td></tr>
+<tr><td>Date</td><td id="detailDate"></td></tr>
+<tr><td>Message</td><td id="detailMessage"></td></tr>
+</table>
+
+<br>
+
+<button class="send-btn" onclick="openPopup('feedbackPopup')">Provide Feedback</button>
+<button class="feedback-btn" onclick="closePopup('detailsPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="feedbackPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"/>
+</svg>
+<span>Provide Feedback</span>
+</div>
+<span class="close-btn" onclick="closePopup('feedbackPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<textarea style="width:100%;height:100px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Write feedback..."></textarea>
+
+<br><br>
+
+<p>Rate your experience</p>
+<div class="star-rating" id="stars">
+<span onclick="rate(1)">★</span>
+<span onclick="rate(2)">★</span>
+<span onclick="rate(3)">★</span>
+<span onclick="rate(4)">★</span>
+<span onclick="rate(5)">★</span>
+</div>
+
+<br>
+
+<input type="file">
+
+<br><br>
+
+<button class="send-btn">Submit</button>
+<button class="feedback-btn" onclick="closePopup('feedbackPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="approvePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Approve Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<strong>Are you sure want to approve this enquiry?</strong>
+<p><strong>Student:</strong> <span id="approveStudent"></span></p>
+<p><strong>Date:</strong> <span id="approveDate"></span></p>
+<p><strong>Enquiry Type:</strong> <span>Assignment Help</span></p>
+<p><strong>Time:</strong> <span>11:00 AM</span></p>
+
+<br>
+
+<button class="send-btn"
+onclick="updateStatus('Approved')">
+Confirm Approve
+</button>
+<button class="feedback-btn" onclick="closePopup('approvePopup')">Cancel</button>
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="rejectPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+ <svg width="26" height="26" fill="#ef4444" viewBox="0 0 24 24">
+    <path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L12 13.4l-6.3 6.3-1.4-1.4L10.6 12 4.3 5.7l1.4-1.4L12 10.6l6.3-6.3z"/>
+  </svg>
+<span>Reject Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('rejectPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Rejection</strong>
+<p><strong>Student:</strong> <span id="rejectStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn"
+onclick="updateStatus('Rejected')">
+Confirm Reject
+</button>
+<button class="feedback-btn" onclick="closePopup('rejectPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- RESCHEDULE POPUP -->
+<div class="popup-overlay" id="reschedulePopup">
+<div class="popup-box reschedule-box">
+
+<div class="popup-header reschedule-header">
+<div class="popup-title">
+<span style="font-size:26px;">📅</span>
+<span>Reschedule Session</span>
+</div>
+<span class="close-btn" onclick="closePopup('reschedulePopup')">✖</span>
+</div>
+
+<div class="popup-body reschedule-body">
+
+<div class="reschedule-card">
+
+<!-- CURRENT SESSION DETAILS -->
+<h3 class="section-title">Current Session Details</h3>
+
+<div class="details-grid">
+
+<div>
+<label>Student Name</label>
+<div class="detail-value" id="resStudentName">-</div>
+</div>
+
+<div>
+<label>Current Date</label>
+<div class="detail-value" id="resCurrentDate">-</div>
+</div>
+
+<div>
+<label>Class</label>
+<div class="detail-value" id="resClass">-</div>
+</div>
+
+<div>
+<label>Current Time Slot</label>
+<div class="detail-value" id="resTime">-</div>
+</div>
+
+<div>
+<label>Enquiry Type</label>
+<div class="detail-value" id="resType">-</div>
+</div>
+
+<div>
+<label>Status</label>
+<div class="detail-value" id="resStatus">-</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- NEW SESSION SELECTION -->
+<h3 class="section-title">New Session Selection</h3>
+
+<div class="new-session-grid">
+
+<div>
+<label>Select New Date</label>
+<input type="date" class="input-style">
+</div>
+
+<div>
+<label>Reason for Reschedule</label>
+<textarea class="textarea-style"
+placeholder="Type something reason ...."></textarea>
+</div>
+
+<div>
+<label>Select New Time Slot</label>
+<input type="time" class="input-style">
+</div>
+
+</div>
+
+<div class="confirm-line">
+<input type="checkbox" checked>
+<span><strong>I confirm to reschedule this session</strong></span>
+</div>
+
+<p class="note-text">
+Once rescheduled, your faculty and student will receive a notification.
+</p>
+
+</div>
+
+<!-- BUTTONS -->
+<div class="reschedule-footer">
+<button class="confirm-btn"
+onclick="updateStatus('Rescheduled')">
+Confirm Reschedule
+</button>
+<button class="cancel-btn" onclick="closePopup('reschedulePopup')">Cancel</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="completePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Mark as Complete</span>
+</div>
+<span class="close-btn" onclick="closePopup('completePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<strong>Are you sure you want to mark this enquiry as completed?</strong> 
+<p><strong>Student:</strong> <span id="completeStudent"></span></p>
+<span>Add completion notes</span>
+<br>
+<textarea class="textarea-style"
+placeholder="Type something here ..."></textarea>
+<br><br>
+<button class="send-btn"
+onclick="updateStatus('Completed')">
+Confirm Complete
+</button>
+<button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="cancelPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13l-2 2-3-3-3 3-2-2 3-3-3-3 2-2 3 3 3-3 2 2-3 3 3 3z"/>
+  </svg>
+<span>Cancel Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('cancelPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<strong>Reason for Cancellation</strong>
+<p><strong>Student:</strong> <span id="cancelStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Type reason here..."></textarea>
+
+<br><br>
+
+<button class="send-btn"
+onclick="updateStatus('Cancelled')">
+Confirm Cancel
+</button>
+
+<button class="feedback-btn" onclick="closePopup('cancelPopup')">Close</button>
+
+</div>
+</div>
+</div>
+
+    <!-- TABS -->
+    <div class="enquiry-tabs">
+        <div class="tab-item active" onclick="switchTab('parent')">Parent Enquiries</div>
+        <div class="tab-item" onclick="switchTab('student')">Academic / Students Enquiries</div>
+    </div>
+
+   <div class="filter-section">
+    <input type="text" id="commonSearch" placeholder="🔍 Search by ID, Name, Type..."
+        onkeyup="smartFilter()">
+
+    <input type="date" id="commonDate"
+        onchange="smartFilter()">
+
+    <button onclick="clearSmartFilter()">Clear</button>
+    </div>
+
+    <!-- =================== TABLE SECTION =================== -->
+
+    <!-- PARENT TABLE -->
+    <div id="parentTable">
+
+        <div class="table-card">
+            <h3>Parent Previous Enquiries</h3>
+
+            <table id="parentEnquiryTable" class="enquiry-table">
+              <thead>
+<tr>
+<th>Enquiry ID</th>
+<th>Parent Name</th>
+<th>Student Name</th>
+<th>Class</th>
+<th>Enquiry</th>
+<th>Date & Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for p in parent_enquiries %}
+
+<tr data-id="{{ p.id }}" data-type="parent">
+
+<td>PENQ-{{p.id}}</td>
+<td>{{p.parent_name}}</td>
+<td>{{p.child_name}}</td>
+<td>{{p.child_class}}</td>
+<td>{{p.enquiry_type}}</td>
+
+<td data-date="{{p.created_at|date:'Y-m-d'}}">
+{{p.created_at|date:"d M Y"}} |
+{{p.created_at|time:"h:i A"}}
+</td>
+
+<td class="status-cell status-{{p.status}}">
+{{p.status|title}}
+</td>
+
+<td>
+
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>Approve</option>
+<option>Reject</option>
+<option>View</option>
+</select>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="8" style="text-align:center;">
+No Parent Enquiries Found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+            </table>
+
+            <!-- PARENT PAGINATION -->
+            <div class="pagination" id="parentPagination">
+    <button onclick="prevParentPage()">Previous</button>
+    <!-- dynamic page numbers here -->
+    <button onclick="nextParentPage()">Next</button>
+</div>
+        </div>
+    </div>
+
+    <!-- STUDENT TABLE -->
+    <div id="studentTable" style="display:none;">
+
+        <div class="table-card">
+            <h3>Student Previous Enquiries</h3>
+
+            <table id="studentEnquiryTable" class="enquiry-table">
+                <thead>
+<tr>
+<th>Enquiry ID</th>
+<th>Student Name</th>
+<th>Class</th>
+<th>Enquiry</th>
+<th>Date & Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in student_enquiries %}
+
+<tr data-id="{{ s.id }}" data-type="student">
+
+<td>SENQ-{{s.id}}</td>
+<td>{{s.student_name}}</td>
+<td>{{s.student_class}}</td>
+<td>{{s.enquiry_type}}</td>
+
+<td data-date="{{s.created_at|date:'Y-m-d'}}">
+{{s.created_at|date:"d M Y"}} |
+{{s.created_at|time:"h:i A"}}
+</td>
+
+<td class="status-cell status-{{s.status}}">
+{{s.status|title}}
+</td>
+
+<td>
+
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>Approve</option>
+<option>Reject</option>
+<option>View</option>
+</select>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="7" style="text-align:center;">
+No Student Enquiries Found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+            <!-- STUDENT PAGINATION -->
+ <div class="pagination" id="studentPagination">
+    <button onclick="prevStudentPage()">Previous</button>
+    <!-- dynamic page numbers here -->
+    <button onclick="nextStudentPage()">Next</button>
+</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- GUIDELINE POPUP -->
+<div class="popup-overlay" id="guidelinePopup">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h3 class="popup-title">➕ Add Guideline</h3>
+      <span class="close-btn" onclick="closePopup('guidelinePopup')">✖</span>
+    </div>
+    <div class="popup-body">
+      <form id="guidelineForm">
+        <input type="hidden" id="guidelineId" name="id">
+        {% csrf_token %}
+        <label>Select Role</label>
+        <select name="role" id="role" class="input-style">
+          <option value="">-- Select Role --</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+          <option value="faculty">Faculty</option>
+        </select>
+
+        <label for="message" style="margin-top:10px;">Guideline Message</label>
+        <textarea name="message" id="message" class="textarea-style" placeholder="Type guideline here..."></textarea>
+
+        <button type="submit" class="send-btn" style="margin-top:15px;width:100%;">Save Guideline</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= JS ================= -->
+
+<script>
+
+/* ================= SMART FILTER ================= */
+
+function smartFilter() {
+
+    let searchValue = document.getElementById("commonSearch").value.toLowerCase();
+    let dateValue = document.getElementById("commonDate").value;
+
+    filterTable("parentEnquiryTable", searchValue, dateValue);
+    filterTable("studentEnquiryTable", searchValue, dateValue);
+}
+
+function filterTable(tableId, searchValue, dateValue) {
+
+    let table = document.getElementById(tableId);
+    let rows = document.querySelectorAll(`#${tableId} tr`);
+
+    rows.forEach((row) => {
+
+        let text = row.innerText.toLowerCase();
+        let dateCell = row.querySelector("td[data-date]");
+        let rowDate = dateCell ? dateCell.getAttribute("data-date") : "";
+
+        let matchSearch = text.includes(searchValue);
+        let matchDate = !dateValue || rowDate === dateValue;
+
+        row.style.display = (matchSearch && matchDate) ? "" : "none";
+    });
+}
+
+/* ================= CLEAR FILTER ================= */
+
+function clearSmartFilter(){
+    document.getElementById("commonSearch").value = "";
+    document.getElementById("commonDate").value = "";
+    smartFilter();
+}
+
+/* ================= TAB SWITCH ================= */
+
+function switchTab(type){
+
+    document.querySelectorAll(".tab-item").forEach(tab=>tab.classList.remove("active"));
+
+    if(type==="parent"){
+        document.querySelectorAll(".tab-item")[0].classList.add("active");
+        document.getElementById("parentTable").style.display="block";
+        document.getElementById("studentTable").style.display="none";
+    }else{
+        document.querySelectorAll(".tab-item")[1].classList.add("active");
+        document.getElementById("parentTable").style.display="none";
+        document.getElementById("studentTable").style.display="block";
+    }
+}
+
+
+/* ================= POPUP CONTROL ================= */
+
+function openPopup(id){
+    document.getElementById(id).classList.add("active");
+}
+
+function closePopup(id){
+    document.getElementById(id).classList.remove("active");
+}
+
+
+/* ================= GLOBAL ROW ================= */
+
+let currentRow = null;
+
+
+/* ================= HANDLE ACTION ================= */
+
+function handleAction(select){
+
+    let value = select.value;
+    let row = select.closest("tr");
+    currentRow = row;
+
+    let studentName = row.children[1].innerText;
+
+    if(value==="Approve"){
+        document.getElementById("approveStudent").innerText = studentName;
+        openPopup("approvePopup");
+    }
+
+    else if(value==="Reject"){
+        document.getElementById("rejectStudent").innerText = studentName;
+        openPopup("rejectPopup");
+    }
+
+    else if(value==="Reschedule"){
+        document.getElementById("resStudentName").innerText = studentName;
+        openPopup("reschedulePopup");
+    }
+
+    else if(value==="Mark as Complete"){
+        document.getElementById("completeStudent").innerText = studentName;
+        openPopup("completePopup");
+    }
+
+    else if(value==="Cancel"){
+        document.getElementById("cancelStudent").innerText = studentName;
+        openPopup("cancelPopup");
+    }
+
+    else if(value==="View"){
+        let id = row.children[0].innerText
+        let name = row.children[1].innerText
+        let cls = row.children[2].innerText
+        let type = row.children[3].innerText
+        let date = row.children[4].innerText
+
+        document.getElementById("detailId").innerText=id
+        document.getElementById("detailStudent").innerText=name
+        document.getElementById("detailClass").innerText=cls
+        document.getElementById("detailType").innerText=type
+        document.getElementById("detailDate").innerText=date
+
+        openPopup("detailsPopup");
+    }
+
+    select.selectedIndex = 0;
+}
+
+/* ================= GUIDELINES EDIT ================= */
+
+function enableEdit(){
+    let content = document.getElementById("guidelineContent");
+    let textarea = document.getElementById("guidelineTextarea");
+
+    textarea.value = content.innerText.trim();
+    content.style.display = "none";
+    textarea.style.display = "block";
+    textarea.focus();
+}
+
+function saveGuidelines(){
+    let content = document.getElementById("guidelineContent");
+    let textarea = document.getElementById("guidelineTextarea");
+
+    if(textarea.style.display === "block"){
+
+        let lines = textarea.value.split("\n");
+        let html = "<ul>";
+
+        lines.forEach(line=>{
+            if(line.trim() !== ""){
+                html += `<li>${line}</li>`;
+            }
+        });
+
+        html += "</ul>";
+
+        content.innerHTML = html;
+
+        textarea.style.display = "none";
+        content.style.display = "block";
+    }
+}
+
+
+function deleteGuideline(id){
+
+if(!confirm("Are you sure you want to delete this guideline?")) return;
+
+fetch("/admin-panel/delete-guideline/"+id+"/",{
+method:"POST",
+headers:{
+"X-CSRFToken":getCookie("csrftoken")
+}
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.status==="deleted"){
+
+showToast("Guideline Deleted Successfully")
+
+setTimeout(()=>{
+location.reload()
+},800)
+
+}
+
+})
+
+}
+
+
+
+/* ================= UPDATE DROPDOWN BASED ON STATUS ================= */
+
+function updateDropdownForRow(row, status){
+
+    let select = row.querySelector(".action-select");
+
+    select.innerHTML = '<option>Select</option>';
+
+    if(status.toLowerCase()==="pending"){
+        select.innerHTML += `
+            <option>Approve</option>
+            <option>Reject</option>
+            <option>Reschedule</option>
+            <option>View</option>
+        `;
+    }
+
+    else if(status.toLowerCase()==="approved" || status.toLowerCase()==="rescheduled"){
+        select.innerHTML += `
+            <option>Mark as Complete</option>
+            <option>Cancel</option>
+            <option>View</option>
+        `;
+    }
+
+    else{
+        select.innerHTML += `<option>View</option>`;
+    }
+}
+
+
+/* ================= CLOSE ALL POPUPS ================= */
+
+function closeAllPopups(){
+    document.querySelectorAll(".popup-overlay").forEach(p=>{
+        p.classList.remove("active");
+    });
+}
+
+
+/* ================= INITIALIZE DROPDOWNS ================= */
+
+function initializeAllDropdowns(){
+
+    document.querySelectorAll(".enquiry-table tr:not(:first-child)").forEach(row=>{
+        let status = row.querySelector(".status-cell").innerText.trim();
+        updateDropdownForRow(row, status);
+    });
+}
+
+
+/* ================= PAGINATION ================= */
+
+let currentPages = {};
+
+function setupPagination(tableId, paginationId, rowsPerPage){
+
+    let rows = document.querySelectorAll(`#${tableId} tr:not(:first-child)`);
+    let totalPages = Math.ceil(rows.length / rowsPerPage);
+    let container = document.getElementById(paginationId);
+
+    currentPages[tableId] = 1;
+
+    container.querySelectorAll(".page-btn").forEach(btn=>btn.remove());
+
+    for(let i=1; i<=totalPages; i++){
+        let btn = document.createElement("button");
+        btn.innerText = i;
+        btn.classList.add("page-btn");
+
+        btn.onclick = function(){
+            currentPages[tableId] = i;
+            showPage(tableId, paginationId, i, rowsPerPage);
+        };
+
+        container.insertBefore(btn, container.lastElementChild);
+    }
+
+    showPage(tableId, paginationId, 1, rowsPerPage);
+}
+
+function showPage(tableId, paginationId, page, rowsPerPage){
+
+    let rows = document.querySelectorAll(`#${tableId} tr:not(:first-child)`);
+    let totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    if(page < 1) page = 1;
+    if(page > totalPages) page = totalPages;
+
+    rows.forEach((row,index)=>{
+        let start = (page-1)*rowsPerPage;
+        let end = start + rowsPerPage;
+        row.style.display = (index >= start && index < end) ? "" : "none";
+    });
+
+    document.querySelectorAll(`#${paginationId} .page-btn`)
+        .forEach(btn=>btn.classList.remove("active"));
+
+    document.querySelectorAll(`#${paginationId} .page-btn`)[page-1]
+        ?.classList.add("active");
+
+    currentPages[tableId] = page;
+}
+
+
+function nextParentPage(){
+    let page = currentPages["parentEnquiryTable"] + 1;
+    showPage("parentEnquiryTable","parentPagination",page,8);
+}
+
+function prevParentPage(){
+    let page = currentPages["parentEnquiryTable"] - 1;
+    showPage("parentEnquiryTable","parentPagination",page,8);
+}
+
+function nextStudentPage(){
+    let page = currentPages["studentEnquiryTable"] + 1;
+    showPage("studentEnquiryTable","studentPagination",page,8);
+}
+
+function prevStudentPage(){
+    let page = currentPages["studentEnquiryTable"] - 1;
+    showPage("studentEnquiryTable","studentPagination",page,8);
+}
+
+/* ================= INIT ================= */
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    initializeAllDropdowns();
+
+    setupPagination("parentEnquiryTable","parentPagination",8);
+    setupPagination("studentEnquiryTable","studentPagination",8);
+
+});
+
+
+function openAddPopup(){
+    openPopup("guidelinePopup")
+}
+
+function editGuideline(id,role,message){
+
+document.getElementById("guidelineId").value=id;
+document.getElementById("role").value=role;
+document.getElementById("message").value=message;
+
+document.querySelector(".popup-title").innerText="✏️ Update Guideline";
+
+openPopup("guidelinePopup")
+}
+
+function saveGuideline(){
+
+let id = document.getElementById("guidelineId").value;
+let role = document.getElementById("role").value;
+let message = document.getElementById("message").value;
+
+let url = "/add-guideline/";
+
+if(id){
+url = "/update-guideline/"+id+"/";
+}
+
+fetch(url,{
+method:"POST",
+headers:{
+"X-CSRFToken":"{{csrf_token}}"
+},
+body:new URLSearchParams({
+role:role,
+message:message
+})
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="added"){
+showToast("Guideline Added");
+}
+
+if(data.status=="updated"){
+showToast("Guideline Updated");
+}
+
+location.reload();
+
+})
+
+}
+
+
+function getCookie(name) {
+let cookieValue = null;
+if (document.cookie && document.cookie !== '') {
+const cookies = document.cookie.split(';');
+for (let i = 0; i < cookies.length; i++) {
+const cookie = cookies[i].trim();
+if (cookie.substring(0, name.length + 1) === (name + '=')) {
+cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+break;
+}
+}
+}
+return cookieValue;
+}
+
+function showToast(message){
+
+let toast = document.getElementById("toastMessage");
+
+toast.innerText = message;
+toast.style.display = "block";
+
+setTimeout(()=>{
+    toast.style.display = "none";
+},3000)
+
+}
+
+document.getElementById("guidelineForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let id = document.getElementById("guidelineId").value
+let role = document.getElementById("role").value
+let message = document.getElementById("message").value
+
+let url = "/admin-panel/add-guideline/"
+
+if(id){
+url = "/admin-panel/update-guideline/"+id+"/"
+}
+
+fetch(url,{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+},
+body:`role=${role}&message=${message}`
+})
+.then(response=>response.json())
+.then(data=>{
+
+if(data.status=="added"){
+showToast("Guideline Added Successfully")
+}
+
+if(data.status=="updated"){
+showToast("Guideline Updated Successfully")
+}
+
+setTimeout(()=>{
+location.reload()
+},1000)
+
+})
+
+})
+
+function updateStatus(newStatus){
+
+if(!currentRow) return;
+
+let enquiryId = currentRow.dataset.id
+let type = currentRow.dataset.type
+
+fetch("/admin-panel/update-enquiry-status/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"X-CSRFToken":getCookie("csrftoken")
+},
+
+body:`id=${enquiryId}&type=${type}&status=${newStatus.toLowerCase()}`
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="success"){
+
+let statusCell = currentRow.querySelector(".status-cell")
+
+statusCell.innerText = newStatus
+
+statusCell.className = "status-cell status-"+newStatus.toLowerCase()
+
+showToast("Status Updated Successfully")
+
+}
+
+})
+
+closeAllPopups()
+
+}
+
+window.addEventListener("DOMContentLoaded", function(){
+
+    const params = new URLSearchParams(window.location.search);
+    const msg = params.get("msg");
+
+    if(msg === "approved"){
+        showToast("Enquiry Approved Successfully");
+    }
+
+    else if(msg === "rejected"){
+        showToast("Enquiry Rejected Successfully");
+    }
+    
+    if(msg){
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+});
+
+</script>
+<div id="toastMessage">
 </div>
 {% endblock %}
+

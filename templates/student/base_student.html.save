@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}{% block student_title %}Student | EduConnect{% endblock %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root{
+    --bg:#eaf0ff;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:#e3e9ff;
+    --blue:#1b56d7;
+    --blue2:#0b3ea8;
+    --shadow:0 18px 40px rgba(15,23,42,.10);
+    --shadow2:0 10px 25px rgba(15,23,42,.08);
+    --r18:18px;
+    --r22:22px;
+  }
+  body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text)}
+  a{text-decoration:none;color:inherit}
+
+  .layout{display:flex;min-height:100vh;gap:22px;padding:22px}
+  .sidebar{
+    width:280px;flex:0 0 280px;background:rgba(255,255,255,.9);
+    border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow2);
+    padding:18px 16px;position:sticky;top:18px;height:calc(100vh - 44px);overflow:auto;
+  }
+  .brand{display:flex;align-items:center;gap:12px;padding:10px 10px 16px}
+  .logo{
+    width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,#1b56d7,#ff7a18);
+    display:grid;place-items:center;color:#fff;font-weight:950;box-shadow:0 10px 22px rgba(27,86,215,.22)
+  }
+  .brand h2{margin:0;font-size:30px;font-weight:900;letter-spacing:.2px}
+  .nav{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+  .nav a{
+    display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;
+    color:#0f172a;font-weight:800;border:1px solid transparent;
+  }
+  .nav a .ico{
+    width:38px;height:38px;border-radius:14px;display:grid;place-items:center;
+    background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px rgba(15,23,42,.05);
+    font-size:18px;
+  }
+  .nav a.active{
+    background:#fff;border-color:#dbe7ff;
+  }
+  .nav a.active span{color:var(--blue)}
+  .nav a:hover{background:#f6f9ff}
+
+  .main{flex:1}
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:6px 0 14px;
+  }
+  .search{
+    flex:1;max-width:760px;background:#fff;border:1px solid var(--line);
+    border-radius:999px;box-shadow:var(--shadow2);display:flex;align-items:center;gap:12px;
+    padding:10px 14px;
+  }
+  .search .sico{
+    width:34px;height:34px;border-radius:999px;background:#eaf1ff;
+    display:grid;place-items:center;color:var(--blue2);font-weight:900;
+  }
+  .search input{
+    border:0;outline:none;width:100%;font-size:14px;background:transparent;
+  }
+  .ticons{display:flex;align-items:center;gap:12px}
+  .tbtn{
+    width:40px;height:40px;border-radius:14px;border:1px solid var(--line);
+    background:#fff;box-shadow:0 8px 18px rgba(15,23,42,.06);
+    display:grid;place-items:center;cursor:pointer;font-size:18px;
+  }
+  .dot{position:relative}
+  .dot:after{
+    content:"";position:absolute;top:7px;right:7px;width:10px;height:10px;border-radius:999px;background:#ff2d2d;
+    border:2px solid #fff;
+  }
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow2)}
+  .pad{padding:18px}
+</style>
+{% block student_extra_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">E</div>
+      <h2>EduConnect</h2>
+    </div>
+
+    <nav class="nav">
+      <a href="{% url 'student_dashboard' %}"
+         class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+        <div class="ico">🏠</div> <span>Home</span>
+      </a>
+
+      <a href="{% url 'student_my_courses' %}"
+         class="{% if request.resolver_match.url_name == 'student_my_courses' %}active{% endif %}">
+        <div class="ico">🎓</div> <span>My Courses</span>
+      </a>
+
+      <a href="{% url 'student_explore_courses' %}"
+         class="{% if request.resolver_match.url_name == 'student_explore_courses' %}active{% endif %}">
+        <div class="ico">🔎</div> <span>Explore Courses</span>
+      </a>
+
+      <a href="{% url 'student_live_classes' %}"
+         class="{% if request.resolver_match.url_name == 'student_live_classes' %}active{% endif %}">
+        <div class="ico">📡</div> <span>Live Classes</span>
+      </a>
+
+      <a href="{% url 'student_assignments' %}"
+         class="{% if request.resolver_match.url_name == 'student_assignments' %}active{% endif %}">
+        <div class="ico">📝</div> <span>Assignments</span>
+      </a>
+
+      <a href="{% url 'student_study_material' %}"
+         class="{% if request.resolver_match.url_name == 'student_study_material' %}active{% endif %}">
+        <div class="ico">📚</div> <span>Study Material</span>
+      </a>
+
+      <a href="{% url 'student_quiz_exam' %}"
+         class="{% if request.resolver_match.url_name == 'student_quiz_exam' %}active{% endif %}">
+        <div class="ico">❓</div> <span>Quiz/Exam</span>
+      </a>
+
+      <a href="{% url 'student_my_progress' %}"
+         class="{% if request.resolver_match.url_name == 'student_my_progress' %}active{% endif %}">
+        <div class="ico">📈</div> <span>My Progress</span>
+      </a>
+
+      <a href="{% url 'student_payments' %}"
+         class="{% if request.resolver_match.url_name == 'student_payments' %}active{% endif %}">
+        <div class="ico">💳</div> <span>Payments</span>
+      </a>
+
+      <a href="{% url 'student_enquiry' %}"
+         class="{% if request.resolver_match.url_name == 'student_enquiry' %}active{% endif %}">
+        <div class="ico">👥</div> <span>Enquiry</span>
+      </a>
+      
+      <a href="{% url 'student_announcement' %}"
+         class="{% if request.resolver_match.url_name == 'student_announcement' %}active{% endif %}">
+        <div clas="ico"></div> <span>Announcement</span>
+      </a>    
+
+      <a href="{% url 'student_my_account' %}"
+         class="{% if request.resolver_match.url_name == 'student_my_account' %}active{% endif %}">
+        <div class="ico">👤</div> <span>My Account</span>
+      </a>
+
+      <a href="{% url 'logout' %}">
+        <div class="ico">🚪</div> <span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="search">
+        <div class="sico">🔍</div>
+        <input type="text" placeholder="Search course.." />
+      </div>
+
+      <div class="ticons">
+        <button class="tbtn dot" type="button" title="Live">📶</button>
+        <button class="tbtn dot" type="button" title="Notifications">🔔</button>
+        <button class="tbtn" type="button" title="Profile">👤</button>
+      </div>
+    </div>
+
+    {% block student_content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% block student_extra_js %}{% endblock %}
+{% endblock %}

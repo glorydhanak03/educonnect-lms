@@ -1,0 +1,164 @@
+{% extends "adminel/base_admin.html" %}
+
+{% block admin_title %}Admin | Announcement{% endblock %}
+
+{% block admin_content %}
+
+<style>
+.page-wrapper{
+    background:#e9f0f8;
+    padding:25px;
+    border-radius:10px;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-header h2{
+    font-size:24px;
+    font-weight:600;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+}
+
+.controls input,
+.controls select{
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+.send-btn{
+    background:#6c63ff;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.section-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.category-box{
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+    position:relative;
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
+}
+
+.category-box::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:6px;
+    background:#ff4d4d;
+    border-top-left-radius:12px;
+    border-bottom-left-radius:12px;
+}
+
+.category-title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+.announcement-item{
+    background:#fde2e2;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.announcement-item h5{
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+}
+
+.announcement-item p{
+    margin:4px 0;
+    font-size:13px;
+}
+
+.meta{
+    font-size:12px;
+    color:#555;
+}
+</style>
+
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h2>🔔 Announcement & Notifications</h2>
+        <div class="controls">
+            <input type="text" placeholder="Search...">
+            <select>
+                <option>All Categories</option>
+                <option>Students</option>
+                <option>Faculty</option>
+                <option>Parents</option>
+                <option>Exams</option>
+            </select>
+            <a href="{% url 'admin_panel:admin_announcement' %}" class="send-btn">
+                + Send Announcement & Notifications
+            </a>
+        </div>
+    </div>
+
+    <div class="section-grid">
+
+        <!-- Students -->
+        <div class="category-box">
+            <div class="category-title">Students</div>
+            {% for announcement in announcements %}
+                {% if announcement.audience == "student" or announcement.audience == "all" %}
+                <div class="announcement-item">
+                    <h5>{{ announcement.title }}</h5>
+                    <p>{{ announcement.message|truncatechars:80 }}</p>
+                    <div class="meta">
+                        By: {{ announcement.created_by }} |
+                        {{ announcement.created_at }}
+                    </div>
+                </div>
+                {% endif %}
+            {% empty %}
+                <p>No student announcements</p>
+            {% endfor %}
+        </div>
+
+        <!-- Faculty -->
+        <div class="category-box">
+            <div class="category-title">Faculty</div>
+            {% for announcement in announcements %}
+                {% if announcement.audience == "faculty" or announcement.audience == "all" %}
+                <dikv class="announcement-item">
+                    <h5>{{ announcement.title }}</h5>
+                    <p>{{ announcement.message|truncatechars:80 }}</p>
+                    <div class="meta">
+                        By: {{ announcement.created_by }} |
+                        {{ announcement.created_at }}
+                    </div>
+                </div>
+                {% endif %}
+            {% empty %}
+                <p>No faculty announcements</p>
+            {% endfor %}
+        </div>
+
+        <!-- Parents -->
+        <div class="c

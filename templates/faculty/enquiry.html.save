@@ -1,0 +1,963 @@
+{% extends "faculty/base_faculty.html" %}
+
+{% block faculty_title %}Faculty | enquiry{% endblock %}
+
+{% block faculty_content %}
+
+<style>
+
+/* PAGE */
+.enquiry-container{ padding:30px; }
+.enquiry-card{
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* TABLE */
+table{ width:100%; border-collapse:collapse; font-size:14px; }
+th,td{ border:1px solid #e5e7eb; padding:10px; text-align:center; }
+th{ background:#f9fafb; font-weight:600; }
+
+/* STATUS COLORS */
+.status-pending{color:#f59e0b;font-weight:600;}
+.status-approved{color:#16a34a;font-weight:600;}
+.status-complete{color:#2563eb;font-weight:600;}
+.status-rejected{color:#dc2626;font-weight:600;}
+.status-cancelled{color:#6b7280;font-weight:600;}
+
+/* DROPDOWN */
+.action-select{ padding:6px 10px; border-radius:6px; }
+
+/* ================= POPUP OVERLAY ================= */
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(6px);
+
+    display:flex;                /* Always flex */
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+/* When active */
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ================= POPUP BOX ================= */
+.popup-box{
+    width:750px;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+/* ================= HEADER ================= */
+.popup-header{
+    background:#FBF9F9;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+}
+
+.popup-title{
+    font-size:22px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.close-btn{
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* ================= BODY ================= */
+.popup-body{
+    padding:25px;
+}
+
+.popup-body table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.popup-body table tr{
+    border-bottom:1px solid #eee;
+}
+
+.popup-body table td{
+    padding:10px;
+}
+
+.popup-body table td:first-child{
+    font-weight:600;
+    width:35%;
+    background:#f9fafb;
+}
+
+/* ================= BUTTONS ================= */
+.send-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.feedback-btn{
+    background:#e5e7eb;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+/* ================= STAR RATING ================= */
+.star-rating{
+    font-size:28px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.star-rating .active{
+    color:gold;
+}
+
+/* ================= GUIDELINE BADGE ================= */
+.guideline-badge{
+    background:#e8f0ff;
+    padding:8px 14px;
+    border-radius:8px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin:10px 0;
+}
+
+/* ================= PAGINATION ================= */
+.pagination-container{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+}
+
+.page-btn,
+.page-number{
+    padding:6px 14px;
+    border:1px solid #e5e7eb;
+    background:#ffffff;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s ease;
+}
+
+.page-number.active{
+    background:#2563eb;
+    color:#fff;
+    border:1px solid #2563eb;
+    box-shadow:0 4px 10px rgba(37,99,235,0.3);
+}
+
+.page-btn:hover,
+.page-number:hover{
+    background:#f3f4f6;
+}
+
+/* Animation */
+.popup-overlay{
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+}
+
+.popup-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.popup-box{
+    transform:scale(0.9);
+    transition:0.3s ease;
+}
+
+.popup-overlay.active .popup-box{
+    transform:scale(1);
+}
+
+
+/* ================= RESCHEDULE SPECIAL ================= */
+
+.reschedule-box{
+    width:900px;
+}
+
+.reschedule-header{
+    background:#f3f4f6;
+}
+
+.reschedule-body{
+    background:#ffffff;
+    padding:30px;
+}
+
+.reschedule-card{
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:25px;
+}
+
+.section-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px 60px;
+    margin-bottom:20px;
+}
+
+.details-grid label{
+    font-weight:600;
+    font-size:14px;
+    color:#444;
+}
+
+.detail-value{
+    border-bottom:1px solid #ddd;
+    padding:6px 0;
+    margin-top:4px;
+}
+
+.new-session-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px 60px;
+    margin-bottom:20px;
+}
+
+.input-style{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.textarea-style{
+    width:100%;
+    height:100px;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.confirm-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.note-text{
+    font-size:14px;
+    color:#555;
+    margin-top:8px;
+}
+
+.reschedule-footer{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-top:30px;
+}
+
+.confirm-btn{
+    background:#f59e0b;
+    color:#fff;
+    padding:12px 40px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    padding:12px 60px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+
+</style>
+
+
+<div class="enquiry-container">
+<div style="text-align:right;margin-top:15px;font-size:20px;color:#01579B">
+        <a href="#" onclick="openPopup('guidelinesPopup')">View Admin Enquiry Guidelines</a>
+ </div>
+
+<br>
+<div class="enquiry-card">
+
+
+<h1>👥 Enquiries</h1>
+
+<table id="enquiryTable">
+<tr>
+<th>ID</th>
+<th>Parent</th>
+<th>Student</th>
+<th>Class</th>
+<th>Type</th>
+<th>Date</th>
+<th>Status</th>
+<th>Take Action</th>
+</tr>
+
+<!-- 8 Rows -->
+
+<tr>
+<td>ENQ-101</td><td>Ajinkya</td><td>Riya</td><td>5th</td>
+<td>Fee</td><td>10 Oct</td>
+<td class="status-pending">Pending</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>✅ Approve</option>
+<option>❌ Reject</option>
+<option>📅 Reschedule</option>
+<option>👁 View Details</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>ENQ-102</td><td>Raj</td><td>Arjun</td><td>6th</td>
+<td>Complaint</td><td>12 Oct</td>
+<td class="status-approved">Approved</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>✔ Mark as Complete</option>
+<option>❌ Cancel</option>
+<option>📅 Reschedule</option>
+<option>👁 View Details</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>ENQ-103</td><td>Meena</td><td>Simran</td><td>7th</td>
+<td>Academic</td><td>13 Oct</td>
+<td class="status-complete">Complete</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>👁 View Details</option>
+<option>💬 Feedback</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>ENQ-104</td><td>Amit</td><td>Karan</td><td>8th</td>
+<td>General</td><td>14 Oct</td>
+<td class="status-rejected">Rejected</td>
+<td>
+<select class="action-select" onchange="handleAction(this)">
+<option>Select</option>
+<option>👁 View Details</option>
+</select>
+</td>
+</tr>
+
+<tr><td>ENQ-105</td><td>Pooja</td><td>Neha</td><td>9th</td><td>Fee</td><td>15 Oct</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-106</td><td>Suresh</td><td>Aryan</td><td>10th</td><td>Complaint</td><td>16 Oct</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-107</td><td>Kavita</td><td>Isha</td><td>11th</td><td>General</td><td>17 Oct</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-108</td><td>Rohan</td><td>Tanvi</td><td>12th</td><td>Academic</td><td>18 Oct</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
+
+<tr><td>ENQ-105</td><td>Pooja</td><td>Neha</td><td>9th</td><td>Fee</td><td>15 Oct</td><td class="status-pending">Pending</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✅ Approve</option><option>❌ Reject</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-106</td><td>Suresh</td><td>Aryan</td><td>10th</td><td>Complaint</td><td>16 Oct</td><td class="status-approved">Approved</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>✔ Mark as Complete</option><option>❌ Cancel</option><option>📅 Reschedule</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-107</td><td>Kavita</td><td>Isha</td><td>11th</td><td>General</td><td>17 Oct</td><td class="status-cancelled">Cancelled</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option></select></td></tr>
+<tr><td>ENQ-108</td><td>Rohan</td><td>Tanvi</td><td>12th</td><td>Academic</td><td>18 Oct</td><td class="status-complete">Complete</td><td><select class="action-select" onchange="handleAction(this)"><option>Select</option><option>👁 View Details</option><option>💬 Feedback</option></select></td></tr>
+
+</table>
+</div>
+</div>
+
+<!--PAGINATION-->
+<div class="pagination-container">
+    <button class="page-btn" onclick="prevPage()">Previous</button>
+
+    <button class="page-number active" onclick="goToPage(1)">1</button>
+    <button class="page-number" onclick="goToPage(2)">2</button>
+    <button class="page-number" onclick="goToPage(3)">3</button>
+
+    <button class="page-btn" onclick="nextPage()">Next</button>
+</div>
+
+
+<!--Enqury Details Popup-->
+<div class="popup-overlay" id="detailsPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+</svg>
+<span>Enquiry Details</span>
+</div>
+<span class="close-btn" onclick="closePopup('detailsPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<table>
+<tr><td>Enquiry ID</td><td>ENQ-101</td></tr>
+<tr><td>Student Name</td><td>Ram Jadhav</td></tr>
+<tr><td>Class</td><td>5th Std</td></tr>
+<tr><td>Send To</td><td>Admin</td></tr>
+<tr><td>Admin Name</td><td>Mr. Ajinkya Pachade</td></tr>
+<tr><td>Type</td><td>1 to 1 Session</td></tr>
+<tr><td>Date</td><td>10 Oct 2025</td></tr>
+<tr><td>Time Slot</td><td>11:25 AM</td></tr>
+<tr><td>Message</td><td>I need help in physics.</td></tr>
+</table>
+
+<br>
+
+<button class="send-btn" onclick="openPopup('feedbackPopup')">Provide Feedback</button>
+<button class="feedback-btn" onclick="closePopup('detailsPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="feedbackPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V5a2 2 0 0 1 2-2h12a4 4 0 0 1 4 4z"/>
+</svg>
+<span>Provide Feedback</span>
+</div>
+<span class="close-btn" onclick="closePopup('feedbackPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<textarea style="width:100%;height:100px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Write feedback..."></textarea>
+
+<br><br>
+
+<p>Rate your experience</p>
+<div class="star-rating" id="stars">
+<span onclick="rate(1)">★</span>
+<span onclick="rate(2)">★</span>
+<span onclick="rate(3)">★</span>
+<span onclick="rate(4)">★</span>
+<span onclick="rate(5)">★</span>
+</div>
+
+<br>
+
+<input type="file">
+
+<br><br>
+
+<button class="send-btn">Submit</button>
+<button class="feedback-btn" onclick="closePopup('feedbackPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="guidelinesPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#f59e0b" viewBox="0 0 24 24">
+<path d="M12 2 2 7v6c0 5 3.8 9.7 10 11 6.2-1.3 10-6 10-11V7l-10-5z"/>
+</svg>
+<span>Enquiry Guidelines</span>
+</div>
+<span class="close-btn" onclick="closePopup('guidelinesPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+    
+    <svg width="20" height="20" fill="#2563eb" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <text x="12" y="16" text-anchor="middle" font-size="14" fill="white">!</text>
+    </svg>
+
+    <span>General Rule</span>
+</div>
+
+<ul>
+<li>Avoid cancelling approved sessions without valid reason.</li>
+<li>Keep your availability schedule updated in the system.</li>
+<li>Do not share student data or confidential information externally.</li>
+<li>Report inappropriate behavior immediately to the admin.</li>
+</ul>
+
+<div class="guideline-badge" style="display:flex;align-items:center;gap:8px;">
+
+    <svg width="20" height="20" fill="#16a34a" viewBox="0 0 24 24">
+        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+        <path d="M11 12.98L3.21 9 11 5.02 18.79 9 11 12.98z"/>
+    </svg>
+
+    <span>Faculty Guidelines</span>
+</div>
+
+<ul>
+<li>Begin the session on time and take attendance.</li>
+<li>Briefly recap the previous class before starting new content.</li>
+<li>Report any technical or behavioral issues to the admin immediately.</li>
+<li>Share study materials or references if necessary.</li>
+<li>Review the student’s enquiry details before the session begins.</li>
+<li>Ensure a stable internet connection and proper audio/video setup.</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div class="popup-overlay" id="approvePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#16a34a" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Approve Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('approvePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<p><strong>Student:</strong> <span id="approveStudent"></span></p>
+<p><strong>Date:</strong> <span id="approveDate"></span></p>
+
+<br>
+
+<button class="send-btn">Confirm Approve</button>
+<button class="feedback-btn" onclick="closePopup('approvePopup')">Cancel</button>
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="rejectPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#dc2626" viewBox="0 0 24 24">
+<path d="M18 6 6 18M6 6l12 12"/>
+</svg>
+<span>Reject Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('rejectPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<p><strong>Student:</strong> <span id="rejectStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Reason for rejection"></textarea>
+
+<br><br>
+
+<button class="send-btn" style="background:#dc2626;">Confirm Reject</button>
+<button class="feedback-btn" onclick="closePopup('rejectPopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- RESCHEDULE POPUP -->
+<div class="popup-overlay" id="reschedulePopup">
+<div class="popup-box reschedule-box">
+
+<div class="popup-header reschedule-header">
+<div class="popup-title">
+<span style="font-size:26px;">📅</span>
+<span>Reschedule Session</span>
+</div>
+<span class="close-btn" onclick="closePopup('reschedulePopup')">✖</span>
+</div>
+
+<div class="popup-body reschedule-body">
+
+<div class="reschedule-card">
+
+<!-- CURRENT SESSION DETAILS -->
+<h3 class="section-title">Current Session Details</h3>
+
+<div class="details-grid">
+
+<div>
+<label>Student Name</label>
+<div class="detail-value" id="resStudentName">-</div>
+</div>
+
+<div>
+<label>Current Date</label>
+<div class="detail-value" id="resCurrentDate">-</div>
+</div>
+
+<div>
+<label>Class</label>
+<div class="detail-value" id="resClass">-</div>
+</div>
+
+<div>
+<label>Current Time Slot</label>
+<div class="detail-value" id="resTime">-</div>
+</div>
+
+<div>
+<label>Enquiry Type</label>
+<div class="detail-value" id="resType">-</div>
+</div>
+
+<div>
+<label>Status</label>
+<div class="detail-value" id="resStatus">-</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- NEW SESSION SELECTION -->
+<h3 class="section-title">New Session Selection</h3>
+
+<div class="new-session-grid">
+
+<div>
+<label>Select New Date</label>
+<input type="date" class="input-style">
+</div>
+
+<div>
+<label>Reason for Reschedule</label>
+<textarea class="textarea-style"
+placeholder="Type something reason ...."></textarea>
+</div>
+
+<div>
+<label>Select New Time Slot</label>
+<input type="time" class="input-style">
+</div>
+
+</div>
+
+<div class="confirm-line">
+<input type="checkbox" checked>
+<span><strong>I confirm to reschedule this session</strong></span>
+</div>
+
+<p class="note-text">
+Once rescheduled, your faculty and student will receive a notification.
+</p>
+
+</div>
+
+<!-- BUTTONS -->
+<div class="reschedule-footer">
+<button class="confirm-btn" onclick="confirmReschedule()">Confirm Reschedule</button>
+<button class="cancel-btn" onclick="closePopup('reschedulePopup')">Cancel</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="completePopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#2563eb" viewBox="0 0 24 24">
+<path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6z"/>
+</svg>
+<span>Mark as Complete</span>
+</div>
+<span class="close-btn" onclick="closePopup('completePopup')">✖</span>
+</div>
+
+<div class="popup-body">
+<p><strong>Student:</strong> <span id="completeStudent"></span></p>
+
+<br>
+
+<button class="send-btn">Confirm Complete</button>
+<button class="feedback-btn" onclick="closePopup('completePopup')">Cancel</button>
+
+</div>
+</div>
+</div>
+
+
+<div class="popup-overlay" id="cancelPopup">
+<div class="popup-box">
+
+<div class="popup-header">
+<div class="popup-title">
+<svg width="26" height="26" fill="#6b7280" viewBox="0 0 24 24">
+<path d="M18 6 6 18M6 6l12 12"/>
+</svg>
+<span>Cancel Enquiry</span>
+</div>
+<span class="close-btn" onclick="closePopup('cancelPopup')">✖</span>
+</div>
+
+<div class="popup-body">
+
+<p><strong>Student:</strong> <span id="cancelStudent"></span></p>
+
+<textarea style="width:100%;height:90px;border:1px solid #ddd;border-radius:8px;padding:10px;"
+placeholder="Reason for cancellation"></textarea>
+
+<br><br>
+
+<button class="send-btn" style="background:#6b7280;">Confirm Cancel</button>
+<button class="feedback-btn" onclick="closePopup('cancelPopup')">Close</button>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+/* ================= POPUP CONTROL ================= */
+
+function openPopup(id){
+    document.getElementById(id).classList.add("active");
+}
+
+function closePopup(id){
+    document.getElementById(id).classList.remove("active");
+}
+
+/* ================= STAR RATING ================= */
+
+function rate(star){
+    let stars=document.querySelectorAll("#stars span");
+    stars.forEach((s,i)=>{
+        if(i<star){ s.classList.add("active"); }
+        else{ s.classList.remove("active"); }
+    });
+}
+
+/* ================= HANDLE DROPDOWN ACTION ================= */
+
+let currentRow = null; // store active row
+
+function handleAction(select){
+
+    let value = select.value;
+    let row = select.closest("tr");
+
+    currentRow = row; // store row globally
+
+    let studentName = row.children[2].innerText;
+    let className = row.children[3].innerText;
+    let type = row.children[4].innerText;
+    let date = row.children[5].innerText;
+    let status = row.children[6].innerText;
+
+    if(value.includes("Reschedule")){
+
+        document.getElementById("resStudentName").innerText = studentName;
+        document.getElementById("resCurrentDate").innerText = date;
+        document.getElementById("resClass").innerText = className;
+        document.getElementById("resTime").innerText = "01:15 PM"; // demo time
+        document.getElementById("resType").innerText = type;
+        document.getElementById("resStatus").innerText = status;
+
+        openPopup("reschedulePopup");
+    }
+
+    else if(value.includes("Approve")){
+        document.getElementById("approveStudent").innerText = studentName;
+        document.getElementById("approveDate").innerText = date;
+        openPopup("approvePopup");
+    }
+
+    else if(value.includes("Reject")){
+        document.getElementById("rejectStudent").innerText = studentName;
+        openPopup("rejectPopup");
+    }
+
+    else if(value.includes("Mark as Complete")){
+        document.getElementById("completeStudent").innerText = studentName;
+        openPopup("completePopup");
+    }
+
+    else if(value.includes("Cancel")){
+        document.getElementById("cancelStudent").innerText = studentName;
+        openPopup("cancelPopup");
+    }
+
+    else if(value.includes("View")){
+        openPopup("detailsPopup");
+    }
+
+    else if(value.includes("Feedback")){
+        openPopup("feedbackPopup");
+    }
+
+    select.selectedIndex = 0;
+}
+
+function confirmReschedule(){
+
+    if(currentRow){
+
+        let statusCell = currentRow.children[6];
+
+        statusCell.innerText = "Rescheduled";
+        statusCell.className = "status-pending";
+
+        closePopup("reschedulePopup");
+    }
+}
+
+let currentPage = 1;
+let rowsPerPage = 8;
+
+function showPage(page){
+
+    let table = document.getElementById("enquiryTable");
+    let rows = table.querySelectorAll("tr");
+
+    let start = (page - 1) * rowsPerPage + 1;
+    let end = start + rowsPerPage - 1;
+
+    rows.forEach((row, index) => {
+
+        if(index === 0){
+            row.style.display = ""; // header
+        }
+        else if(index >= start && index <= end){
+            row.style.display = "";
+        }
+        else{
+            row.style.display = "none";
+        }
+
+    });
+
+    updateActiveButton(page);
+}
+
+function updateActiveButton(page){
+    document.querySelectorAll(".page-number").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(".page-number")[page-1].classList.add("active");
+
+    currentPage = page;
+}
+
+function goToPage(page){
+    showPage(page);
+}
+
+function nextPage(){
+    let totalPages = document.querySelectorAll(".page-number").length;
+    if(currentPage < totalPages){
+        showPage(currentPage + 1);
+    }
+}
+
+function prevPage(){
+    if(currentPage > 1){
+        showPage(currentPage - 1);
+    }
+}
+
+/* Load first page on start */
+document.addEventListener("DOMContentLoaded", function(){
+    showPage(1);
+});
+
+function switchTab(type){
+
+    let tabs = document.querySelectorAll(".tab-item");
+    tabs.forEach(t => t.classList.remove("active"));
+
+    if(type === "student"){
+        tabs[0].classList.add("active");
+        document.getElementById("studentTable").style.display = "block";
+        document.getElementById("parentTable").style.display = "none";
+    }
+    else{
+        tabs[1].classList.add("active");
+        document.getElementById("studentTable").style.display = "none";
+        document.getElementById("parentTable").style.display = "block";
+    }
+
+}
+
+</script>
+
+
+{% endblock %}
+

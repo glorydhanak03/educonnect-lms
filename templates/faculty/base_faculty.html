@@ -80,6 +80,139 @@
     .layout{flex-direction:column}
     .sidebar{width:100%;position:relative;height:auto}
   }
+
+
+/* PROFILE DROPDOWN POPUP */
+.profile-popup{
+  position:absolute;
+  top:80px;
+  right:40px;
+  width:280px;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+  display:none;
+  z-index:9999;
+  overflow:hidden;
+}
+
+.profile-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px;
+  border-bottom:1px solid #eee;
+}
+
+.profile-avatar{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#1b56d7,#60a5fa);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  color:#fff;
+}
+
+.profile-name{
+  font-weight:800;
+  font-size:18px;
+}
+
+.profile-role{
+  font-size:14px;
+  color:#666;
+}
+
+.profile-menu{
+  padding:10px 0;
+}
+
+.profile-menu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  font-weight:600;
+  color:#333;
+}
+
+.profile-menu a:hover{
+  background:#f4f6ff;
+}
+
+/* VIEW PROFILE POPUP */
+.profile-detail-popup{
+  position:absolute;
+top:80px;
+  right:40px;
+  width:340px;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+  display:none;
+  z-index:10000;
+  overflow:hidden;
+}
+
+.profile-detail-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:18px;
+  border-bottom:1px solid #eee;
+}
+
+.profile-detail-avatar{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#1b56d7,#60a5fa);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  color:#fff;
+}
+
+.profile-detail-name{
+ font-weight:800;
+  font-size:20px;
+}
+
+.profile-detail-role{
+  font-size:14px;
+  color:#666;
+}
+
+.profile-info{
+  padding:18px;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.profile-info h4{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.popup-close{
+  position:absolute;
+  top:12px;
+  right:15px;
+  font-size:22px;
+  font-weight:900;
+  cursor:pointer;
+  color:#555;
+}
+
+.popup-close:hover{
+  color:#1b56d7;
+}
+
+
 </style>
 {% block faculty_extra_css %}{% endblock %}
 {% endblock %}
@@ -159,7 +292,7 @@
     <div class="topbar">
       <div>
         <div style="font-size:38px;font-weight:950;line-height:1.1;">
-          Good Afternoon, {{ display_name }}
+          Good Afternoon, {{ request.user.username }}
         </div>
         <div style="color:#64748b;font-size:13px;margin-top:4px">
           September 22, Monday
@@ -172,14 +305,114 @@
           <div class="sico">🔍</div>
         </div>
         <div class="topRight">
-          <button class="bell" type="button" title="Notifications">🔔</button>
-          <div class="profilePic" title="Profile">👩</div>
+          <button class="bell" title="Notifications" id="notificationBtn">🔔</button>
+
+          <div class="profilePic" id="profileIcon" title="Profile">👩</div>
         </div>
       </div>
     </div>
+
+  <!-- SMALL PROFILE POPUP -->
+<div class="profile-popup" id="profilePopup">
+
+  <!-- CLOSE BUTTON -->
+  <span class="popup-close" id="closeProfilePopup">&times;</span>
+
+  <div class="profile-header">
+    <div class="profile-avatar">👩</div>
+    <div>
+      <div class="profile-name">{{ request.user.username }}</div>
+      <div class="profile-role">Faculty</div>
+    </div>
+  </div>
+
+  <div class="profile-menu">
+    <a href="#" id="openProfileDetail">👤 View Profile</a>
+    <a class="{% if request.resolver_match.url_name == 'faculty_announcement' %}active{% endif %}" href="{% url 'faculty_announcement' %}">📣 Announcement</a>
+    <a class="{% if request.resolver_match.url_name == 'faculty_profile' %}active{% endif %}" href="{% url 'faculty_profile' %}">⚙ Settings</a>
+    <a href="{% url 'logout' %}">🚪 Log out</a>
+  </div>
+</div>
+
+
+    
+    <!-- FULL PROFILE DETAIL POPUP -->
+<div class="profile-detail-popup" id="profileDetailPopup">
+ <!-- CLOSE BUTTON -->
+  <span class="popup-close" id="closeProfileDetailPopup">&times;</span>
+
+  <div class="profile-detail-header">
+    <div class="profile-detail-avatar">🙂</div>
+    <div>
+     <div class="profile-name">{{ request.user.username }}</div>
+      <div class="profile-detail-role">Faculty</div>
+      <div style="font-size:13px;color:#666;">
+        faculty@educonnect.com<br>
+        +91 0000000000
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-info">
+    <h4>Work / Account Info</h4>
+    Faculty ID : FM001<br>
+    Mobile No : 5226544558<br>
+    Joining Date : 12 March 2024<br>
+    Department : Faculty<br>
+    Access Level : Faculty Management Level
+  </div>
+</div>
 
     {% block faculty_content %}{% endblock %}
   </main>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const profileIcon = document.getElementById("profileIcon");
+  const profilePopup = document.getElementById("profilePopup");
+  const profileDetailPopup = document.getElementById("profileDetailPopup");
+  const openProfileDetail = document.getElementById("openProfileDetail");
+  const closeProfilePopup = document.getElementById("closeProfilePopup");
+  const closeProfileDetailPopup = document.getElementById("closeProfileDetailPopup");
+
+  // Toggle small popup
+  profileIcon.addEventListener("click", function(e){
+    e.stopPropagation();
+    profilePopup.style.display =
+      profilePopup.style.display === "block" ? "none" : "block";
+    profileDetailPopup.style.display = "none";
+  });
+
+  // Open detail popup
+  openProfileDetail.addEventListener("click", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    profilePopup.style.display = "none";
+    profileDetailPopup.style.display = "block";
+  });
+
+  // Close small popup
+  closeProfilePopup.addEventListener("click", function(e){
+    e.stopPropagation();
+    profilePopup.style.display = "none";
+  });
+
+  // Close detail popup
+  closeProfileDetailPopup.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDetailPopup.style.display = "none";
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(){
+    profilePopup.style.display = "none";
+    profileDetailPopup.style.display = "none";
+  });
+
+});
+</script>
+
 {% endblock %}

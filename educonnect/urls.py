@@ -25,7 +25,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
 
     # ✅ Custom Admin Panel
-    path("admin/", include("admin_panel.urls")),
+    # path("admin/", include("admin_panel.urls")),
 
     # ✅ Django default admin moved here
     path("dj-admin/", admin.site.urls),
@@ -33,6 +33,8 @@ urlpatterns = [
     path("student/", include("student.urls")),
     path("faculty/", include("faculty.urls")),
     path("parent/", include("parent.urls")),
+    path("admin-panel/", include("admin_panel.urls")),
+
   
 ]
 if settings.DEBUG:

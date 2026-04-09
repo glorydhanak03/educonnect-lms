@@ -2,8 +2,21 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
-
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import JsonResponse
+from .models import AdminAnnouncement
+from django.views.decorators.csrf import csrf_exempt
+from student.models import Enquiry
+from parent.models import ParentEnquiry
+from admin_panel.models import AdminGuideline
+from accounts.models import StudentProfile
+from core.models import Batch
+from admin_panel.models import EnquiryAction
+from core.models import LiveSession
+import uuid
+from core.utils import generate_meeting_link
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # -------------------------
 # HELPERS
@@ -124,16 +137,291 @@ def analytics_report(request):
     return render(request, "admin_panel/analytics_report.html")
 
 
-@login_required
 def announcement(request):
-    return render(request, "admin_panel/announcement.html")
+
+    selected_category = request.GET.get("category", "All")
+
+    announcements = AdminAnnouncement.objects.all().order_by("-created_at")
+
+    category_map = {
+        "Students": [],
+        "Faculty": [],
+        "Parents": [],
+    }
+
+    for ann in announcements:
+
+        ann.display_name = ann.sender.first_name or "Admin"
+
+        for cat in ann.categories:
+
+            if selected_category != "All" and cat != selected_category:
+                continue
+
+            if cat in category_map:
+                category_map[cat].append(ann)
+
+    return render(request, "admin_panel/announcement.html", {
+        "category_map": category_map,
+        "selected_category": selected_category
+    })
+
+
+@login_required
+def create_announcement(request):
+
+    if request.method == "POST":
+
+        title = request.POST.get("title")
+        message = request.POST.get("message")
+        categories = request.POST.getlist("categories")
+
+        AdminAnnouncement.objects.create(
+            title=title,
+            message=message,
+            categories=categories,
+            sender=request.user
+        )
+
+        return redirect("/admin-panel/announcement/?status=posted")
+
+
+@login_required
+def update_announcement(request, id):
+
+    ann = get_object_or_404(AdminAnnouncement, id=id)
+
+    if request.method == "POST":
+
+        ann.title = request.POST.get("title")
+        ann.message = request.POST.get("message")
+
+        categories = request.POST.getlist("categories")
+        if categories:
+            ann.categories = categories
+
+        ann.save()
+
+        return redirect("/admin-panel/announcement/?status=updated")
+
+    return redirect("/admin-panel/announcement/")
+
+
+@login_required
+def delete_announcement(request, id):
+
+    ann = get_object_or_404(AdminAnnouncement, id=id)
+
+    if request.method == "POST":
+        ann.delete()
+
+    return redirect("/admin-panel/announcement/?status=deleted")
 
 
 @login_required
 def enquiry(request):
-    return render(request, "admin_panel/enquiry.html")
+    resolved_count = EnquiryAction.objects.filter(action="completed").count()
+
+    guidelines = AdminGuideline.objects.all().order_by("-id")
+
+    student_enquiries = Enquiry.objects.filter(send_to="admin").order_by("-created_at")
+
+    parent_enquiries = ParentEnquiry.objects.filter(send_to="admin").order_by("-created_at")
+
+    latest_student = student_enquiries.first()
+    latest_parent = parent_enquiries.first()
+
+    latest_enquiry = None
+    latest_type = None
+
+    if latest_student and latest_parent:
+
+        if latest_student.created_at > latest_parent.created_at:
+            latest_enquiry = latest_student
+            latest_type = "student"
+        else:
+            latest_enquiry = latest_parent
+            latest_type = "parent"
+
+    elif latest_student:
+        latest_enquiry = latest_student
+        latest_type = "student"
+
+    elif latest_parent:
+        latest_enquiry = latest_parent
+        latest_type = "parent"
+
+    return render(request,"admin_panel/enquiry.html",{
+
+        "guidelines":guidelines,
+        "student_enquiries":student_enquiries,
+        "parent_enquiries":parent_enquiries,
+        "latest_enquiry":latest_enquiry,
+        "latest_type":latest_type,
+        "resolved_count":resolved_count
+
+    })
+
+@login_required
+def update_enquiry_status(request):
+
+    if request.method == "POST":
+
+        enquiry_id = request.POST.get("id")
+        enquiry_type = request.POST.get("type")
+        status = request.POST.get("status")
+        reason = request.POST.get("reason")
+
+        if enquiry_type == "student":
+            enquiry = Enquiry.objects.get(id=enquiry_id)
+        else:
+            enquiry = ParentEnquiry.objects.get(id=enquiry_id)
+
+        enquiry.status = status
+        enquiry.save()
+
+        EnquiryAction.objects.create(
+            enquiry_id=enquiry_id,
+            enquiry_type=enquiry_type,
+            action=status,
+            reason=reason
+        )
+
+        return JsonResponse({"status":"success"})
+
+
+
+def approve_enquiry(request: HttpRequest, id: int, type: str):
+
+    meeting_link = generate_meeting_link()
+
+    if type == "student":
+        enquiry = get_object_or_404(Enquiry, id=id)
+    else:
+        enquiry = get_object_or_404(ParentEnquiry, id=id)
+
+    enquiry.status = "approved"
+    enquiry.save()
+
+    EnquiryAction.objects.create(
+        enquiry_id=id,
+        enquiry_type=type,
+        action="approved",
+        meeting_link=meeting_link,
+        session_date=enquiry.date,
+        session_time=enquiry.time_slot
+    )
+
+    # Save LiveSession
+    LiveSession.objects.create(
+        enquiry_id=id,
+        enquiry_type=type,
+        meeting_link=meeting_link,
+        session_date=enquiry.date,
+        session_time=enquiry.time_slot
+    )
+
+    url = reverse("admin_panel:admin_enquiry") + "?msg=approved"
+    return HttpResponseRedirect(url)
+
+
+@login_required
+def reject_enquiry(request,id,type):
+
+    if type=="student":
+        enquiry = get_object_or_404(Enquiry,id=id)
+
+    else:
+        enquiry = get_object_or_404(ParentEnquiry, id=id)
+
+    enquiry.status="rejected"
+    enquiry.save()
+
+    url = reverse("admin_panel:admin_enquiry") + "?msg=rejected"
+    return HttpResponseRedirect(url)
+
+# ADD GUIDELINE
+@csrf_exempt
+def add_guideline(request):
+
+    if request.method == "POST":
+
+        role = request.POST.get("role")
+        message = request.POST.get("message")
+
+        AdminGuideline.objects.create(
+            role=role,
+            message=message
+        )
+
+        return JsonResponse({"status":"added"})
+
+
+# DELETE GUIDELINE
+@csrf_exempt
+def delete_guideline(request,id):
+
+    if request.method == "POST":
+
+        guideline = AdminGuideline.objects.get(id=id)
+        guideline.delete()
+
+        return JsonResponse({"status":"deleted"})
+
+
+# UPDATE GUIDELINE
+@csrf_exempt
+def update_guideline(request,id):
+
+    if request.method == "POST":
+
+        guideline = AdminGuideline.objects.get(id=id)
+
+        guideline.message = request.POST.get("message")
+        guideline.role = request.POST.get("role")
+
+        guideline.save()
+
+        return JsonResponse({"status":"updated"})
 
 
 @login_required
 def settings(request):
     return render(request, "admin_panel/settings.html")
+
+@login_required
+def assign_batch(request):
+
+    # students = StudentProfile.objects.filter(batch__isnull=True)
+    students = StudentProfile.objects.all()
+    batches = Batch.objects.all()
+
+    if request.method == "POST":
+
+        student_id = request.POST.get("student_id")
+        batch_id = request.POST.get("batch_id")
+
+        try:
+            student = StudentProfile.objects.get(id=student_id)
+            batch = Batch.objects.get(id=batch_id)
+
+            student.batch = batch
+            student.save()
+
+            return JsonResponse({
+                "status":"success",
+                "message":f"{student.user.username} assigned to {batch.name}"
+            })
+
+        except Exception:
+            return JsonResponse({
+                "status":"error",
+                "message":"Something went wrong"
+            })
+
+    context = {
+        "students": students,
+        "batches": batches,
+    }
+
+    return render(request,"admin_panel/assign_batch.html",context)
