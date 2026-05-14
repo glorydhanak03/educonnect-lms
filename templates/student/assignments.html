@@ -378,7 +378,15 @@ let title = btn.dataset.title
 let description = btn.dataset.description
 let due = btn.dataset.due
 let questions = btn.dataset.questions
+
 let pdf = btn.dataset.pdf
+let uploadBox = document.querySelector(".upload-box")
+
+if(pdf){
+    uploadBox.style.display = "block"
+}else{
+    uploadBox.style.display = "none"
+}
 let status = btn.dataset.status  // ✅ NEW
 let submittedDate = btn.dataset.submitted
 
@@ -398,7 +406,17 @@ if(questions){
         }
     })
 }
-
+if(pdf){
+    questionHtml += `
+    <p>
+        <b>Assignment PDF:</b> 
+        <a href="${pdf}" target="_blank" style="color:blue;">
+            📄 View / Download
+        </a>
+    </p>
+    
+    `
+}
 // ✅ अगर already submit किया है
 
 if(status === "submitted"){

@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-from symtable import Class
+
 
 from django.db import models
 from accounts.models import User
@@ -66,7 +65,7 @@ class AssignmentQuestion(models.Model):
 
     def __str__(self):
         return self.question_text
-=======
+
 from django.db import models
 from django.conf import settings  
 
@@ -93,4 +92,4 @@ class FacultyAnnouncement(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.faculty}"
->>>>>>> main
+

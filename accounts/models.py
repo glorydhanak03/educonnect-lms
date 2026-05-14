@@ -10,15 +10,15 @@ class User(AbstractUser):
         ('admin','Admin'),
     )
     contact_number = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=15, null=True, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
-<<<<<<< HEAD
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    mobile = models.CharField(max_length=15)
+
+  
 
     class_name = models.CharField(max_length=50, blank=True, null=True)
     section = models.CharField(max_length=10, blank=True, null=True)
-=======
+
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -49,4 +49,3 @@ class FacultyProfile(models.Model):
 
     def __str__(self):
         return self.user.username
->>>>>>> main

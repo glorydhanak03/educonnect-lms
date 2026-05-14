@@ -1,5 +1,5 @@
 from django.db import models
-<<<<<<< HEAD
+
 from accounts.models import User
 from faculty.models import Assignment
 
@@ -39,7 +39,7 @@ class AssignmentSubmission(models.Model):
     
     def __str__(self):
         return f"{self.student} - {self.assignment}"
-=======
+
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -134,4 +134,4 @@ class Feedback(models.Model):
     @property
     def formatted_id(self):
         return f"SENQ-{self.id}"
->>>>>>> main
+

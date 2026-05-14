@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from urllib import request
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from .models import Assignment, AssignmentQuestion
 from student.models import AssignmentSubmission
 
-=======
+
 from student.models import Enquiry
 from parent.models import ParentEnquiry
 from django.db.models import Q
@@ -28,7 +28,7 @@ from django.utils import timezone
 from datetime import timedelta
 from admin_panel.models import AdminGuideline
 from admin_panel.models import EnquiryAction
->>>>>>> main
+
 
 def _faculty_name(request):
     name = (request.user.first_name or request.user.username or "Faculty")
@@ -198,9 +198,9 @@ def study_material(request):
 
 @login_required
 def announcement(request):
-<<<<<<< HEAD
+
     return render(request, "faculty/announcement.html")
-=======
+
     # === Existing POST logic for faculty announcement ===
     if request.method == "POST":
         title = request.POST.get("title")
@@ -208,7 +208,7 @@ def announcement(request):
         subject = request.POST.get("subject", "")
         post_to = request.POST.get("post_to")
         announcement_text = request.POST.get("announcement")
->>>>>>> main
+
 
         FacultyAnnouncement.objects.create(
             faculty=request.user,
@@ -304,9 +304,9 @@ def students(request):
 
 @login_required
 def enquiry(request):
-<<<<<<< HEAD
+
     return render(request, "faculty/enquiry.html")
-=======
+
     search = request.GET.get("search", "")
     date = request.GET.get("date", "")
 
@@ -527,7 +527,7 @@ def complete_session(request, id, type):
     )
 
     return redirect("faculty_enquiry")
->>>>>>> main
+
 
 
 @login_required

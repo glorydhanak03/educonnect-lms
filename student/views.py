@@ -1,11 +1,13 @@
+from urllib import request
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
+
 from django.contrib import messages
 
 from faculty.models import Assignment
 from .models import AssignmentSubmission
-=======
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Enquiry, Feedback
@@ -29,12 +31,12 @@ def _student_name(request):
         name = name.split(
             "@")[0]
     return name.strip().title()
->>>>>>> main
+
 
 
 @login_required
 def dashboard(request):
-<<<<<<< HEAD
+
     return render(request, "student/dashboard.html")
 
 
@@ -102,49 +104,38 @@ def student_assignments(request):
 # ✅ FINAL SUBMISSION FUNCTION
 @login_required
 def submit_assignment(request, id):
-    if request.user.role != "STUDENT":
-        messages.error(request, "Only students can submit assignments.")
-        return redirect("student_assignments")
+    from .models import AssignmentSubmission
+    from faculty.models import Assignment
 
     assignment = get_object_or_404(Assignment, id=id)
 
-    # ❗ अगर GET request आया
-    if request.method != "POST":
+    if request.method == "POST":
+        submission, created = AssignmentSubmission.objects.get_or_create(
+            student=request.user,
+            assignment=assignment
+        )
+
+        file = request.FILES.get("file")
+        answers = request.POST.getlist("answers[]")
+
+        answers_text = "\n".join(answers)
+
+        if not file and not any(a.strip() for a in answers):
+           messages.error(request, "Please write something.")
+           return redirect("student_assignments")
+
+        submission.file = file if file else submission.file
+        submission.answers = answers_text
+        submission.status = "submitted"
+        submission.submitted_at = timezone.now()
+
+        submission.save()
+
+        messages.success(request, "Assignment submitted successfully")
+
         return redirect("student_assignments")
 
-    already_submitted = AssignmentSubmission.objects.filter(
-        assignment=assignment,
-        student=request.user
-    ).exists()
-
-    if already_submitted:
-        messages.error(request, "You already submitted this assignment.")
-        return redirect("student_assignments")
-
-    file = request.FILES.get("file")
-    answers = request.POST.getlist("answers[]")
-
-    print("Answers:", answers)
-
-    answers_text = "\n".join(answers)
-
-    if not file and not any(a.strip() for a in answers):
-        messages.error(request, "Please write something.")
-        return redirect("student_assignments")
-
-    AssignmentSubmission.objects.create(
-        assignment=assignment,
-        student=request.user,
-        file=file if file else None,
-        answers=answers_text
-    )
-
-    print("✅ SAVED SUCCESSFULLY")
-
-    messages.success(request, "Assignment submitted successfully")
-
-    return redirect("student_assignments")
-
+    
 
 @login_required
 def study_material(request):
@@ -164,18 +155,18 @@ def my_progress(request):
 @login_required
 def payments(request):
     return render(request, "student/payments.html")
-=======
+
     return render(request, "student/dashboard.html", {
         "display_name": _student_name(request)
     })
->>>>>>> main
+
 
 
 @login_required
 def enquiry(request):
-<<<<<<< HEAD
+
     return render(request, "student/enquiry.html")
-=======
+
 
     # ================= SAVE ENQUIRY =================
     if request.method == "POST" and "submit_enquiry" in request.POST:
@@ -458,14 +449,14 @@ def announcement(request):
             "display_name": _student_name(request)
         }
     )
->>>>>>> main
+
 
 
 @login_required
 def my_account(request):
-<<<<<<< HEAD
+
     return render(request, "student/my_account.html")
-=======
+
     return render(request, "student/my_account.html", {
         "display_name": _student_name(request)
     })
@@ -478,4 +469,4 @@ def student_announcements(request):
 
     announcements = FacultyAnnouncement.objects.filter(batch=batch).order_by('-created_at')
     return render(request, "student/announcement.html", {"announcements": announcements})
->>>>>>> main
+

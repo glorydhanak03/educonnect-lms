@@ -46,7 +46,7 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
     if expected_role is None:
         return redirect("/")
 
-<<<<<<< HEAD
+
     # 👉 GET request
     if request.method != "POST":
         return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
@@ -54,23 +54,28 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
     # 👉 POST request
     email = (request.POST.get("email") or "").strip()
     password = request.POST.get("password") or ""
-=======
+
     if request.method == "POST":
         username = (request.POST.get("email") or "").strip()
         password = request.POST.get("password") or ""
 
-        user = authenticate(request, username=username, password=password)
-        if user is None:
+    user_obj = User.objects.filter(email=username).first()
+
+    if user_obj:
+     user = authenticate(request, username=user_obj.username, password=password)
+    else:
+     user = None
+    if user is None:
             user_obj = User.objects.filter(email=username).first()
             if user_obj:
                 user = authenticate(request, username=user_obj.username, password=password)
             else:
                 user = None
->>>>>>> main
+
 
     user_obj = User.objects.filter(email=email).first()
 
-<<<<<<< HEAD
+
     if user_obj:
         user = authenticate(request, username=user_obj.username, password=password)
     else:
@@ -79,7 +84,7 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
     if user is None:
         messages.error(request, "Invalid email or password")
         return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
-=======
+
         user_role = str(getattr(user, "role", "")).lower()
         if user.is_staff or user.is_superuser or user_role == "ADMIN":
             messages.error(request, "Admin must login from Admin Panel only.")
@@ -91,11 +96,10 @@ def role_login(request: HttpRequest, role: str) -> HttpResponse:
             actual = user_role.title() if user_role else "Unknown"
             messages.error(request, f"This account is {actual}. Please use {actual.lower()} login page.")
             return render(request, "auth/login.html", {"page_role": role, "mode": "login"})
->>>>>>> main
+
 
     # ✅ ROLE CHECK
-    user_role = str(getattr(user, "role", "")).upper()
-
+    user_role = str(getattr(user, "role", "")).lower()
     if user.is_staff or user.is_superuser or user_role == "ADMIN":
         messages.error(request, "Admin must login from Admin Panel only.")
         return render(request, "auth/login.html", {"page_role": role, "mode": "login"})

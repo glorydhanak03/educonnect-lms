@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-39ib8_w5yth3t2#$&mi7_oq!zkr$&&io0s=ns11c-)^w8ql0ff
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = [*]
 ALLOWED_HOSTS = [
     "educonnect.evisiontechnoserve.in",
     "dev.educonnect.evisiontechnoserve.in",
@@ -100,6 +100,7 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -178,7 +179,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
