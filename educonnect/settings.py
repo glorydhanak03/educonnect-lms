@@ -26,26 +26,8 @@ SECRET_KEY = 'django-insecure-39ib8_w5yth3t2#$&mi7_oq!zkr$&&io0s=ns11c-)^w8ql0ff
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = [*]
-ALLOWED_HOSTS = [
-    "educonnect.evisiontechnoserve.in",
-    "dev.educonnect.evisiontechnoserve.in",
-    'educonnect-lms-lcs1.onrender.com',
-    "dev0.evisiontechnoserve.in",
-    "dev1.evisiontechnoserve.in",
-    "dev2.evisiontechnoserve.in",
-    "dev3.evisiontechnoserve.in",
-    "dev4.evisiontechnoserve.in",
-    "dev5.evisiontechnoserve.in",
-    "dev6.evisiontechnoserve.in",
-    "dev7.evisiontechnoserve.in",
-    "dev8.evisiontechnoserve.in",
-    "dev9.evisiontechnoserve.in",
-    "223.235.16.24",
-    "192.168.1.20",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ['*']
+
 
 
 # origins
