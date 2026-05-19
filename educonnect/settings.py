@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "educonnect.evisiontechnoserve.in",
     "dev.educonnect.evisiontechnoserve.in",
+    'educonnect-lms-lcs1.onrender.com',
     "dev0.evisiontechnoserve.in",
     "dev1.evisiontechnoserve.in",
     "dev2.evisiontechnoserve.in",
