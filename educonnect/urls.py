@@ -18,12 +18,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-
+from core.views import create_admin
 
 urlpatterns = [
 
     path("", include("core.urls")),
     path("accounts/", include("accounts.urls")),
+    path("create-admin/", create_admin,),
 
     # ✅ Custom Admin Panel
     # path("admin/", include("admin_panel.urls")),
