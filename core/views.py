@@ -1,19 +1,19 @@
-from django.shortcuts import render
-
-def home(request):
-    return render(request, "home.html")
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 
 def create_admin(request):
     User = get_user_model()
 
-    if not User.objects.filter(email="mahidhanak08@gmail.com").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="mahidhanak08@gmail.com",
-            password="mahi2808"
-        )
-        return HttpResponse("Superuser created!")
+    user, created = User.objects.get_or_create(
+        email="mahidhanak08@gmail.com",
+        defaults={
+            "username": "admin"
+        }
+    )
 
-    return HttpResponse("User already exists!")
+    user.is_staff = True
+    user.is_superuser = True
+    user.set_password("mahi2808")
+    user.save()
+
+    return HttpResponse("Admin fixed successfully!")
